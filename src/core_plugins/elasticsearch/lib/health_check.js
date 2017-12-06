@@ -4,6 +4,7 @@ import kibanaVersion from './kibana_version';
 import { ensureEsVersion } from './ensure_es_version';
 import { ensureNotTribe } from './ensure_not_tribe';
 import { patchKibanaIndex } from './patch_kibana_index';
+import { verifyKibanaIndex } from './verify_kibana_index';
 
 const NoConnections = elasticsearch.errors.NoConnections;
 
@@ -46,6 +47,12 @@ export default function (plugin, server) {
         .then(waitForEsVersion)
         .then(() => ensureNotTribe(callAdminAsKibanaUser))
         .then(() => patchKibanaIndex({
+          callCluster: callAdminAsKibanaUser,
+          log: (...args) => server.log(...args),
+          indexName: config.get('kibana.index'),
+          kibanaIndexMappingsDsl: server.getKibanaIndexMappingsDsl()
+        }))
+        .then(() => verifyKibanaIndex({
           callCluster: callAdminAsKibanaUser,
           log: (...args) => server.log(...args),
           indexName: config.get('kibana.index'),
