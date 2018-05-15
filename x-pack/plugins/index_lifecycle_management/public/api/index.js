@@ -53,6 +53,11 @@ export async function savePolicy(policy) {
   return response.data;
 }
 
+export async function deletePolicy(policyName) {
+  const response = await httpClient.delete(`${apiPrefix}/policy/${policyName}`);
+  return response.data;
+}
+
 export async function bootstrap(indexName, aliasName) {
   const response = await httpClient.post(`${apiPrefix}/indices/bootstrap`, { indexName, aliasName });
   return response.data;

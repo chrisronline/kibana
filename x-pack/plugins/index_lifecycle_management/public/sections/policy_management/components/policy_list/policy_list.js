@@ -17,6 +17,7 @@ const getEditUrl = name => `#${BASE_PATH}policies/edit_policy/${name}`;
 export class PolicyList extends PureComponent {
   static propTypes = {
     fetchPolicies: PropTypes.func.isRequired,
+    deletePolicy: PropTypes.func.isRequired,
 
     policies: PropTypes.array.isRequired,
   }
@@ -26,13 +27,16 @@ export class PolicyList extends PureComponent {
   }
 
   render() {
-    const { policies } = this.props;
+    const { policies, deletePolicy } = this.props;
 
     return (
       <Fragment>
         <EuiTitle>
           <h2>Policy Management</h2>
         </EuiTitle>
+        <EuiLink href={`#${BASE_PATH}policies/new`}>
+          Create new policy
+        </EuiLink>
         <EuiInMemoryTable
           items={policies}
           columns={[
@@ -66,8 +70,8 @@ export class PolicyList extends PureComponent {
               }
             },
             {
-              render: () => {
-                return (<EuiIcon type="trash" color="danger"/>);
+              render: policy => {
+                return (<EuiIcon type="trash" color="danger" onClick={() => deletePolicy(policy.name)}/>);
               }
             }
           ]}

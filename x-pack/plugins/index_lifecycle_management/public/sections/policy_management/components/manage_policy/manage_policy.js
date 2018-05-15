@@ -9,30 +9,48 @@ import PropTypes from 'prop-types';
 import { toastNotifications } from 'ui/notify';
 
 import {
-  EuiTitle, EuiHorizontalRule, EuiButton, EuiButtonEmpty, EuiLink
+  EuiTitle,
+  EuiHorizontalRule,
+  EuiButton,
+  EuiButtonEmpty,
+  EuiLink,
+  EuiSpacer,
+  EuiFieldText,
 } from '@elastic/eui';
 
 import { HotPhase } from '../../../wizard/components/policy_configuration/components/hot_phase';
-import { STRUCTURE_POLICY_CONFIGURATION, PHASE_HOT, PHASE_WARM, PHASE_COLD, PHASE_DELETE } from '../../../../store/constants';
+import {
+  STRUCTURE_POLICY_CONFIGURATION,
+  PHASE_HOT,
+  PHASE_WARM,
+  PHASE_COLD,
+  PHASE_DELETE,
+  STRUCTURE_POLICY_NAME,
+  STRUCTURE_REVIEW,
+} from '../../../../store/constants';
 import { hasErrors } from '../../../../lib/find_errors';
 import { WarmPhase } from '../../../wizard/components/policy_configuration/components/warm_phase';
 import { ColdPhase } from '../../../wizard/components/policy_configuration/components/cold_phase';
 import { DeletePhase } from '../../../wizard/components/policy_configuration/components/delete_phase';
 import { NodeAttrsDetails } from '../../../wizard/components/node_attrs_details/node_attrs_details';
 import { BASE_PATH } from '../../../../../common/constants';
+import { ErrableFormRow } from '../../../wizard/form_errors';
 
-export class EditPolicy extends Component {
+export class ManagePolicy extends Component {
   static propTypes = {
     fetchPolicy: PropTypes.func.isRequired,
     validateLifecycle: PropTypes.func.isRequired,
+    setSelectedPolicyName: PropTypes.func.isRequired,
 
     match: PropTypes.shape({
       params: PropTypes.shape({
-        name: PropTypes.string.isRequired
-      }).isRequired,
-    }).isRequired,
+        name: PropTypes.string,
+      }),
+    }),
+    isEditMode: PropTypes.bool,
+    isCreateMode: PropTypes.bool,
     policy: PropTypes.object,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -44,12 +62,17 @@ export class EditPolicy extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchPolicy(this.props.match.params.name);
+    if (this.props.isEditMode) {
+      this.props.fetchPolicy(this.props.match.params.name);
+    }
   }
 
   getErrors = () => {
     const errors = this.props.validateLifecycle();
-    return errors[STRUCTURE_POLICY_CONFIGURATION];
+    return {
+      policy: errors[STRUCTURE_POLICY_CONFIGURATION],
+      name: errors[STRUCTURE_REVIEW],
+    };
   };
 
   validate = () => {
@@ -61,71 +84,98 @@ export class EditPolicy extends Component {
   submit = async () => {
     this.setState({ isShowingErrors: true });
     if (await this.validate()) {
-      this.props.savePolicy(this.props.policy);
+      await this.props.savePolicy(this.props.policy);
+      this.props.history.push(`/policies`);
     } else {
       toastNotifications.addDanger('Please fix errors on the page.');
     }
   };
 
   showNodeDetailsFlyout = selectedNodeAttrsForDetails => {
-    this.setState({ isShowingNodeDetailsFlyout: true, selectedNodeAttrsForDetails });
-  }
+    this.setState({
+      isShowingNodeDetailsFlyout: true,
+      selectedNodeAttrsForDetails,
+    });
+  };
 
   render() {
-    const { policy } = this.props;
+    const {
+      policy,
+      isEditMode,
+      isCreateMode,
+      setSelectedPolicyName,
+    } = this.props;
     const { errors, isShowingErrors } = this.state;
 
     return (
       <Fragment>
         <EuiTitle>
-          <h2>Edit Policy {policy.name}</h2>
+          {isEditMode ? (
+            <h2>Edit Policy {policy.name}</h2>
+          ) : (
+            <h2>Create Policy</h2>
+          )}
         </EuiTitle>
+        {isCreateMode ? (
+          <Fragment>
+            <ErrableFormRow
+              label="Policy name"
+              errorKey={STRUCTURE_POLICY_NAME}
+              isShowingErrors={isShowingErrors}
+              errors={errors.name}
+            >
+              <EuiFieldText
+                value={policy.name}
+                onChange={async e => {
+                  await setSelectedPolicyName(e.target.value);
+                  this.validate();
+                }}
+              />
+            </ErrableFormRow>
+            <EuiSpacer />
+          </Fragment>
+        ) : null}
         <HotPhase
           validate={this.validate}
-          errors={errors[PHASE_HOT]}
-          isShowingErrors={isShowingErrors && hasErrors(errors[PHASE_HOT])}
+          errors={errors.policy[PHASE_HOT]}
+          isShowingErrors={
+            isShowingErrors && hasErrors(errors.policy[PHASE_HOT])
+          }
         />
         <EuiHorizontalRule className="ilmHrule" />
         <WarmPhase
           validate={this.validate}
-          errors={errors[PHASE_WARM]}
+          errors={errors.policy[PHASE_WARM]}
           showNodeDetailsFlyout={this.showNodeDetailsFlyout}
-          isShowingErrors={isShowingErrors && hasErrors(errors[PHASE_WARM])}
+          isShowingErrors={
+            isShowingErrors && hasErrors(errors.policy[PHASE_WARM])
+          }
         />
         <EuiHorizontalRule className="ilmHrule" />
         <ColdPhase
           validate={this.validate}
-          errors={errors[PHASE_COLD]}
+          errors={errors.policy[PHASE_COLD]}
           showNodeDetailsFlyout={this.showNodeDetailsFlyout}
-          isShowingErrors={isShowingErrors && hasErrors(errors[PHASE_COLD])}
+          isShowingErrors={
+            isShowingErrors && hasErrors(errors.policy[PHASE_COLD])
+          }
         />
         <EuiHorizontalRule className="ilmHrule" />
         <DeletePhase
           validate={this.validate}
-          errors={errors[PHASE_DELETE]}
-          isShowingErrors={isShowingErrors && hasErrors(errors[PHASE_DELETE])}
+          errors={errors.policy[PHASE_DELETE]}
+          isShowingErrors={
+            isShowingErrors && hasErrors(errors.policy[PHASE_DELETE])
+          }
         />
         <EuiHorizontalRule className="ilmHrule" />
-
         <EuiLink href={`#${BASE_PATH}policies`}>
-          <EuiButtonEmpty
-            iconSide="left"
-            iconType="sortLeft"
-            onClick={this.cancel}
-          >
-            Cancel
-          </EuiButtonEmpty>
+          <EuiButtonEmpty onClick={this.cancel}>Cancel</EuiButtonEmpty>
         </EuiLink>
         &nbsp;&nbsp;
-        <EuiButton
-          fill
-          iconSide="right"
-          iconType="sortRight"
-          onClick={this.submit}
-        >
-          Save
+        <EuiButton fill onClick={this.submit}>
+          {isEditMode ? 'Save' : 'Create'}
         </EuiButton>
-
         {this.state.isShowingNodeDetailsFlyout ? (
           <NodeAttrsDetails
             selectedNodeAttrs={this.state.selectedNodeAttrsForDetails}

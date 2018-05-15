@@ -10,7 +10,7 @@
 import { connect } from 'react-redux';
 import { PolicyList as PresentationComponent } from './policy_list';
 import { getPolicies } from '../../../../store/selectors';
-import { fetchPolicies } from '../../../../store/actions';
+import { fetchPolicies, deletePolicy } from '../../../../store/actions';
 
 export const PolicyList = connect(
   state => ({
@@ -18,5 +18,6 @@ export const PolicyList = connect(
   }),
   {
     fetchPolicies,
+    deletePolicy,
   }
 )(PresentationComponent);

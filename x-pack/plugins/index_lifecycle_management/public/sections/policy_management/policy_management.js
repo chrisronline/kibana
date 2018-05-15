@@ -7,12 +7,13 @@
 import React, { Fragment } from 'react';
 import { Route } from 'react-router-dom';
 import { PolicyList } from './components/policy_list';
-import { EditPolicy } from './components/edit_policy';
+import { ManagePolicy } from './components/manage_policy';
 
 export const PolicyManagement = ({ match }) => {
   return (
     <Fragment>
-      <Route path={`${match.url}/edit_policy/:name`} component={EditPolicy}/>
+      <Route path={`${match.url}/edit_policy/:name`} render={() => (<ManagePolicy isEditMode/>)}/>
+      <Route path={`${match.url}/new`} render={() => (<ManagePolicy isCreateMode/>)}/>
       <Route exact path={`${match.url}`} component={PolicyList}/>
     </Fragment>
   );

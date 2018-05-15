@@ -8,11 +8,12 @@
 
 
 import { connect } from 'react-redux';
-import { EditPolicy as PresentationComponent } from './edit_policy';
+import { withRouter } from 'react-router-dom';
+import { ManagePolicy as PresentationComponent } from './manage_policy';
 import { validateLifecycle, getSelectedPolicy } from '../../../../store/selectors';
-import { fetchPolicy, savePolicy } from '../../../../store/actions';
+import { fetchPolicy, savePolicy, setSelectedPolicyName } from '../../../../store/actions';
 
-export const EditPolicy = connect(
+export const ManagePolicy = connect(
   (state) => ({
     policy: getSelectedPolicy(state),
     validateLifecycle: () => validateLifecycle(state),
@@ -20,5 +21,6 @@ export const EditPolicy = connect(
   {
     fetchPolicy,
     savePolicy,
+    setSelectedPolicyName,
   }
-)(PresentationComponent);
+)(withRouter(PresentationComponent));

@@ -14,7 +14,8 @@ import {
   setSelectedPolicyName,
   setSaveAsNewPolicy,
   setPhaseData,
-  fetchedPolicy
+  fetchedPolicy,
+  deletedPolicy
 } from '../actions';
 import { policyFromES } from '../selectors';
 import {
@@ -144,6 +145,20 @@ export const policies = handleActions(
         policies: [
           ...state.policies,
           policy,
+        ]
+      };
+    },
+    [deletedPolicy](state, { payload: policyName }) {
+      const isSelectedPolicy = state.selectedPolicy && state.selectedPolicy.name === policyName;
+      const index = state.policies.findIndex(policy => policy.name === policyName);
+      return {
+        ...state,
+        isLoading: false,
+        selectedPolicy: isSelectedPolicy ? defaultPolicy : state.selectedPolicy,
+        originalPolicyName: isSelectedPolicy ? undefined : state.originalPolicyName,
+        policies: [
+          ...state.policies.slice(0, index),
+          ...state.policies.slice(index + 1),
         ]
       };
     },

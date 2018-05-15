@@ -9,7 +9,7 @@
 
 import { createAction } from 'redux-actions';
 import { toastNotifications } from 'ui/notify';
-import { loadPolicies, loadPolicy, savePolicy as savePolicyApi } from '../../api';
+import { loadPolicies, loadPolicy, savePolicy as savePolicyApi, deletePolicy as deletePolicyApi } from '../../api';
 import { getLifecycle } from '../selectors';
 
 export const fetchedPolicies = createAction('FETCHED_POLICIES');
@@ -60,4 +60,18 @@ export const savePolicy = () => async (dispatch, getState) => {
   toastNotifications.addSuccess(`Successfully saved policy '${policy.name}'`);
 
   dispatch(savedPolicy(saved));
+};
+
+export const deletedPolicy = createAction('DELETED_POLICY');
+export const deletePolicy = name => async dispatch => {
+  try {
+    await deletePolicyApi(name);
+  }
+  catch (err) {
+    return toastNotifications.addDanger(err.data.message);
+  }
+
+  toastNotifications.addSuccess(`Successfully deleted policy '${name}'`);
+
+  dispatch(deletedPolicy(name));
 };
