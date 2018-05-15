@@ -13,7 +13,8 @@ import {
   setSelectedPolicy,
   setSelectedPolicyName,
   setSaveAsNewPolicy,
-  setPhaseData
+  setPhaseData,
+  fetchedPolicy
 } from '../actions';
 import { policyFromES } from '../selectors';
 import {
@@ -109,6 +110,41 @@ export const policies = handleActions(
         ...state,
         isLoading: false,
         policies
+      };
+    },
+    [fetchedPolicy](state, { payload }) {
+      const policyName = Object.keys(payload)[0];
+      const policy = payload[policyName];
+
+      const selectedPolicy = policyFromES({
+        name: policyName,
+        phases: policy.phases,
+      });
+
+      const index = state.policies.findIndex(_policy => _policy.name === policy.name);
+      if (index >= 0) {
+        return {
+          ...state,
+          isLoading: false,
+          selectedPolicy,
+          originalPolicyName: selectedPolicy.name,
+          policies: [
+            ...state.policies.slice(0, index),
+            policy,
+            ...state.policies.slice(index + 1),
+          ]
+        };
+      }
+
+      return {
+        ...state,
+        isLoading: false,
+        selectedPolicy,
+        originalPolicyName: selectedPolicy.name,
+        policies: [
+          ...state.policies,
+          policy,
+        ]
       };
     },
     [setSelectedPolicy](state, { payload: selectedPolicy }) {

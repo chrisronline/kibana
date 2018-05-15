@@ -21,13 +21,13 @@ import { manageAngularLifecycle } from './lib/manage_angular_lifecycle';
 const renderReact = async (elem) => {
   render(
     <Provider store={indexLifecycleManagementStore()}>
-      <App />
+      <App baseName={BASE_PATH} />
     </Provider>,
     elem
   );
 };
 
-routes.when(`${BASE_PATH}:view?/:id?`, {
+routes.when(`${BASE_PATH}:view?/:subview?/:id?`, {
   template: template,
   controllerAs: 'indexManagement',
   controller: class IndexManagementController {

@@ -38,8 +38,18 @@ export async function loadPolicies() {
   return response.data;
 }
 
+export async function loadPolicy(name) {
+  const response = await httpClient.get(`${apiPrefix}/policy/${name}`);
+  return response.data;
+}
+
 export async function saveLifecycle(lifecycle, indexTemplatePatch) {
   const response = await httpClient.post(`${apiPrefix}/lifecycle`, { lifecycle, indexTemplatePatch });
+  return response.data;
+}
+
+export async function savePolicy(policy) {
+  const response = await httpClient.post(`${apiPrefix}/policy`, { policy });
   return response.data;
 }
 
