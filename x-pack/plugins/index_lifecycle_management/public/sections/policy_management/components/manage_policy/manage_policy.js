@@ -41,6 +41,7 @@ export class ManagePolicy extends Component {
     fetchPolicy: PropTypes.func.isRequired,
     validateLifecycle: PropTypes.func.isRequired,
     setSelectedPolicyName: PropTypes.func.isRequired,
+    resetSelectedPolicy: PropTypes.func.isRequired,
 
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -65,6 +66,10 @@ export class ManagePolicy extends Component {
     if (this.props.isEditMode) {
       this.props.fetchPolicy(this.props.match.params.name);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.resetSelectedPolicy();
   }
 
   getErrors = () => {

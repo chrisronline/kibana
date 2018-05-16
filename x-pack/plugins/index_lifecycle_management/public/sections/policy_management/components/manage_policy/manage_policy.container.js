@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { ManagePolicy as PresentationComponent } from './manage_policy';
 import { validateLifecycle, getSelectedPolicy } from '../../../../store/selectors';
-import { fetchPolicy, savePolicy, setSelectedPolicyName } from '../../../../store/actions';
+import { fetchPolicy, savePolicy, setSelectedPolicyName, resetSelectedPolicy } from '../../../../store/actions';
 
 export const ManagePolicy = connect(
   (state) => ({
@@ -22,5 +22,6 @@ export const ManagePolicy = connect(
     fetchPolicy,
     savePolicy,
     setSelectedPolicyName,
+    resetSelectedPolicy,
   }
 )(withRouter(PresentationComponent));

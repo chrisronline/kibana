@@ -39,6 +39,7 @@ export const fetchPolicy = name => async dispatch => {
 };
 
 export const setSelectedPolicy = createAction('SET_SELECTED_POLICY');
+export const resetSelectedPolicy = createAction('RESET_SELECTED_POLICY');
 export const setSelectedPolicyName = createAction('SET_SELECTED_POLICY_NAME');
 export const setSaveAsNewPolicy = createAction('SET_SAVE_AS_NEW_POLICY');
 

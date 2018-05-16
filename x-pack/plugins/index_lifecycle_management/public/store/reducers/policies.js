@@ -15,7 +15,8 @@ import {
   setSaveAsNewPolicy,
   setPhaseData,
   fetchedPolicy,
-  deletedPolicy
+  deletedPolicy,
+  resetSelectedPolicy
 } from '../actions';
 import { policyFromES } from '../selectors';
 import {
@@ -179,6 +180,14 @@ export const policies = handleActions(
           ...defaultPolicy,
           ...policyFromES(selectedPolicy)
         }
+      };
+    },
+    [resetSelectedPolicy](state) {
+      return {
+        ...state,
+        originalPolicyName: defaultState.originalPolicyName,
+        selectedPolicySet: false,
+        selectedPolicy: defaultPolicy,
       };
     },
     [setSelectedPolicyName](state, { payload: name }) {
