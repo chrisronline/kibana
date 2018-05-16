@@ -19,7 +19,7 @@ const defaultState = {
   isLoading: false,
   fullSelectedIndexTemplate: null,
   selectedIndexTemplateName: '',
-  indexTemplates: null,
+  indexTemplates: [],
 };
 
 export const indexTemplate = handleActions(

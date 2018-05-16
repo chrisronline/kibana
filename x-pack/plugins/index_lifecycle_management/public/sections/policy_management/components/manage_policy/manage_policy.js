@@ -32,7 +32,7 @@ import { hasErrors } from '../../../../lib/find_errors';
 import { WarmPhase } from '../../../wizard/components/policy_configuration/components/warm_phase';
 import { ColdPhase } from '../../../wizard/components/policy_configuration/components/cold_phase';
 import { DeletePhase } from '../../../wizard/components/policy_configuration/components/delete_phase';
-import { NodeAttrsDetails } from '../../../wizard/components/node_attrs_details/node_attrs_details';
+import { NodeAttrsDetails } from '../../../wizard/components/node_attrs_details';
 import { BASE_PATH } from '../../../../../common/constants';
 import { ErrableFormRow } from '../../../wizard/form_errors';
 
