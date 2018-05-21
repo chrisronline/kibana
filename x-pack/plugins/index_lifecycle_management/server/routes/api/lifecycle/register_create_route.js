@@ -81,6 +81,7 @@ export function registerCreateRoute(server) {
         const response2 = await updateIndexTemplate(callWithRequest, request.payload.indexTemplatePatch);
         reply([response, response2]);
       } catch (err) {
+        console.log(err);
         if (isEsError(err)) {
           return reply(wrapEsError(err));
         }

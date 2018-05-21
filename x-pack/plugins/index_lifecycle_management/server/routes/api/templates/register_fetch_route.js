@@ -65,7 +65,7 @@ export function registerFetchRoute(server) {
 
       try {
         const hits = await fetchTemplates(callWithRequest);
-        const templates = formatTemplates(hits, callWithRequest);
+        const templates = await formatTemplates(hits, callWithRequest);
         reply(templates);
       } catch (err) {
         if (isEsError(err)) {
