@@ -10,9 +10,7 @@
 import { createAction } from 'redux-actions';
 import { toastNotifications } from 'ui/notify';
 import { loadIndexTemplates, loadIndexTemplate } from '../../api';
-import { getAlias } from '../selectors';
 import {
-  setPhaseData,
   setIndexName,
   setAliasName,
   setSelectedPrimaryShardCount,
@@ -20,13 +18,6 @@ import {
   setSelectedNodeAttrs,
   setSelectedPolicyName,
 } from '.';
-import {
-  PHASE_HOT,
-  PHASE_ROLLOVER_ALIAS,
-  PHASE_WARM,
-  PHASE_COLD,
-  PHASE_DELETE
-} from '../constants';
 
 export const fetchingIndexTemplates = createAction('FETCHING_INDEX_TEMPLATES');
 export const fetchedIndexTemplates = createAction('FETCHED_INDEX_TEMPLATES');
@@ -88,20 +79,8 @@ export const setSelectedIndexTemplateName = createAction(
   'SET_SELECTED_INDEX_TEMPLATE_NAME'
 );
 
-export const setSelectedIndexTemplate = name => async (dispatch, getState) => {
+export const setSelectedIndexTemplate = name => async dispatch => {
   // Await all of these to ensure they happen before the next round of validation
-  const promises = [
-    dispatch(setSelectedIndexTemplateName(name)),
-    dispatch(fetchIndexTemplate(name))
-  ];
-  const alias = getAlias(getState());
-  if (alias) {
-    promises.push(...[
-      dispatch(setPhaseData(PHASE_HOT, PHASE_ROLLOVER_ALIAS, alias)),
-      dispatch(setPhaseData(PHASE_WARM, PHASE_ROLLOVER_ALIAS, alias)),
-      dispatch(setPhaseData(PHASE_COLD, PHASE_ROLLOVER_ALIAS, alias)),
-      dispatch(setPhaseData(PHASE_DELETE, PHASE_ROLLOVER_ALIAS, alias))
-    ]);
-  }
-  await Promise.all(promises);
+  dispatch(setSelectedIndexTemplateName(name));
+  dispatch(fetchIndexTemplate(name));
 };
