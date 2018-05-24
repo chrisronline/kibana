@@ -68,24 +68,6 @@ export const validatePhase = (type, phase) => {
     }
   }
 
-  for (const numberedAttribute of PHASE_ATTRIBUTES_THAT_ARE_NUMBERS) {
-    if (phase.hasOwnProperty(numberedAttribute) && phase[numberedAttribute] !== '') {
-      // If shrink is disabled, there is no need to validate this
-      if (numberedAttribute === PHASE_PRIMARY_SHARD_COUNT && !phase[PHASE_SHRINK_ENABLED]) {
-        continue;
-      }
-      if (!isNumber(phase[numberedAttribute])) {
-        errors[numberedAttribute] = ['A number is required'];
-      }
-      else if (phase[numberedAttribute] < 0) {
-        errors[numberedAttribute] = ['Only positive numbers are allowed'];
-      }
-      else if (numberedAttribute === PHASE_PRIMARY_SHARD_COUNT && phase[numberedAttribute] < 1) {
-        errors[numberedAttribute] = ['Only positive numbers are allowed'];
-      }
-    }
-  }
-
   if (phase[PHASE_SHRINK_ENABLED]) {
     if (!isNumber(phase[PHASE_PRIMARY_SHARD_COUNT])) {
       errors[PHASE_PRIMARY_SHARD_COUNT] = ['A number is required.'];
@@ -101,6 +83,35 @@ export const validatePhase = (type, phase) => {
     }
     else if (phase[PHASE_FORCE_MERGE_SEGMENTS] < 1) {
       errors[PHASE_FORCE_MERGE_SEGMENTS] = ['Only positive numbers above 0 are allowed.'];
+    }
+  }
+
+  for (const numberedAttribute of PHASE_ATTRIBUTES_THAT_ARE_NUMBERS) {
+    if (phase.hasOwnProperty(numberedAttribute) && phase[numberedAttribute] !== '') {
+      // If some things are not enabled, we skip validation of the numbers
+      if (numberedAttribute === PHASE_PRIMARY_SHARD_COUNT && !phase[PHASE_SHRINK_ENABLED]) {
+        continue;
+      }
+      if (numberedAttribute === PHASE_FORCE_MERGE_SEGMENTS && !phase[PHASE_FORCE_MERGE_ENABLED]) {
+        continue;
+      }
+
+      // If it already has errors, do not show a ton of them, just one
+      if (errors[numberedAttribute] && errors[numberedAttribute].length > 0) {
+        continue;
+      }
+      if (!isNumber(phase[numberedAttribute])) {
+        errors[numberedAttribute] = errors[numberedAttribute] || [];
+        errors[numberedAttribute].push('A number is required');
+      }
+      else if (phase[numberedAttribute] < 0) {
+        errors[numberedAttribute] = errors[numberedAttribute] || [];
+        errors[numberedAttribute].push('Only positive numbers are allowed');
+      }
+      else if (numberedAttribute === PHASE_PRIMARY_SHARD_COUNT && phase[numberedAttribute] < 1) {
+        errors[numberedAttribute] = errors[numberedAttribute] || [];
+        errors[numberedAttribute].push('Only positive numbers are allowed');
+      }
     }
   }
 
@@ -150,8 +161,7 @@ export const validateLifecycle = state => {
   if (!getSelectedPolicyName(state)) {
     errors[STRUCTURE_REVIEW][STRUCTURE_POLICY_NAME].push('A policy name is required');
   }
-
-  if (getSaveAsNewPolicy(state) && getSelectedOriginalPolicyName(state) === getSelectedPolicyName(state)) {
+  else if (getSaveAsNewPolicy(state) && getSelectedOriginalPolicyName(state) === getSelectedPolicyName(state)) {
     errors[STRUCTURE_REVIEW][STRUCTURE_POLICY_NAME].push('The policy name must be different');
   }
 

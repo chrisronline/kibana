@@ -57,14 +57,6 @@ export const getSelectedIndexTemplate = createSelector(
 
 export const getFullSelectedIndexTemplate = state => state.indexTemplate.fullSelectedIndexTemplate;
 
-export const getAlias = state => {
-  const template = getSelectedIndexTemplate(state);
-  if (template && template.settings) {
-    return template.settings.indexlifecycle.rollover_alias;
-  }
-  return undefined;
-};
-
 // TODO: add createSelector
 export const getAffectedIndexTemplates = state => {
   const selectedIndexTemplateName = getSelectedIndexTemplateName(state);
