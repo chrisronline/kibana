@@ -33,7 +33,8 @@ import {
   PHASE_ENABLED,
   PHASE_ROLLOVER_ALIAS,
   PHASE_ATTRIBUTES_THAT_ARE_NUMBERS,
-  MAX_SIZE_TYPE_DOCUMENT
+  MAX_SIZE_TYPE_DOCUMENT,
+  PHASE_SHRINK_ENABLED
 } from '../constants';
 import { getIndexTemplates } from '.';
 
@@ -122,7 +123,7 @@ export const phaseFromES = (phase, defaultPolicy) => {
         policy[PHASE_ROLLOVER_MAX_SIZE_STORED_UNITS] = maxSizeUnits;
       }
       if (rollover.max_docs) {
-        policy[PHASE_ROLLOVER_MAX_SIZE_STORED] = rollover.max_docs;
+        policy[PHASE_ROLLOVER_MAX_SIZE_STORED] = parseInt(rollover.max_docs);
         policy[PHASE_ROLLOVER_MAX_SIZE_STORED_UNITS] = MAX_SIZE_TYPE_DOCUMENT;
       }
     } else {
@@ -139,7 +140,7 @@ export const phaseFromES = (phase, defaultPolicy) => {
     if (actions.forcemerge) {
       const forcemerge = actions.forcemerge;
       policy[PHASE_FORCE_MERGE_ENABLED] = true;
-      policy[PHASE_FORCE_MERGE_SEGMENTS] = forcemerge.max_num_segments;
+      policy[PHASE_FORCE_MERGE_SEGMENTS] = parseInt(forcemerge.max_num_segments);
     }
 
     if (actions.shrink) {
@@ -217,7 +218,7 @@ export const phaseToES = (state, phase) => {
     };
   }
 
-  if (isNumber(phase[PHASE_PRIMARY_SHARD_COUNT])) {
+  if (phase[PHASE_SHRINK_ENABLED]) {
     esPhase.actions.shrink = {
       number_of_shards: phase[PHASE_PRIMARY_SHARD_COUNT]
     };
