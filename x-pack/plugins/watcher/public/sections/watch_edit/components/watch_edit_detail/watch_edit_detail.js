@@ -42,7 +42,8 @@ app.directive('watchEditDetail', function () {
       }
 
       updateIsValid = () => {
-        const isValid = !(this.form.$invalid || !this.isJsonValid);
+        const form = this.form || {};
+        const isValid = !(form.$invalid || !this.isJsonValid);
 
         if (isValid) {
           this.onValid();

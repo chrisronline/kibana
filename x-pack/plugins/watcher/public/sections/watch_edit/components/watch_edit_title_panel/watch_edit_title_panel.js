@@ -101,6 +101,10 @@ app.directive('watchEditTitlePanel', function ($injector) {
         return this.watch.titleDescription;
       }
 
+      getForm = () => {
+        return this.form || {};
+      }
+
       onIndexSelectTouched = () => {
         this.indexSelectTouched = true;
       }
@@ -113,7 +117,7 @@ app.directive('watchEditTitlePanel', function ($injector) {
       }
 
       updateValidity = () => {
-        const isValid = this.form.$valid && this.hasAnyValidSelectedIndices();
+        const isValid = this.getForm().$valid && this.hasAnyValidSelectedIndices();
 
         if (isValid) {
           this.onValid();
@@ -135,14 +139,15 @@ app.directive('watchEditTitlePanel', function ($injector) {
       }
 
       isValidationMessageVisible = (fieldName, errorType, showIfOtherErrors = true) => {
-        if (!this.form[fieldName]) {
+        const form = this.getForm();
+        if (!form[fieldName]) {
           return false;
         }
 
-        let showMessage = (this.form[fieldName].$touched || this.form[fieldName].$dirty) &&
-          this.form[fieldName].$error[errorType];
+        let showMessage = (form[fieldName].$touched || form[fieldName].$dirty) &&
+          form[fieldName].$error[errorType];
 
-        if (showMessage && !showIfOtherErrors && size(this.form[fieldName].$error) > 1) {
+        if (showMessage && !showIfOtherErrors && size(form[fieldName].$error) > 1) {
           showMessage = false;
         }
 

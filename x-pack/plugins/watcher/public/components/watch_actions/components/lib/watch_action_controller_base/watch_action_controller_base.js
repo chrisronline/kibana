@@ -12,7 +12,8 @@ export class WatchActionControllerBase {
   }
 
   isValidationMessageVisible = (fieldName, errorType) => {
-    return this.form[fieldName].$touched &&
-      this.form[fieldName].$error[errorType];
+    const form = this.form || {};
+    return form[fieldName].$touched &&
+      form[fieldName].$error[errorType];
   }
 }

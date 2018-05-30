@@ -8,6 +8,13 @@ import { InitAfterBindingsWorkaround } from 'ui/compat';
 import { forEach, size } from 'lodash';
 
 export class ThresholdWatchBaseController extends InitAfterBindingsWorkaround {
+  getForm = () => {
+    return this.form || {
+      $setPristine: () => {},
+      $setUntouched: () => {},
+    };
+  }
+
   checkValidity = () => {
     if (this.isValid()) {
       this.onValid(this.itemId);
@@ -25,30 +32,32 @@ export class ThresholdWatchBaseController extends InitAfterBindingsWorkaround {
   }
 
   resetForm = () => {
-    forEach(this.form, (control) => {
+    const form = this.getForm();
+    forEach(form, (control) => {
       if (Boolean(control) && typeof control.$setViewValue === 'function') {
         control.$setViewValue(undefined);
       }
     });
 
-    this.form.$setPristine();
-    this.form.$setUntouched();
+    form.$setPristine();
+    form.$setUntouched();
   }
 
   isValid = () => {
-    return !(this.form.$invalid);
+    return !(this.getForm().$invalid);
   }
 
   isDirty = () => {
-    return this.form.$dirty;
+    return this.getForm().$dirty;
   }
 
   isValidationMessageVisible = (fieldName, errorType, showIfOtherErrors = true) => {
-    let showMessage = this.form[fieldName] &&
-      (this.form[fieldName].$touched || this.form[fieldName].$dirty) &&
-      this.form[fieldName].$error[errorType];
+    const form = this.getForm();
+    let showMessage = form[fieldName] &&
+      (form[fieldName].$touched || form[fieldName].$dirty) &&
+      form[fieldName].$error[errorType];
 
-    if (showMessage && !showIfOtherErrors && size(this.form[fieldName].$error) > 1) {
+    if (showMessage && !showIfOtherErrors && size(form[fieldName].$error) > 1) {
       showMessage = false;
     }
 
