@@ -18,7 +18,7 @@ describe('nodes', () => {
     };
 
     expect(getNodeOptions(state)).toEqual([
-      { text: '' },
+      { text: '-- Do not reallocate my indices --' },
       { text: 'hot_node:true (1)', value: 'hot_node:true' },
       { text: 'warm_node:true (2)', value: 'warm_node:true' }
     ]);

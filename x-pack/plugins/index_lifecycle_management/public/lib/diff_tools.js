@@ -56,7 +56,7 @@ export const removePrefixes = obj => {
     return obj.replace(removePrefixRegex, '');
   }
 
-  if (!obj || typeof obj !== 'object') {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
     return obj;
   }
 
@@ -71,7 +71,7 @@ export const removePrefixes = obj => {
 };
 
 const normalizeChange = (key, value) => {
-  if (typeof value === 'string') {
+  if (typeof value === 'string' || typeof value === 'number') {
     return {
       key: removePrefixes(key),
       value: removePrefixes(value)

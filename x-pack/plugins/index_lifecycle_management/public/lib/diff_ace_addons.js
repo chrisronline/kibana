@@ -6,14 +6,14 @@
 import ace from 'brace';
 import { ADDITION_PREFIX, REMOVAL_PREFIX } from './diff_tools';
 
-function findInObject(key, obj, debug) {
+function findInObject(key, obj) {
   const objKeys = Object.keys(obj);
   for (const objKey of objKeys) {
     if (objKey === key) {
       return obj[objKey];
     }
     if (typeof obj[objKey] === 'object' && !Array.isArray(obj[objKey])) {
-      const item = findInObject(key, obj[objKey], debug);
+      const item = findInObject(key, obj[objKey]);
       if (item !== false) {
         return item;
       }
