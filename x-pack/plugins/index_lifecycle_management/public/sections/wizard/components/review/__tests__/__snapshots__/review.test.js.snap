@@ -1,0 +1,284 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Review should render properly 1`] = `
+<Review
+  affectedIndexTemplates={
+    Array [
+      "",
+    ]
+  }
+  aliasName=""
+  back={[Function]}
+  bootstrapEnabled={false}
+  done={[Function]}
+  errors={
+    Object {
+      "policyName": Array [],
+    }
+  }
+  indexName=""
+  lifecycle={
+    Object {
+      "name": "",
+      "phases": Object {
+        "hot": Object {
+          "actions": Object {
+            "rollover": Object {
+              "alias": "",
+            },
+          },
+          "after": "0s",
+        },
+      },
+    }
+  }
+  policies={Array []}
+  saveAsNewPolicy={true}
+  selectedIndexTemplateName=""
+  selectedPolicyName=""
+  setSaveAsNewPolicy={[Function]}
+  setSelectedPolicyName={[Function]}
+  templateDiff={
+    Object {
+      "hasChanged": false,
+      "newFullIndexTemplate": Object {
+        "settings": Object {
+          "index": Object {
+            "lifecycle": Object {
+              "name": "",
+            },
+            "number_of_replicas": "1",
+            "number_of_shards": "1",
+            "routing": Object {
+              "allocation": Object {
+                "include": Object {
+                  "sattr_name": "",
+                },
+              },
+            },
+          },
+        },
+      },
+      "originalFullIndexTemplate": Object {
+        "settings": Object {
+          "index": Object {
+            "lifecycle": Object {
+              "name": "",
+            },
+            "number_of_replicas": "1",
+            "number_of_shards": "1",
+            "routing": Object {
+              "allocation": Object {
+                "include": Object {
+                  "sattr_name": "",
+                },
+              },
+            },
+          },
+        },
+      },
+    }
+  }
+  validate={[Function]}
+>
+  <div
+    className="euiAnimateContentLoad"
+  >
+    <EuiSpacer />
+    <EuiTitle
+      size="s"
+    >
+      <h3>
+        Review your policy changes
+      </h3>
+    </EuiTitle>
+    <EuiText>
+      <p>
+        When you save a policy, your changes go into effect immediately.
+      </p>
+    </EuiText>
+    <EuiSpacer />
+    <EuiCallOut
+      color="warning"
+      title="Your changes affect these template configurations"
+    >
+      <h4>
+        1 Index template
+      </h4>
+      <ul>
+        <li />
+      </ul>
+      <h4>
+        2 Indices
+      </h4>
+      <ul>
+        <li
+          key="foobar*"
+        >
+          foobar*
+        </li>
+        <li
+          key="boofar*"
+        >
+          boofar*
+        </li>
+      </ul>
+    </EuiCallOut>
+    <EuiHorizontalRule
+      className="ilmHrule"
+    />
+    <EuiSpacer />
+    <EuiTitle
+      size="s"
+    >
+      <h3>
+        Save your work
+      </h3>
+    </EuiTitle>
+    <EuiSpacer />
+    <ErrableFormRow
+      errorKey="policyName"
+      errors={
+        Object {
+          "policyName": Array [],
+        }
+      }
+      label="Policy name"
+    >
+      <EuiFormRow
+        error={Array []}
+        label="Policy name"
+      >
+        <EuiFieldText
+          key=".0"
+          onChange={[Function]}
+          value=""
+        />
+      </EuiFormRow>
+    </ErrableFormRow>
+    <EuiFlexGroup>
+      <EuiFlexItem
+        grow={false}
+      >
+        <EuiButtonEmpty
+          iconSide="left"
+          iconType="sortLeft"
+          onClick={[Function]}
+        >
+          Back
+        </EuiButtonEmpty>
+      </EuiFlexItem>
+      <EuiFlexItem
+        grow={false}
+      >
+        <EuiButton
+          color="secondary"
+          fill={true}
+          iconType="check"
+          onClick={[Function]}
+        >
+          Looks good, save changes
+        </EuiButton>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+      
+  </div>
+</Review>
+`;
+
+exports[`Review should show a warning if editing an existing policy 1`] = `
+Array [
+  <EuiText>
+    <p>
+      When you save a policy, your changes go into effect immediately.
+    </p>
+  </EuiText>,
+  <EuiText>
+    <p>
+      <strong>
+        You are editing an existing policy
+      </strong>
+      . Any changes you make will also change index templates that this policy is attached to. Alternately, you can save these changes in a new policy and only change the template you selected.
+    </p>
+  </EuiText>,
+]
+`;
+
+exports[`Review should show errors 1`] = `
+<ErrableFormRow
+  errorKey="policyName"
+  errors={
+    Object {
+      "policyName": Array [
+        "Error",
+      ],
+    }
+  }
+  label="Policy name"
+>
+  <EuiFormRow
+    error={
+      Array [
+        "Error",
+      ]
+    }
+    label="Policy name"
+  >
+    <EuiFieldText
+      key=".0"
+      onChange={[Function]}
+      value=""
+    />
+  </EuiFormRow>
+</ErrableFormRow>
+`;
+
+exports[`Review should show the aliases if bootstrap is enabled 1`] = `
+<EuiCallOut
+  color="success"
+  title="This action creates a new index alias"
+>
+  <p>
+    You decided to bootstrap a new index. Point to this new alias going forward.
+  </p>
+  <h3>
+    <span
+      className="ilmAlias"
+    >
+      my_alias
+    </span>
+     is your new alias
+  </h3>
+</EuiCallOut>
+`;
+
+exports[`Review should show the diff if there are changes 1`] = `
+<DiffView
+  templateDiff={
+    Object {
+      "hasChanged": true,
+      "newFullIndexTemplate": Object {
+        "settings": Object {
+          "index": Object {
+            "lifecycle": Object {
+              "name": "",
+            },
+            "number_of_replicas": "1",
+            "number_of_shards": "1",
+            "routing": Object {
+              "allocation": Object {
+                "include": Object {
+                  "sattr_name": "",
+                },
+              },
+            },
+          },
+        },
+      },
+      "originalFullIndexTemplate": Object {
+        "settings": Object {},
+      },
+    }
+  }
+/>
+`;

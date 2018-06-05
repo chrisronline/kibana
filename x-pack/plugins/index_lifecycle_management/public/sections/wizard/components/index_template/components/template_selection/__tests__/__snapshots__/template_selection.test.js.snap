@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TemplateSelection bootstrap options should show bootstrap options 1`] = `
+<EuiFormRow
+  label="Bootstrap options"
+  style={
+    Object {
+      "maxWidth": "100%",
+    }
+  }
+>
+  <EuiSwitch
+    checked={false}
+    label={
+      <span>
+        Create an index and alias for this template
+      </span>
+    }
+    onChange={[Function]}
+    style={
+      Object {
+        "maxWidth": "100%",
+      }
+    }
+  />
+</EuiFormRow>
+`;
+
+exports[`TemplateSelection bootstrap options should show index and alias name 1`] = `
+<UNDEFINED>
+  <ErrableFormRow
+    errorKey="indexName"
+    errors={Object {}}
+    isShowingErrors={false}
+    label="Index name"
+  >
+    <EuiFieldText
+      onChange={[Function]}
+      value=""
+    />
+  </ErrableFormRow>
+  <ErrableFormRow
+    errorKey="aliasName"
+    errors={Object {}}
+    isShowingErrors={false}
+    label="Alias name"
+  >
+    <EuiFieldText
+      onChange={[Function]}
+      value=""
+    />
+  </ErrableFormRow>
+</UNDEFINED>
+`;
+
+exports[`TemplateSelection should render properly 1`] = `
+<TemplateSelection
+  aliasName=""
+  bootstrapEnabled={false}
+  errors={Object {}}
+  fetchIndexTemplates={[Function]}
+  indexName=""
+  isShowingErrors={false}
+  selectedIndexTemplateName=""
+  setAliasName={[Function]}
+  setBootstrapEnabled={[Function]}
+  setIndexName={[Function]}
+  setSelectedIndexTemplate={[Function]}
+  templateOptions={
+    Array [
+      Object {
+        "text": "",
+        "value": undefined,
+      },
+      Object {
+        "text": undefined,
+        "value": undefined,
+      },
+    ]
+  }
+  validate={[Function]}
+>
+  <EuiDescribedFormGroup
+    description={
+      <p>
+        An index template defines the settings, mappings, and aliases to apply when you create an index.
+         
+        <EuiLink
+          href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html"
+        >
+          Learn more
+        </EuiLink>
+      </p>
+    }
+    fullWidth={true}
+    title={
+      <h4>
+        Select a template
+      </h4>
+    }
+    titleSize="s"
+  >
+    <ErrableFormRow
+      errorKey="templateName"
+      errors={Object {}}
+      isShowingErrors={false}
+      label="Your existing templates"
+    >
+      <EuiSelect
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "text": "",
+              "value": undefined,
+            },
+            Object {
+              "text": undefined,
+              "value": undefined,
+            },
+          ]
+        }
+        value=""
+      />
+    </ErrableFormRow>
+  </EuiDescribedFormGroup>
+</TemplateSelection>
+`;

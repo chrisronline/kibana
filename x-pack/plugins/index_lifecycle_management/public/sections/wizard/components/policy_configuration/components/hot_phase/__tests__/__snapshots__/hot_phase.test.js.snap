@@ -1,0 +1,720 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HotPhase should render just the activate button if not activated 1`] = `
+<HotPhase
+  errors={Object {}}
+  isShowingErrors={false}
+  phaseData={
+    Object {
+      "phaseEnabled": true,
+      "rolloverEnabled": true,
+      "selectedAlias": "",
+      "selectedMaxAge": "",
+      "selectedMaxAgeUnits": "s",
+      "selectedMaxDocSize": "",
+      "selectedMaxSizeStored": "",
+      "selectedMaxSizeStoredUnits": "gb",
+    }
+  }
+  setPhaseData={[Function]}
+  validate={[Function]}
+>
+  <EuiDescribedFormGroup
+    description={
+      <UNDEFINED>
+        <p>
+          This phase is required. Your index is being queried and actively written to. You can optimize this phase for write throughput.
+        </p>
+      </UNDEFINED>
+    }
+    fullWidth={true}
+    title={
+      <div>
+        <span
+          className="eui-displayInlineBlock eui-alignMiddle"
+        >
+          Hot phase
+        </span>
+         
+        <EuiBetaBadge
+          className="eui-alignMiddle"
+          iconType="check"
+          label="Enabled"
+        />
+      </div>
+    }
+    titleSize="s"
+  >
+    <EuiFormRow
+      hasEmptyLabelSpace={true}
+      helpText={
+        <p>
+          If true, rollover the index when it gets too big or too old. The alias switches to the new index.
+           
+          <EuiLink
+            href="https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-rollover-index.html"
+          >
+            Learn more
+          </EuiLink>
+        </p>
+      }
+    >
+      <EuiSwitch
+        checked={true}
+        label="Enable rollover"
+        onChange={[Function]}
+      />
+    </EuiFormRow>
+    <EuiSpacer
+      size="m"
+    />
+    <EuiFlexGroup>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxSizeStored"
+          errors={Object {}}
+          isShowingErrors={false}
+          label="Maximum index size"
+        >
+          <EuiFormRow
+            isInvalid={false}
+            label="Maximum index size"
+          >
+            <EuiFieldNumber
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxSizeStoredUnits"
+          errors={Object {}}
+          hasEmptyLabelSpace={true}
+          isShowingErrors={false}
+        >
+          <EuiFormRow
+            hasEmptyLabelSpace={true}
+            isInvalid={false}
+          >
+            <EuiSelect
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "text": "gigabytes",
+                    "value": "gb",
+                  },
+                  Object {
+                    "text": "documents",
+                    "value": "d",
+                  },
+                ]
+              }
+              value="gb"
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <EuiFlexGroup>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxAge"
+          errors={Object {}}
+          isShowingErrors={false}
+          label="Maximum age"
+        >
+          <EuiFormRow
+            isInvalid={false}
+            label="Maximum age"
+          >
+            <EuiFieldNumber
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxAgeUnits"
+          errors={Object {}}
+          hasEmptyLabelSpace={true}
+          isShowingErrors={false}
+        >
+          <EuiFormRow
+            hasEmptyLabelSpace={true}
+            isInvalid={false}
+          >
+            <EuiSelect
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "text": "days",
+                    "value": "d",
+                  },
+                  Object {
+                    "text": "hours",
+                    "value": "h",
+                  },
+                ]
+              }
+              value="s"
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  </EuiDescribedFormGroup>
+</HotPhase>
+`;
+
+exports[`HotPhase should show configuration options when activated 1`] = `
+<HotPhase
+  errors={Object {}}
+  isShowingErrors={false}
+  phaseData={
+    Object {
+      "phaseEnabled": true,
+      "rolloverEnabled": true,
+      "selectedAlias": "",
+      "selectedMaxAge": "",
+      "selectedMaxAgeUnits": "s",
+      "selectedMaxDocSize": "",
+      "selectedMaxSizeStored": "",
+      "selectedMaxSizeStoredUnits": "gb",
+    }
+  }
+  setPhaseData={[Function]}
+  validate={[Function]}
+>
+  <EuiDescribedFormGroup
+    description={
+      <UNDEFINED>
+        <p>
+          This phase is required. Your index is being queried and actively written to. You can optimize this phase for write throughput.
+        </p>
+      </UNDEFINED>
+    }
+    fullWidth={true}
+    title={
+      <div>
+        <span
+          className="eui-displayInlineBlock eui-alignMiddle"
+        >
+          Hot phase
+        </span>
+         
+        <EuiBetaBadge
+          className="eui-alignMiddle"
+          iconType="check"
+          label="Enabled"
+        />
+      </div>
+    }
+    titleSize="s"
+  >
+    <EuiFormRow
+      hasEmptyLabelSpace={true}
+      helpText={
+        <p>
+          If true, rollover the index when it gets too big or too old. The alias switches to the new index.
+           
+          <EuiLink
+            href="https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-rollover-index.html"
+          >
+            Learn more
+          </EuiLink>
+        </p>
+      }
+    >
+      <EuiSwitch
+        checked={true}
+        label="Enable rollover"
+        onChange={[Function]}
+      />
+    </EuiFormRow>
+    <EuiSpacer
+      size="m"
+    />
+    <EuiFlexGroup>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxSizeStored"
+          errors={Object {}}
+          isShowingErrors={false}
+          label="Maximum index size"
+        >
+          <EuiFormRow
+            isInvalid={false}
+            label="Maximum index size"
+          >
+            <EuiFieldNumber
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxSizeStoredUnits"
+          errors={Object {}}
+          hasEmptyLabelSpace={true}
+          isShowingErrors={false}
+        >
+          <EuiFormRow
+            hasEmptyLabelSpace={true}
+            isInvalid={false}
+          >
+            <EuiSelect
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "text": "gigabytes",
+                    "value": "gb",
+                  },
+                  Object {
+                    "text": "documents",
+                    "value": "d",
+                  },
+                ]
+              }
+              value="gb"
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <EuiFlexGroup>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxAge"
+          errors={Object {}}
+          isShowingErrors={false}
+          label="Maximum age"
+        >
+          <EuiFormRow
+            isInvalid={false}
+            label="Maximum age"
+          >
+            <EuiFieldNumber
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxAgeUnits"
+          errors={Object {}}
+          hasEmptyLabelSpace={true}
+          isShowingErrors={false}
+        >
+          <EuiFormRow
+            hasEmptyLabelSpace={true}
+            isInvalid={false}
+          >
+            <EuiSelect
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "text": "days",
+                    "value": "d",
+                  },
+                  Object {
+                    "text": "hours",
+                    "value": "h",
+                  },
+                ]
+              }
+              value="s"
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  </EuiDescribedFormGroup>
+</HotPhase>
+`;
+
+exports[`HotPhase should show errors 1`] = `
+<HotPhase
+  errors={
+    Object {
+      "selectedMaxAge": Array [
+        "Error",
+      ],
+      "selectedMaxAgeUnits": Array [
+        "Error",
+      ],
+      "selectedMaxSizeStored": Array [
+        "Error",
+      ],
+      "selectedMaxSizeStoredUnits": Array [
+        "Error",
+      ],
+    }
+  }
+  isShowingErrors={true}
+  phaseData={
+    Object {
+      "phaseEnabled": true,
+      "rolloverEnabled": true,
+      "selectedAlias": "",
+      "selectedMaxAge": "",
+      "selectedMaxAgeUnits": "s",
+      "selectedMaxDocSize": "",
+      "selectedMaxSizeStored": "",
+      "selectedMaxSizeStoredUnits": "gb",
+    }
+  }
+  setPhaseData={[Function]}
+  validate={[Function]}
+>
+  <EuiDescribedFormGroup
+    description={
+      <UNDEFINED>
+        <p>
+          This phase is required. Your index is being queried and actively written to. You can optimize this phase for write throughput.
+        </p>
+        <EuiTextColor
+          color="danger"
+        >
+          <EuiText>
+            <p>
+              This phase contains errors
+            </p>
+          </EuiText>
+        </EuiTextColor>
+      </UNDEFINED>
+    }
+    fullWidth={true}
+    title={
+      <div>
+        <span
+          className="eui-displayInlineBlock eui-alignMiddle"
+        >
+          Hot phase
+        </span>
+         
+        <EuiBetaBadge
+          className="eui-alignMiddle"
+          iconType="check"
+          label="Enabled"
+        />
+      </div>
+    }
+    titleSize="s"
+  >
+    <EuiFormRow
+      hasEmptyLabelSpace={true}
+      helpText={
+        <p>
+          If true, rollover the index when it gets too big or too old. The alias switches to the new index.
+           
+          <EuiLink
+            href="https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-rollover-index.html"
+          >
+            Learn more
+          </EuiLink>
+        </p>
+      }
+    >
+      <EuiSwitch
+        checked={true}
+        label="Enable rollover"
+        onChange={[Function]}
+      />
+    </EuiFormRow>
+    <EuiSpacer
+      size="m"
+    />
+    <EuiFlexGroup>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxSizeStored"
+          errors={
+            Object {
+              "selectedMaxAge": Array [
+                "Error",
+              ],
+              "selectedMaxAgeUnits": Array [
+                "Error",
+              ],
+              "selectedMaxSizeStored": Array [
+                "Error",
+              ],
+              "selectedMaxSizeStoredUnits": Array [
+                "Error",
+              ],
+            }
+          }
+          isShowingErrors={true}
+          label="Maximum index size"
+        >
+          <EuiFormRow
+            error={
+              Array [
+                "Error",
+              ]
+            }
+            isInvalid={true}
+            label="Maximum index size"
+          >
+            <EuiFieldNumber
+              isInvalid={true}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxSizeStoredUnits"
+          errors={
+            Object {
+              "selectedMaxAge": Array [
+                "Error",
+              ],
+              "selectedMaxAgeUnits": Array [
+                "Error",
+              ],
+              "selectedMaxSizeStored": Array [
+                "Error",
+              ],
+              "selectedMaxSizeStoredUnits": Array [
+                "Error",
+              ],
+            }
+          }
+          hasEmptyLabelSpace={true}
+          isShowingErrors={true}
+        >
+          <EuiFormRow
+            error={
+              Array [
+                "Error",
+              ]
+            }
+            hasEmptyLabelSpace={true}
+            isInvalid={true}
+          >
+            <EuiSelect
+              isInvalid={true}
+              key=".0"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "text": "gigabytes",
+                    "value": "gb",
+                  },
+                  Object {
+                    "text": "documents",
+                    "value": "d",
+                  },
+                ]
+              }
+              value="gb"
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <EuiFlexGroup>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxAge"
+          errors={
+            Object {
+              "selectedMaxAge": Array [
+                "Error",
+              ],
+              "selectedMaxAgeUnits": Array [
+                "Error",
+              ],
+              "selectedMaxSizeStored": Array [
+                "Error",
+              ],
+              "selectedMaxSizeStoredUnits": Array [
+                "Error",
+              ],
+            }
+          }
+          isShowingErrors={true}
+          label="Maximum age"
+        >
+          <EuiFormRow
+            error={
+              Array [
+                "Error",
+              ]
+            }
+            isInvalid={true}
+            label="Maximum age"
+          >
+            <EuiFieldNumber
+              isInvalid={true}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedMaxAgeUnits"
+          errors={
+            Object {
+              "selectedMaxAge": Array [
+                "Error",
+              ],
+              "selectedMaxAgeUnits": Array [
+                "Error",
+              ],
+              "selectedMaxSizeStored": Array [
+                "Error",
+              ],
+              "selectedMaxSizeStoredUnits": Array [
+                "Error",
+              ],
+            }
+          }
+          hasEmptyLabelSpace={true}
+          isShowingErrors={true}
+        >
+          <EuiFormRow
+            error={
+              Array [
+                "Error",
+              ]
+            }
+            hasEmptyLabelSpace={true}
+            isInvalid={true}
+          >
+            <EuiSelect
+              isInvalid={true}
+              key=".0"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "text": "days",
+                    "value": "d",
+                  },
+                  Object {
+                    "text": "hours",
+                    "value": "h",
+                  },
+                ]
+              }
+              value="s"
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  </EuiDescribedFormGroup>
+</HotPhase>
+`;

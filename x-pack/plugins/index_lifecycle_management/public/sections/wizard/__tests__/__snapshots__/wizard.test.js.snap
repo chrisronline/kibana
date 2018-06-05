@@ -1,0 +1,207 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Wizard should render the first step 1`] = `
+<EuiPageContent
+  className="ilmContent"
+  horizontalPosition="center"
+  verticalPosition="center"
+>
+  <EuiTitle
+    size="m"
+  >
+    <h2>
+      Index lifecycle management
+    </h2>
+  </EuiTitle>
+  <EuiSpacer />
+  <EuiStepsHorizontal
+    steps={
+      Array [
+        Object {
+          "isComplete": false,
+          "isSelected": true,
+          "onClick": [Function],
+          "title": "Select a template",
+        },
+        Object {
+          "disabled": true,
+          "isComplete": false,
+          "isSelected": false,
+          "onClick": [Function],
+          "title": "Configure a policy",
+        },
+        Object {
+          "disabled": true,
+          "isComplete": false,
+          "isSelected": false,
+          "onClick": [Function],
+          "title": "Review and save",
+        },
+      ]
+    }
+  />
+  <EuiSpacer />
+  <IndexTemplate
+    done={[Function]}
+    errors={
+      Object {
+        "configuration": Object {
+          "node_attrs": Array [],
+          "primary_nodes": Array [],
+          "replicas": Array [],
+        },
+        "templateSelection": Object {
+          "aliasName": Array [],
+          "indexName": Array [],
+          "templateName": Array [
+            "An index template is required",
+          ],
+        },
+      }
+    }
+    validate={[Function]}
+  />
+</EuiPageContent>
+`;
+
+exports[`Wizard should render the second step 1`] = `
+<EuiPageContent
+  className="ilmContent"
+  horizontalPosition="center"
+  verticalPosition="center"
+>
+  <EuiTitle
+    size="m"
+  >
+    <h2>
+      Index lifecycle management
+    </h2>
+  </EuiTitle>
+  <EuiSpacer />
+  <EuiStepsHorizontal
+    steps={
+      Array [
+        Object {
+          "isComplete": true,
+          "isSelected": false,
+          "onClick": [Function],
+          "title": "Select a template",
+        },
+        Object {
+          "disabled": false,
+          "isComplete": false,
+          "isSelected": true,
+          "onClick": [Function],
+          "title": "Configure a policy",
+        },
+        Object {
+          "disabled": true,
+          "isComplete": false,
+          "isSelected": false,
+          "onClick": [Function],
+          "title": "Review and save",
+        },
+      ]
+    }
+  />
+  <EuiSpacer />
+  <PolicyConfiguration
+    back={[Function]}
+    done={[Function]}
+    errors={
+      Object {
+        "cold": Object {
+          "selectedAfter": Array [],
+          "selectedAfterUnits": Array [],
+          "selectedAlias": Array [],
+          "selectedNodeAttrs": Array [],
+          "selectedReplicaCount": Array [],
+        },
+        "delete": Object {
+          "selectedAfter": Array [],
+          "selectedAfterUnits": Array [],
+          "selectedAlias": Array [],
+        },
+        "hot": Object {
+          "selectedAlias": Array [],
+          "selectedMaxAge": Array [
+            "A maximum age is required",
+          ],
+          "selectedMaxAgeUnits": Array [],
+          "selectedMaxDocSize": Array [],
+          "selectedMaxSizeStored": Array [
+            "A maximum index size is required",
+          ],
+          "selectedMaxSizeStoredUnits": Array [],
+        },
+        "warm": Object {
+          "selectedAfter": Array [],
+          "selectedAfterUnits": Array [],
+          "selectedAlias": Array [],
+          "selectedForceMergeSegments": Array [],
+          "selectedNodeAttrs": Array [],
+          "selectedPrimaryShardCount": Array [],
+          "selectedReplicaCount": Array [],
+        },
+      }
+    }
+    validate={[Function]}
+  />
+</EuiPageContent>
+`;
+
+exports[`Wizard should render the third step 1`] = `
+<EuiPageContent
+  className="ilmContent"
+  horizontalPosition="center"
+  verticalPosition="center"
+>
+  <EuiTitle
+    size="m"
+  >
+    <h2>
+      Index lifecycle management
+    </h2>
+  </EuiTitle>
+  <EuiSpacer />
+  <EuiStepsHorizontal
+    steps={
+      Array [
+        Object {
+          "isComplete": true,
+          "isSelected": false,
+          "onClick": [Function],
+          "title": "Select a template",
+        },
+        Object {
+          "disabled": false,
+          "isComplete": true,
+          "isSelected": false,
+          "onClick": [Function],
+          "title": "Configure a policy",
+        },
+        Object {
+          "disabled": false,
+          "isComplete": false,
+          "isSelected": true,
+          "onClick": [Function],
+          "title": "Review and save",
+        },
+      ]
+    }
+  />
+  <EuiSpacer />
+  <Review
+    back={[Function]}
+    done={[Function]}
+    errors={
+      Object {
+        "policyName": Array [
+          "A policy name is required",
+        ],
+      }
+    }
+    validate={[Function]}
+  />
+</EuiPageContent>
+`;

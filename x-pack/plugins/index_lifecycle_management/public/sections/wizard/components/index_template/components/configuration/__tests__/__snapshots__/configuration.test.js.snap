@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Configuration should render properly 1`] = `
+<Configuration
+  errors={Object {}}
+  fetchNodes={[Function]}
+  isPrimaryShardCountHigherThanSelectedNodeAttrsCount={false}
+  isShowingErrors={false}
+  nodeOptions={
+    Array [
+      Object {
+        "text": "-- Do not reallocate my indices --",
+        "value": undefined,
+      },
+    ]
+  }
+  selectedNodeAttrs=""
+  selectedPrimaryShardCount={1}
+  selectedReplicaCount={1}
+  setSelectedNodeAttrs={[Function]}
+  setSelectedPrimaryShardCount={[Function]}
+  setSelectedReplicaCount={[Function]}
+  validate={[Function]}
+>
+  <div>
+    <EuiDescribedFormGroup
+      description="A hot index is actively being written to."
+      fullWidth={true}
+      title={
+        <h4>
+          Configure hot indices
+        </h4>
+      }
+      titleSize="s"
+    >
+      <ErrableFormRow
+        errorKey="node_attrs"
+        errors={Object {}}
+        helpText={null}
+        isShowingErrors={false}
+        label="Where do you want your hot indices to live?"
+      >
+        <EuiSelect
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "text": "-- Do not reallocate my indices --",
+                "value": undefined,
+              },
+            ]
+          }
+          value=""
+        />
+      </ErrableFormRow>
+      <EuiCallOut
+        color="warning"
+        size="s"
+        title={
+          <p>
+            The best way to determine how many shards you need is to benchmark using realistic data and queries on your hardware.
+             
+            <EuiLink
+              href="https://www.elastic.co/webinars/using-rally-to-get-your-elasticsearch-cluster-size-right"
+            >
+              Learn more
+            </EuiLink>
+          </p>
+        }
+      />
+      <EuiSpacer />
+      <EuiFlexGroup>
+        <EuiFlexItem
+          style={
+            Object {
+              "maxWidth": 188,
+            }
+          }
+        >
+          <ErrableFormRow
+            errorKey="primary_nodes"
+            errors={Object {}}
+            isShowingErrors={false}
+            label="Primary shards"
+          >
+            <EuiFieldNumber
+              onChange={[Function]}
+              value={1}
+            />
+          </ErrableFormRow>
+        </EuiFlexItem>
+        <EuiFlexItem
+          style={
+            Object {
+              "maxWidth": 188,
+            }
+          }
+        >
+          <ErrableFormRow
+            errorKey="replicas"
+            errors={Object {}}
+            isShowingErrors={false}
+            label="Replicas"
+          >
+            <EuiFieldNumber
+              onChange={[Function]}
+              value={1}
+            />
+          </ErrableFormRow>
+        </EuiFlexItem>
+      </EuiFlexGroup>
+    </EuiDescribedFormGroup>
+  </div>
+</Configuration>
+`;
+
+exports[`Configuration should show a warning about shard counts if they are higher than node attrs count 1`] = `
+<EuiCallOut
+  color="warning"
+  iconType="help"
+  style={
+    Object {
+      "marginTop": "1rem",
+    }
+  }
+  title="Primary shard count is too high"
+>
+  The shard count should be lower than the number of nodes that match the selected attributes.
+</EuiCallOut>
+`;
+
+exports[`Configuration should show the flyout 1`] = `
+<NodeAttrsDetails
+  close={[Function]}
+  selectedNodeAttrs=""
+/>
+`;

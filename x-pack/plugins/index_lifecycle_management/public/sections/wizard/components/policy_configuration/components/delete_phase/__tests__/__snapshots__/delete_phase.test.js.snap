@@ -1,0 +1,180 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeletePhase should render just the activate button if not activated 1`] = `
+<DeletePhase
+  errors={Object {}}
+  isShowingErrors={false}
+  phaseData={
+    Object {
+      "phaseEnabled": false,
+      "rolloverEnabled": false,
+      "selectedAfter": "",
+      "selectedAfterUnits": "s",
+      "selectedAlias": "",
+    }
+  }
+  setPhaseData={[Function]}
+  showNodeDetailsFlyout={[Function]}
+  validate={[Function]}
+>
+  <EuiDescribedFormGroup
+    description={
+      <UNDEFINED>
+        <p>
+          Use this phase to define how long to retain your data.
+        </p>
+      </UNDEFINED>
+    }
+    fullWidth={true}
+    title={
+      <div>
+        <span
+          className="eui-displayInlineBlock eui-alignMiddle"
+        >
+          Delete phase
+        </span>
+         
+      </div>
+    }
+    titleSize="s"
+  >
+    <div>
+      <EuiSpacer />
+      <EuiButton
+        onClick={[Function]}
+      >
+        Activate delete phase
+      </EuiButton>
+    </div>
+  </EuiDescribedFormGroup>
+</DeletePhase>
+`;
+
+exports[`DeletePhase should show configuration options when activated 1`] = `
+<EuiFlexGroup>
+  <EuiFlexItem
+    style={
+      Object {
+        "maxWidth": 188,
+      }
+    }
+  >
+    <ErrableFormRow
+      errorKey="selectedAfter"
+      errors={Object {}}
+      isShowingErrors={false}
+      label="Delete indices after"
+    >
+      <EuiFormRow
+        isInvalid={false}
+        label="Delete indices after"
+      >
+        <EuiFieldNumber
+          isInvalid={false}
+          key=".0"
+          onChange={[Function]}
+          value=""
+        />
+      </EuiFormRow>
+    </ErrableFormRow>
+  </EuiFlexItem>
+  <EuiFlexItem
+    style={
+      Object {
+        "maxWidth": 188,
+      }
+    }
+  >
+    <EuiFormRow
+      hasEmptyLabelSpace={true}
+    >
+      <EuiSelect
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "text": "days",
+              "value": "d",
+            },
+            Object {
+              "text": "hours",
+              "value": "h",
+            },
+          ]
+        }
+        value="s"
+      />
+    </EuiFormRow>
+  </EuiFlexItem>
+</EuiFlexGroup>
+`;
+
+exports[`DeletePhase should show errors 1`] = `
+<EuiFlexGroup>
+  <EuiFlexItem
+    style={
+      Object {
+        "maxWidth": 188,
+      }
+    }
+  >
+    <ErrableFormRow
+      errorKey="selectedAfter"
+      errors={
+        Object {
+          "selectedAfter": Array [
+            "Error",
+          ],
+        }
+      }
+      isShowingErrors={true}
+      label="Delete indices after"
+    >
+      <EuiFormRow
+        error={
+          Array [
+            "Error",
+          ]
+        }
+        isInvalid={true}
+        label="Delete indices after"
+      >
+        <EuiFieldNumber
+          isInvalid={true}
+          key=".0"
+          onChange={[Function]}
+          value=""
+        />
+      </EuiFormRow>
+    </ErrableFormRow>
+  </EuiFlexItem>
+  <EuiFlexItem
+    style={
+      Object {
+        "maxWidth": 188,
+      }
+    }
+  >
+    <EuiFormRow
+      hasEmptyLabelSpace={true}
+    >
+      <EuiSelect
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "text": "days",
+              "value": "d",
+            },
+            Object {
+              "text": "hours",
+              "value": "h",
+            },
+          ]
+        }
+        value="s"
+      />
+    </EuiFormRow>
+  </EuiFlexItem>
+</EuiFlexGroup>
+`;

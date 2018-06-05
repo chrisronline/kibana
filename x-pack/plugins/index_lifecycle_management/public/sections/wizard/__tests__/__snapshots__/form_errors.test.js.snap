@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrableFormRow should not render errors is we are not showing thenm 1`] = `
+<EuiFormRow
+  describedByIds={Array []}
+  error={
+    Array [
+      "There is an error.",
+    ]
+  }
+  fullWidth={false}
+  hasEmptyLabelSpace={false}
+  isInvalid={false}
+>
+  <React.Fragment>
+    <div
+      isInvalid={false}
+      key=".0"
+    />
+  </React.Fragment>
+</EuiFormRow>
+`;
+
+exports[`ErrableFormRow should render a form row with invalid props and mark the child as invalid 1`] = `
+<EuiFormRow
+  describedByIds={Array []}
+  error={
+    Array [
+      "There is an error.",
+    ]
+  }
+  fullWidth={false}
+  hasEmptyLabelSpace={false}
+  isInvalid={true}
+>
+  <React.Fragment>
+    <div
+      isInvalid={true}
+      key=".0"
+    />
+  </React.Fragment>
+</EuiFormRow>
+`;
+
+exports[`ErrableFormRow should render a form row with invalid props and mark the child as invalid only if it is invalid 1`] = `
+<EuiFormRow
+  describedByIds={Array []}
+  error={Array []}
+  fullWidth={false}
+  hasEmptyLabelSpace={false}
+  isInvalid={false}
+>
+  <React.Fragment>
+    <div
+      isInvalid={false}
+      key=".0"
+    />
+  </React.Fragment>
+</EuiFormRow>
+`;

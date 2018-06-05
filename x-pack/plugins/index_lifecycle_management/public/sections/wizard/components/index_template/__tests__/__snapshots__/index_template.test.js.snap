@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IndexTemplate should render normally 1`] = `
+<div
+  className="euiAnimateContentLoad"
+>
+  <Connect(TemplateSelection)
+    errors={Array []}
+    isShowingErrors={false}
+    validate={[Function]}
+  />
+  <Connect(Configuration)
+    errors={Array []}
+    isShowingErrors={false}
+    validate={[Function]}
+  />
+  <EuiHorizontalRule
+    className="ilmHrule"
+    margin="l"
+    size="full"
+  />
+  <EuiButton
+    color="primary"
+    fill={true}
+    iconSide="right"
+    iconType="sortRight"
+    onClick={[Function]}
+    type="button"
+  >
+    Continue
+  </EuiButton>
+</div>
+`;

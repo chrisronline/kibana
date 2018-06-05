@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PolicyConfiguration should render just the policy selection if no policy is selected yet 1`] = `<PolicySelection />`;
+
+exports[`PolicyConfiguration should render the flyout 1`] = `
+<NodeAttrsDetails
+  close={[Function]}
+  selectedNodeAttrs="foo"
+/>
+`;
+
+exports[`PolicyConfiguration should render the selected new policy 1`] = `
+<PolicyConfiguration
+  back={[Function]}
+  dispatch={[MockFunction]}
+  done={[Function]}
+  errors={
+    Object {
+      "cold": Object {},
+      "delete": Object {},
+      "hot": Object {},
+      "warm": Object {},
+    }
+  }
+  isSelectedPolicySet={true}
+  selectedPolicyName="my_policy"
+  validate={[Function]}
+>
+  <div
+    className="euiAnimateContentLoad"
+  >
+    <PolicySelection />
+    <EuiHorizontalRule
+      className="ilmHrule"
+    />
+    <EuiTitle>
+      <h4>
+        Edit policy my_policy
+      </h4>
+    </EuiTitle>
+    <EuiSpacer
+      size="xs"
+    />
+    <EuiText
+      color="subdued"
+    >
+      <p>
+        Configure the phases of your data and when to transition between them.
+      </p>
+    </EuiText>
+    <EuiSpacer />
+    <HotPhase
+      errors={Object {}}
+      isShowingErrors={false}
+      validate={[Function]}
+    />
+    <EuiHorizontalRule
+      className="ilmHrule"
+    />
+    <WarmPhase
+      errors={Object {}}
+      isShowingErrors={false}
+      showNodeDetailsFlyout={[Function]}
+      validate={[Function]}
+    />
+    <EuiHorizontalRule
+      className="ilmHrule"
+    />
+    <ColdPhase
+      errors={Object {}}
+      isShowingErrors={false}
+      showNodeDetailsFlyout={[Function]}
+      validate={[Function]}
+    />
+    <EuiHorizontalRule
+      className="ilmHrule"
+    />
+    <DeletePhase
+      errors={Object {}}
+      isShowingErrors={false}
+      validate={[Function]}
+    />
+    <EuiHorizontalRule
+      className="ilmHrule"
+    />
+    <EuiButtonEmpty
+      iconSide="left"
+      iconType="sortLeft"
+      onClick={[Function]}
+    >
+      Back
+    </EuiButtonEmpty>
+      
+    <EuiButton
+      fill={true}
+      iconSide="right"
+      iconType="sortRight"
+      onClick={[Function]}
+    >
+      Continue
+    </EuiButton>
+  </div>
+</PolicyConfiguration>
+`;

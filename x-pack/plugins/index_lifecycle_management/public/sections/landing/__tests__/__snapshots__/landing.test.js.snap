@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Landing should render a message if there are no templates 1`] = `
+<h1>
+  No index templates found.
+</h1>
+`;

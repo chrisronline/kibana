@@ -1,0 +1,305 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColdPhase should render just the activate button if not activated 1`] = `
+<ColdPhase
+  errors={Object {}}
+  fetchNodes={[Function]}
+  isShowingErrors={false}
+  nodeOptions={
+    Array [
+      Object {
+        "text": "-- Do not reallocate my indices --",
+        "value": undefined,
+      },
+    ]
+  }
+  phaseData={
+    Object {
+      "phaseEnabled": false,
+      "rolloverEnabled": false,
+      "selectedAfter": "",
+      "selectedAfterUnits": "s",
+      "selectedAlias": "",
+      "selectedNodeAttrs": "",
+      "selectedReplicaCount": "",
+    }
+  }
+  setPhaseData={[Function]}
+  showNodeDetailsFlyout={[Function]}
+  validate={[Function]}
+  warmPhaseReplicaCount={NaN}
+>
+  <EuiDescribedFormGroup
+    description={
+      <UNDEFINED>
+        <p>
+          Your index is queried less frequently and no longer needs to be on the most performant hardware.
+        </p>
+      </UNDEFINED>
+    }
+    fullWidth={true}
+    title={
+      <div>
+        <span
+          className="eui-displayInlineBlock eui-alignMiddle"
+        >
+          Cold phase
+        </span>
+         
+      </div>
+    }
+    titleSize="s"
+  >
+    <div>
+      <EuiSpacer />
+      <EuiButton
+        onClick={[Function]}
+      >
+        Activate cold phase
+      </EuiButton>
+    </div>
+  </EuiDescribedFormGroup>
+</ColdPhase>
+`;
+
+exports[`ColdPhase should show configuration options when activated 1`] = `
+Array [
+  <EuiFlexGroup>
+    <EuiFlexItem
+      style={
+        Object {
+          "maxWidth": 188,
+        }
+      }
+    >
+      <ErrableFormRow
+        errorKey="selectedAfter"
+        errors={Object {}}
+        isShowingErrors={false}
+        label="Move to cold phase after"
+      >
+        <EuiFormRow
+          isInvalid={false}
+          label="Move to cold phase after"
+        >
+          <EuiFieldNumber
+            isInvalid={false}
+            key=".0"
+            onChange={[Function]}
+            value=""
+          />
+        </EuiFormRow>
+      </ErrableFormRow>
+    </EuiFlexItem>
+    <EuiFlexItem
+      style={
+        Object {
+          "maxWidth": 188,
+        }
+      }
+    >
+      <EuiFormRow
+        hasEmptyLabelSpace={true}
+      >
+        <EuiSelect
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "text": "days",
+                "value": "d",
+              },
+              Object {
+                "text": "hours",
+                "value": "h",
+              },
+            ]
+          }
+          value="s"
+        />
+      </EuiFormRow>
+    </EuiFlexItem>
+  </EuiFlexGroup>,
+  <EuiFlexGroup>
+    <EuiFlexItem
+      grow={false}
+      style={
+        Object {
+          "maxWidth": 188,
+        }
+      }
+    >
+      <ErrableFormRow
+        errorKey="selectedReplicaCount"
+        errors={Object {}}
+        isShowingErrors={false}
+        label="Number of replicas"
+      >
+        <EuiFormRow
+          isInvalid={false}
+          label="Number of replicas"
+        >
+          <EuiFieldNumber
+            isInvalid={false}
+            key=".0"
+            onChange={[Function]}
+            value=""
+          />
+        </EuiFormRow>
+      </ErrableFormRow>
+    </EuiFlexItem>
+    <EuiFlexItem
+      grow={false}
+    >
+      <EuiFormRow
+        hasEmptyLabelSpace={true}
+      >
+        <EuiButtonEmpty
+          flush="left"
+          onClick={[Function]}
+        >
+          Set to same as warm phase
+        </EuiButtonEmpty>
+      </EuiFormRow>
+    </EuiFlexItem>
+  </EuiFlexGroup>,
+]
+`;
+
+exports[`ColdPhase should show errors 1`] = `
+Array [
+  <EuiFlexGroup>
+    <EuiFlexItem
+      style={
+        Object {
+          "maxWidth": 188,
+        }
+      }
+    >
+      <ErrableFormRow
+        errorKey="selectedAfter"
+        errors={
+          Object {
+            "selectedAfter": Array [
+              "Error",
+            ],
+            "selectedNodeAttrs": Array [
+              "Error",
+            ],
+            "selectedReplicaCount": Array [
+              "Error",
+            ],
+          }
+        }
+        isShowingErrors={true}
+        label="Move to cold phase after"
+      >
+        <EuiFormRow
+          error={
+            Array [
+              "Error",
+            ]
+          }
+          isInvalid={true}
+          label="Move to cold phase after"
+        >
+          <EuiFieldNumber
+            isInvalid={true}
+            key=".0"
+            onChange={[Function]}
+            value=""
+          />
+        </EuiFormRow>
+      </ErrableFormRow>
+    </EuiFlexItem>
+    <EuiFlexItem
+      style={
+        Object {
+          "maxWidth": 188,
+        }
+      }
+    >
+      <EuiFormRow
+        hasEmptyLabelSpace={true}
+      >
+        <EuiSelect
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "text": "days",
+                "value": "d",
+              },
+              Object {
+                "text": "hours",
+                "value": "h",
+              },
+            ]
+          }
+          value="s"
+        />
+      </EuiFormRow>
+    </EuiFlexItem>
+  </EuiFlexGroup>,
+  <EuiFlexGroup>
+    <EuiFlexItem
+      grow={false}
+      style={
+        Object {
+          "maxWidth": 188,
+        }
+      }
+    >
+      <ErrableFormRow
+        errorKey="selectedReplicaCount"
+        errors={
+          Object {
+            "selectedAfter": Array [
+              "Error",
+            ],
+            "selectedNodeAttrs": Array [
+              "Error",
+            ],
+            "selectedReplicaCount": Array [
+              "Error",
+            ],
+          }
+        }
+        isShowingErrors={true}
+        label="Number of replicas"
+      >
+        <EuiFormRow
+          error={
+            Array [
+              "Error",
+            ]
+          }
+          isInvalid={true}
+          label="Number of replicas"
+        >
+          <EuiFieldNumber
+            isInvalid={true}
+            key=".0"
+            onChange={[Function]}
+            value=""
+          />
+        </EuiFormRow>
+      </ErrableFormRow>
+    </EuiFlexItem>
+    <EuiFlexItem
+      grow={false}
+    >
+      <EuiFormRow
+        hasEmptyLabelSpace={true}
+      >
+        <EuiButtonEmpty
+          flush="left"
+          onClick={[Function]}
+        >
+          Set to same as warm phase
+        </EuiButtonEmpty>
+      </EuiFormRow>
+    </EuiFlexItem>
+  </EuiFlexGroup>,
+]
+`;

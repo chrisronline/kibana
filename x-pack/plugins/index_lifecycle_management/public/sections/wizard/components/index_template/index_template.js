@@ -24,6 +24,7 @@ import {
 export class IndexTemplate extends Component {
   static propTypes = {
     done: PropTypes.func.isRequired,
+    validate: PropTypes.func.isRequired,
 
     errors: PropTypes.object,
   };

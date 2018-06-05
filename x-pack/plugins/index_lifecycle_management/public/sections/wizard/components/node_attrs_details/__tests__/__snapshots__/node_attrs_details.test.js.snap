@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NodeAttrsDetails should render a warning for allocation rules 1`] = `
+<EuiCallOut
+  color="warning"
+  size="m"
+  style={
+    Object {
+      "marginTop": "1rem",
+    }
+  }
+  title="Heads up"
+>
+  Be aware that this index template has existing allocation rules which will affect the list of nodes these indices can be allocated to.
+</EuiCallOut>
+`;
+
+exports[`NodeAttrsDetails should render normally 1`] = `
+<EuiPortal>
+  <EuiFlyout
+    onClose={[Function]}
+    ownFocus={true}
+    size="m"
+  >
+    <EuiFlyoutBody>
+      <EuiTitle
+        size="m"
+      >
+        <h2>
+          Nodes that contain the attribute: \`
+          foo
+          \`
+        </h2>
+      </EuiTitle>
+      <EuiSpacer
+        size="s"
+      />
+      <EuiInMemoryTable
+        columns={
+          Array [
+            Object {
+              "field": "nodeId",
+              "name": "ID",
+            },
+            Object {
+              "field": "stats.name",
+              "name": "Name",
+            },
+            Object {
+              "field": "stats.host",
+              "name": "Host",
+            },
+          ]
+        }
+        items={Array []}
+        pagination={true}
+        responsive={true}
+        sorting={true}
+      />
+    </EuiFlyoutBody>
+    <EuiFlyoutFooter>
+      <EuiButtonEmpty
+        color="primary"
+        flush="left"
+        iconSide="left"
+        iconType="cross"
+        onClick={[Function]}
+        type="button"
+      >
+        Close
+      </EuiButtonEmpty>
+    </EuiFlyoutFooter>
+  </EuiFlyout>
+</EuiPortal>
+`;

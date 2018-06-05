@@ -27,6 +27,9 @@ export class TemplateSelection extends PureComponent {
   static propTypes = {
     fetchIndexTemplates: PropTypes.func.isRequired,
     setSelectedIndexTemplate: PropTypes.func.isRequired,
+    setBootstrapEnabled: PropTypes.func.isRequired,
+    setIndexName: PropTypes.func.isRequired,
+    setAliasName: PropTypes.func.isRequired,
     validate: PropTypes.func.isRequired,
 
     selectedIndexTemplateName: PropTypes.string.isRequired,

@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PolicySelection should render properly 1`] = `
+<PolicySelection
+  fetchPolicies={[Function]}
+  policies={Array []}
+  selectedPolicyName=""
+  setSelectedPolicy={[Function]}
+>
+  <EuiDescribedFormGroup
+    description="An index lifecycle policy is a blueprint for transitioning your data over time. You can create a new policy or edit an existing policy and save it with a new name."
+    fullWidth={true}
+    title={
+      <h4>
+        Select or create a policy
+      </h4>
+    }
+    titleSize="s"
+  >
+    <EuiFlexGroup
+      alignItems="center"
+    >
+      <EuiFlexItem>
+        <EuiFormRow
+          label="Existing policies"
+        >
+          <EuiSelect
+            onChange={[Function]}
+            options={
+              Array [
+                Object {
+                  "text": "-- New Policy --",
+                  "value": "",
+                },
+              ]
+            }
+            value=""
+          />
+        </EuiFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        grow={false}
+      >
+        <EuiFormRow
+          hasEmptyLabelSpace={true}
+        >
+          <EuiButton
+            onClick={[Function]}
+          >
+            Create new policy
+          </EuiButton>
+        </EuiFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  </EuiDescribedFormGroup>
+</PolicySelection>
+`;

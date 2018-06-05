@@ -1,0 +1,896 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WarmPhase should render just the activate button if not activated 1`] = `
+<WarmPhase
+  errors={
+    Object {
+      "selectedAfter": Array [],
+      "selectedNodeAttrs": Array [],
+    }
+  }
+  fetchNodes={[Function]}
+  hotPhasePrimaryShardCount={1}
+  hotPhaseReplicaCount={1}
+  hotPhaseRolloverEnabled={true}
+  isShowingErrors={false}
+  nodeOptions={
+    Array [
+      Object {
+        "text": "-- Do not reallocate my indices --",
+        "value": undefined,
+      },
+    ]
+  }
+  phaseData={
+    Object {
+      "forceMergeEnabled": false,
+      "phaseEnabled": false,
+      "rolloverEnabled": false,
+      "selectedAfter": "",
+      "selectedAfterUnits": "s",
+      "selectedAlias": "",
+      "selectedForceMergeSegments": "",
+      "selectedNodeAttrs": "",
+      "selectedPrimaryShardCount": "",
+      "selectedReplicaCount": "",
+      "shrinkEnabled": true,
+    }
+  }
+  setPhaseData={[Function]}
+  showNodeDetailsFlyout={[Function]}
+  validate={[Function]}
+>
+  <EuiDescribedFormGroup
+    description={
+      <UNDEFINED>
+        <p>
+          Your index becomes read-only when it enters the warm phase. You can optimize this phase for search.
+        </p>
+      </UNDEFINED>
+    }
+    fullWidth={true}
+    title={
+      <div>
+        <span
+          className="eui-displayInlineBlock eui-alignMiddle"
+        >
+          Warm phase
+        </span>
+         
+      </div>
+    }
+    titleSize="s"
+  >
+    <EuiFormRow
+      hasEmptyLabelSpace={true}
+    >
+      <div>
+        <EuiButton
+          onClick={[Function]}
+        >
+          Activate warm phase
+        </EuiButton>
+      </div>
+    </EuiFormRow>
+  </EuiDescribedFormGroup>
+</WarmPhase>
+`;
+
+exports[`WarmPhase should show configuration options when activated 1`] = `
+<WarmPhase
+  errors={
+    Object {
+      "selectedAfter": Array [],
+      "selectedNodeAttrs": Array [],
+    }
+  }
+  fetchNodes={[Function]}
+  hotPhasePrimaryShardCount={1}
+  hotPhaseReplicaCount={1}
+  hotPhaseRolloverEnabled={true}
+  isShowingErrors={false}
+  nodeOptions={
+    Array [
+      Object {
+        "text": "-- Do not reallocate my indices --",
+        "value": undefined,
+      },
+    ]
+  }
+  phaseData={
+    Object {
+      "forceMergeEnabled": false,
+      "phaseEnabled": true,
+      "rolloverEnabled": false,
+      "selectedAfter": "",
+      "selectedAfterUnits": "s",
+      "selectedAlias": "",
+      "selectedForceMergeSegments": "",
+      "selectedNodeAttrs": "",
+      "selectedPrimaryShardCount": "",
+      "selectedReplicaCount": "",
+      "shrinkEnabled": true,
+    }
+  }
+  setPhaseData={[Function]}
+  showNodeDetailsFlyout={[Function]}
+  validate={[Function]}
+>
+  <EuiDescribedFormGroup
+    description={
+      <UNDEFINED>
+        <p>
+          Your index becomes read-only when it enters the warm phase. You can optimize this phase for search.
+        </p>
+      </UNDEFINED>
+    }
+    fullWidth={true}
+    title={
+      <div>
+        <span
+          className="eui-displayInlineBlock eui-alignMiddle"
+        >
+          Warm phase
+        </span>
+         
+        <EuiBetaBadge
+          className="eui-alignMiddle"
+          iconType="check"
+          label="Enabled"
+        />
+      </div>
+    }
+    titleSize="s"
+  >
+    <EuiFormRow
+      hasEmptyLabelSpace={true}
+    >
+      <div>
+        <EuiButton
+          color="danger"
+          onClick={[Function]}
+        >
+          Remove warm phase
+        </EuiButton>
+      </div>
+    </EuiFormRow>
+    <EuiFormRow
+      label="Rollover configuration"
+    >
+      <EuiSwitch
+        checked={false}
+        label="Move to warm phase on rollover"
+        onChange={[Function]}
+      />
+    </EuiFormRow>
+    <EuiFlexGroup>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedAfter"
+          errors={
+            Object {
+              "selectedAfter": Array [],
+              "selectedNodeAttrs": Array [],
+            }
+          }
+          isShowingErrors={false}
+          label="Move to warm phase after"
+        >
+          <EuiFormRow
+            error={Array []}
+            isInvalid={false}
+            label="Move to warm phase after"
+          >
+            <EuiFieldNumber
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <EuiFormRow
+          hasEmptyLabelSpace={true}
+        >
+          <EuiSelect
+            onChange={[Function]}
+            options={
+              Array [
+                Object {
+                  "text": "days",
+                  "value": "d",
+                },
+                Object {
+                  "text": "hours",
+                  "value": "h",
+                },
+              ]
+            }
+            value="s"
+          />
+        </EuiFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <ErrableFormRow
+      errorKey="selectedNodeAttrs"
+      errors={
+        Object {
+          "selectedAfter": Array [],
+          "selectedNodeAttrs": Array [],
+        }
+      }
+      helpText={null}
+      isShowingErrors={false}
+      label="Where would you like to allocate these indices?"
+    >
+      <EuiFormRow
+        error={Array []}
+        helpText={null}
+        isInvalid={false}
+        label="Where would you like to allocate these indices?"
+      >
+        <EuiSelect
+          isInvalid={false}
+          key=".0"
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "text": "-- Do not reallocate my indices --",
+                "value": undefined,
+              },
+            ]
+          }
+          value=""
+        />
+      </EuiFormRow>
+    </ErrableFormRow>
+    <EuiFlexGroup>
+      <EuiFlexItem
+        grow={false}
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedReplicaCount"
+          errors={
+            Object {
+              "selectedAfter": Array [],
+              "selectedNodeAttrs": Array [],
+            }
+          }
+          isShowingErrors={false}
+          label="Number of replicas"
+        >
+          <EuiFormRow
+            isInvalid={false}
+            label="Number of replicas"
+          >
+            <EuiFieldNumber
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        grow={false}
+      >
+        <EuiFormRow
+          hasEmptyLabelSpace={true}
+        >
+          <EuiButtonEmpty
+            flush="left"
+            onClick={[Function]}
+          >
+            Set to same as hot phase
+          </EuiButtonEmpty>
+        </EuiFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <EuiTitle
+      size="s"
+    >
+      <p>
+        Shrink
+      </p>
+    </EuiTitle>
+    <EuiTitle
+      size="xs"
+    >
+      <EuiTextColor
+        color="subdued"
+      >
+        Shrink the index into a new index with fewer primary shards.
+         
+        <EuiLink
+          href="https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-shrink-index.html#indices-shrink-index"
+        >
+          Learn more
+        </EuiLink>
+      </EuiTextColor>
+    </EuiTitle>
+    <EuiSpacer />
+    <EuiSwitch
+      checked={true}
+      label="Shrink index"
+      onChange={[Function]}
+    />
+    <EuiSpacer
+      size="m"
+    />
+    <EuiFlexGroup>
+      <EuiFlexItem
+        grow={false}
+      >
+        <ErrableFormRow
+          errorKey="selectedPrimaryShardCount"
+          errors={
+            Object {
+              "selectedAfter": Array [],
+              "selectedNodeAttrs": Array [],
+            }
+          }
+          isShowingErrors={false}
+          label="Number of primary shards"
+        >
+          <EuiFormRow
+            isInvalid={false}
+            label="Number of primary shards"
+          >
+            <EuiFieldNumber
+              isInvalid={false}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        grow={false}
+      >
+        <EuiFormRow
+          hasEmptyLabelSpace={true}
+        >
+          <EuiButtonEmpty
+            flush="left"
+            onClick={[Function]}
+          >
+            Set to same as hot phase
+          </EuiButtonEmpty>
+        </EuiFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <EuiTitle
+      size="s"
+    >
+      <p>
+        Force merge
+      </p>
+    </EuiTitle>
+    <EuiTitle
+      size="xs"
+    >
+      <EuiTextColor
+        color="subdued"
+      >
+        Reduce the number of segments in your shard by merging smaller files and clearing deleted ones.
+         
+        <EuiLink
+          href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-forcemerge.html"
+        >
+          Learn more
+        </EuiLink>
+      </EuiTextColor>
+    </EuiTitle>
+    <EuiSpacer
+      size="m"
+    />
+    <EuiSwitch
+      checked={false}
+      label="Force merge data"
+      onChange={[Function]}
+    />
+    <EuiSpacer />
+  </EuiDescribedFormGroup>
+</WarmPhase>
+`;
+
+exports[`WarmPhase should show errors 1`] = `
+<WarmPhase
+  errors={
+    Object {
+      "selectedAfter": Array [
+        "Error",
+      ],
+      "selectedForceMergeSegments": Array [
+        "Error",
+      ],
+      "selectedNodeAttrs": Array [
+        "Error",
+      ],
+      "selectedPrimaryShardCount": Array [
+        "Error",
+      ],
+      "selectedReplicaCount": Array [
+        "Error",
+      ],
+    }
+  }
+  fetchNodes={[Function]}
+  hotPhasePrimaryShardCount={1}
+  hotPhaseReplicaCount={1}
+  hotPhaseRolloverEnabled={true}
+  isShowingErrors={true}
+  nodeOptions={
+    Array [
+      Object {
+        "text": "-- Do not reallocate my indices --",
+        "value": undefined,
+      },
+    ]
+  }
+  phaseData={
+    Object {
+      "forceMergeEnabled": true,
+      "phaseEnabled": true,
+      "rolloverEnabled": false,
+      "selectedAfter": "",
+      "selectedAfterUnits": "s",
+      "selectedAlias": "",
+      "selectedForceMergeSegments": "",
+      "selectedNodeAttrs": "",
+      "selectedPrimaryShardCount": "",
+      "selectedReplicaCount": "",
+      "shrinkEnabled": true,
+    }
+  }
+  setPhaseData={[Function]}
+  showNodeDetailsFlyout={[Function]}
+  validate={[Function]}
+>
+  <EuiDescribedFormGroup
+    description={
+      <UNDEFINED>
+        <p>
+          Your index becomes read-only when it enters the warm phase. You can optimize this phase for search.
+        </p>
+        <EuiTextColor
+          color="danger"
+        >
+          <EuiText>
+            <p>
+              This phase contains errors
+            </p>
+          </EuiText>
+        </EuiTextColor>
+      </UNDEFINED>
+    }
+    fullWidth={true}
+    title={
+      <div>
+        <span
+          className="eui-displayInlineBlock eui-alignMiddle"
+        >
+          Warm phase
+        </span>
+         
+        <EuiBetaBadge
+          className="eui-alignMiddle"
+          iconType="check"
+          label="Enabled"
+        />
+      </div>
+    }
+    titleSize="s"
+  >
+    <EuiFormRow
+      hasEmptyLabelSpace={true}
+    >
+      <div>
+        <EuiButton
+          color="danger"
+          onClick={[Function]}
+        >
+          Remove warm phase
+        </EuiButton>
+      </div>
+    </EuiFormRow>
+    <EuiFormRow
+      label="Rollover configuration"
+    >
+      <EuiSwitch
+        checked={false}
+        label="Move to warm phase on rollover"
+        onChange={[Function]}
+      />
+    </EuiFormRow>
+    <EuiFlexGroup>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedAfter"
+          errors={
+            Object {
+              "selectedAfter": Array [
+                "Error",
+              ],
+              "selectedForceMergeSegments": Array [
+                "Error",
+              ],
+              "selectedNodeAttrs": Array [
+                "Error",
+              ],
+              "selectedPrimaryShardCount": Array [
+                "Error",
+              ],
+              "selectedReplicaCount": Array [
+                "Error",
+              ],
+            }
+          }
+          isShowingErrors={true}
+          label="Move to warm phase after"
+        >
+          <EuiFormRow
+            error={
+              Array [
+                "Error",
+              ]
+            }
+            isInvalid={true}
+            label="Move to warm phase after"
+          >
+            <EuiFieldNumber
+              isInvalid={true}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <EuiFormRow
+          hasEmptyLabelSpace={true}
+        >
+          <EuiSelect
+            onChange={[Function]}
+            options={
+              Array [
+                Object {
+                  "text": "days",
+                  "value": "d",
+                },
+                Object {
+                  "text": "hours",
+                  "value": "h",
+                },
+              ]
+            }
+            value="s"
+          />
+        </EuiFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <ErrableFormRow
+      errorKey="selectedNodeAttrs"
+      errors={
+        Object {
+          "selectedAfter": Array [
+            "Error",
+          ],
+          "selectedForceMergeSegments": Array [
+            "Error",
+          ],
+          "selectedNodeAttrs": Array [
+            "Error",
+          ],
+          "selectedPrimaryShardCount": Array [
+            "Error",
+          ],
+          "selectedReplicaCount": Array [
+            "Error",
+          ],
+        }
+      }
+      helpText={null}
+      isShowingErrors={true}
+      label="Where would you like to allocate these indices?"
+    >
+      <EuiFormRow
+        error={
+          Array [
+            "Error",
+          ]
+        }
+        helpText={null}
+        isInvalid={true}
+        label="Where would you like to allocate these indices?"
+      >
+        <EuiSelect
+          isInvalid={true}
+          key=".0"
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "text": "-- Do not reallocate my indices --",
+                "value": undefined,
+              },
+            ]
+          }
+          value=""
+        />
+      </EuiFormRow>
+    </ErrableFormRow>
+    <EuiFlexGroup>
+      <EuiFlexItem
+        grow={false}
+        style={
+          Object {
+            "maxWidth": 188,
+          }
+        }
+      >
+        <ErrableFormRow
+          errorKey="selectedReplicaCount"
+          errors={
+            Object {
+              "selectedAfter": Array [
+                "Error",
+              ],
+              "selectedForceMergeSegments": Array [
+                "Error",
+              ],
+              "selectedNodeAttrs": Array [
+                "Error",
+              ],
+              "selectedPrimaryShardCount": Array [
+                "Error",
+              ],
+              "selectedReplicaCount": Array [
+                "Error",
+              ],
+            }
+          }
+          isShowingErrors={true}
+          label="Number of replicas"
+        >
+          <EuiFormRow
+            error={
+              Array [
+                "Error",
+              ]
+            }
+            isInvalid={true}
+            label="Number of replicas"
+          >
+            <EuiFieldNumber
+              isInvalid={true}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        grow={false}
+      >
+        <EuiFormRow
+          hasEmptyLabelSpace={true}
+        >
+          <EuiButtonEmpty
+            flush="left"
+            onClick={[Function]}
+          >
+            Set to same as hot phase
+          </EuiButtonEmpty>
+        </EuiFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <EuiTitle
+      size="s"
+    >
+      <p>
+        Shrink
+      </p>
+    </EuiTitle>
+    <EuiTitle
+      size="xs"
+    >
+      <EuiTextColor
+        color="subdued"
+      >
+        Shrink the index into a new index with fewer primary shards.
+         
+        <EuiLink
+          href="https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-shrink-index.html#indices-shrink-index"
+        >
+          Learn more
+        </EuiLink>
+      </EuiTextColor>
+    </EuiTitle>
+    <EuiSpacer />
+    <EuiSwitch
+      checked={true}
+      label="Shrink index"
+      onChange={[Function]}
+    />
+    <EuiSpacer
+      size="m"
+    />
+    <EuiFlexGroup>
+      <EuiFlexItem
+        grow={false}
+      >
+        <ErrableFormRow
+          errorKey="selectedPrimaryShardCount"
+          errors={
+            Object {
+              "selectedAfter": Array [
+                "Error",
+              ],
+              "selectedForceMergeSegments": Array [
+                "Error",
+              ],
+              "selectedNodeAttrs": Array [
+                "Error",
+              ],
+              "selectedPrimaryShardCount": Array [
+                "Error",
+              ],
+              "selectedReplicaCount": Array [
+                "Error",
+              ],
+            }
+          }
+          isShowingErrors={true}
+          label="Number of primary shards"
+        >
+          <EuiFormRow
+            error={
+              Array [
+                "Error",
+              ]
+            }
+            isInvalid={true}
+            label="Number of primary shards"
+          >
+            <EuiFieldNumber
+              isInvalid={true}
+              key=".0"
+              onChange={[Function]}
+              value=""
+            />
+          </EuiFormRow>
+        </ErrableFormRow>
+      </EuiFlexItem>
+      <EuiFlexItem
+        grow={false}
+      >
+        <EuiFormRow
+          hasEmptyLabelSpace={true}
+        >
+          <EuiButtonEmpty
+            flush="left"
+            onClick={[Function]}
+          >
+            Set to same as hot phase
+          </EuiButtonEmpty>
+        </EuiFormRow>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+    <EuiSpacer />
+    <EuiTitle
+      size="s"
+    >
+      <p>
+        Force merge
+      </p>
+    </EuiTitle>
+    <EuiTitle
+      size="xs"
+    >
+      <EuiTextColor
+        color="subdued"
+      >
+        Reduce the number of segments in your shard by merging smaller files and clearing deleted ones.
+         
+        <EuiLink
+          href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-forcemerge.html"
+        >
+          Learn more
+        </EuiLink>
+      </EuiTextColor>
+    </EuiTitle>
+    <EuiSpacer
+      size="m"
+    />
+    <EuiSwitch
+      checked={true}
+      label="Force merge data"
+      onChange={[Function]}
+    />
+    <EuiSpacer />
+    <ErrableFormRow
+      errorKey="selectedForceMergeSegments"
+      errors={
+        Object {
+          "selectedAfter": Array [
+            "Error",
+          ],
+          "selectedForceMergeSegments": Array [
+            "Error",
+          ],
+          "selectedNodeAttrs": Array [
+            "Error",
+          ],
+          "selectedPrimaryShardCount": Array [
+            "Error",
+          ],
+          "selectedReplicaCount": Array [
+            "Error",
+          ],
+        }
+      }
+      isShowingErrors={true}
+      label="Number of segments"
+    >
+      <EuiFormRow
+        error={
+          Array [
+            "Error",
+          ]
+        }
+        isInvalid={true}
+        label="Number of segments"
+      >
+        <EuiFieldNumber
+          isInvalid={true}
+          key=".0"
+          onChange={[Function]}
+          value=""
+        />
+      </EuiFormRow>
+    </ErrableFormRow>
+  </EuiDescribedFormGroup>
+</WarmPhase>
+`;

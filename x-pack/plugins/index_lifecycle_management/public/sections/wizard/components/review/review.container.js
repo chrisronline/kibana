@@ -25,9 +25,6 @@ import {
 import {
   setSelectedPolicyName,
   setSaveAsNewPolicy,
-  setAliasName,
-  setIndexName,
-  setBootstrapEnabled,
 } from '../../../../store/actions';
 
 export const Review = connect(
@@ -42,16 +39,10 @@ export const Review = connect(
     selectedPolicyName: getSelectedPolicyName(state),
     saveAsNewPolicy: getSaveAsNewPolicy(state),
     originalPolicyName: getSelectedOriginalPolicyName(state),
-
-    /* start might go away */
     indexName: getIndexName(state),
-    /* end might go away */
   }),
   {
     setSelectedPolicyName,
     setSaveAsNewPolicy,
-    setBootstrapEnabled,
-    setIndexName,
-    setAliasName,
   }
 )(PresentationComponent);
