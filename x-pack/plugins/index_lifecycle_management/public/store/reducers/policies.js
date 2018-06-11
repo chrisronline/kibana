@@ -59,7 +59,7 @@ export const defaultHotPhase = {
   [PHASE_ROLLOVER_ENABLED]: true,
   [PHASE_ROLLOVER_ALIAS]: '',
   [PHASE_ROLLOVER_MAX_AGE]: '',
-  [PHASE_ROLLOVER_MAX_AGE_UNITS]: 's',
+  [PHASE_ROLLOVER_MAX_AGE_UNITS]: 'd',
   [PHASE_ROLLOVER_MAX_SIZE_STORED]: '',
   [PHASE_ROLLOVER_MAX_SIZE_STORED_UNITS]: 'gb',
   [PHASE_ROLLOVER_MAX_DOC_SIZE]: '',
@@ -70,7 +70,7 @@ export const defaultColdPhase = {
   [PHASE_ROLLOVER_ENABLED]: false,
   [PHASE_ROLLOVER_ALIAS]: '',
   [PHASE_ROLLOVER_AFTER]: '',
-  [PHASE_ROLLOVER_AFTER_UNITS]: 's',
+  [PHASE_ROLLOVER_AFTER_UNITS]: 'd',
   [PHASE_NODE_ATTRS]: '',
   [PHASE_REPLICA_COUNT]: ''
 };
@@ -80,7 +80,7 @@ export const defaultDeletePhase = {
   [PHASE_ROLLOVER_ENABLED]: false,
   [PHASE_ROLLOVER_ALIAS]: '',
   [PHASE_ROLLOVER_AFTER]: '',
-  [PHASE_ROLLOVER_AFTER_UNITS]: 's'
+  [PHASE_ROLLOVER_AFTER_UNITS]: 'd'
 };
 
 export const defaultPolicy = {
