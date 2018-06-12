@@ -4,45 +4,40 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import { registerDetailsRoute } from '../register_details_route';
+import sinon from 'sinon';
+import proxyquire from 'proxyquire';
 
-jest.mock('../../../../lib/call_with_request_factory', () => {
-  const mock = jest.fn().mockImplementation((method) => {
-    if (method === 'nodes.stats') {
-      return {
-        nodes: {
-          1: {
-            attributes: {
-              'hot_node': true,
-            }
-          },
-          2: {
-            attributes: {
-              'hot_node': true,
-            }
-          },
-          3: {
-            attributes: {
-              'warm_node': true,
-            }
-          },
-          4: {}
-        }
-      };
-    }
-  });
-  return {
-    callWithRequestFactory: () => mock,
-  };
-});
-
-jest.mock('../../../../lib/is_es_error_factory', () => ({
-  isEsErrorFactory: jest.fn().mockImplementation(() => jest.fn()),
+const callWithRequestFactorySpy = sinon.fake(((method) => {
+  if (method === 'nodes.stats') {
+    return {
+      nodes: {
+        1: {
+          attributes: {
+            'hot_node': true,
+          }
+        },
+        2: {
+          attributes: {
+            'hot_node': true,
+          }
+        },
+        3: {
+          attributes: {
+            'warm_node': true,
+          }
+        },
+        4: {}
+      }
+    };
+  }
 }));
 
-jest.mock('../../../../lib/license_pre_routing_factory', () => ({
-  licensePreRoutingFactory: jest.fn().mockImplementation(() => jest.fn()),
-}));
+const registerDetailsRoute = proxyquire('../register_details_route', {
+  '../../../lib/call_with_request_factory': {
+    callWithRequestFactory: () => callWithRequestFactorySpy
+  }
+}).registerDetailsRoute;
+
 
 let routeHandler;
 const mockServer = {
@@ -55,20 +50,17 @@ describe('ilmNodeDetailsRoute', () => {
   it('should call nodes.stats and format the results', async () => {
     registerDetailsRoute(mockServer);
 
-    const reply = jest.fn();
+    const reply = sinon.fake();
 
     await routeHandler({ params: {
       nodeAttrs: 'hot_node:true'
     } }, reply);
 
-    const mock = require('../../../../lib/call_with_request_factory').callWithRequestFactory().mock;
-
-    expect(mock.calls.length).toBe(1);
-    expect(mock.calls[0]).toEqual([
-      'nodes.stats',
-      { format: 'json' }
-    ]);
-    expect(reply).toHaveBeenCalledWith([
+    sinon.assert.match(callWithRequestFactorySpy.callCount, 1);
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'nodes.stats', {
+      format: 'json'
+    });
+    sinon.assert.calledWith(reply, [
       {
         nodeId: '1',
         stats: {

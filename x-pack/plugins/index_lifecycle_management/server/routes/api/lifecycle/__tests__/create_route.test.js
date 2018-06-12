@@ -4,40 +4,34 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import { registerCreateRoute } from '../register_create_route';
+import sinon from 'sinon';
+import proxyquire from 'proxyquire';
 
-jest.mock('../../../../lib/call_with_request_factory', () => {
-  const mock = jest.fn().mockImplementation((method) => {
-    if (method === 'indices.getTemplate') {
-      return {
-        'foobar': {
-          index_patterns: ['foobar*']
-        },
-        'barfoo': {
-          index_patterns: ['barfoo*'],
-          settings: {
-            index: {
-              lifecycle: {
-                name: 'myPolicy'
-              }
+const callWithRequestFactorySpy = sinon.fake(((method) => {
+  if (method === 'indices.getTemplate') {
+    return {
+      'foobar': {
+        index_patterns: ['foobar*']
+      },
+      'barfoo': {
+        index_patterns: ['barfoo*'],
+        settings: {
+          index: {
+            lifecycle: {
+              name: 'myPolicy'
             }
           }
         }
-      };
-    }
-  });
-  return {
-    callWithRequestFactory: () => mock,
-  };
-});
-
-jest.mock('../../../../lib/is_es_error_factory', () => ({
-  isEsErrorFactory: jest.fn().mockImplementation(() => jest.fn()),
+      }
+    };
+  }
 }));
 
-jest.mock('../../../../lib/license_pre_routing_factory', () => ({
-  licensePreRoutingFactory: jest.fn().mockImplementation(() => jest.fn()),
-}));
+const registerCreateRoute = proxyquire('../register_create_route', {
+  '../../../lib/call_with_request_factory': {
+    callWithRequestFactory: () => callWithRequestFactorySpy
+  }
+}).registerCreateRoute;
 
 let routeHandler;
 const mockServer = {
@@ -62,32 +56,40 @@ describe('ilmCreateLifecycleRoute', () => {
         primaryShardCount: 3,
         replicaCount: 2,
       }
-    } }, jest.fn());
+    } }, sinon.fake());
 
-    const mock = require('../../../../lib/call_with_request_factory').callWithRequestFactory().mock;
-
-    expect(mock.calls.length).toBe(3);
-    expect(mock.calls[0][1].path).toBe(`/_xpack/index_lifecycle/my_policy`);
-    expect(mock.calls[1]).toEqual([
-      'indices.getTemplate',
-      {
-        name: 'foobar'
-      }
-    ]);
-    expect(mock.calls[2][1].path).toBe(`/_template/foobar`);
-    expect(mock.calls[2][1].body).toEqual({
-      index_patterns: ['foobar*'],
-      settings: {
-        index: {
-          lifecycle: {
-            name: 'my_policy'
-          },
-          number_of_replicas: 2,
-          number_of_shards: 3,
-          routing: {
-            allocation: {
-              include: {
-                'sattr_name': 'hot-node',
+    sinon.assert.match(callWithRequestFactorySpy.callCount, 3);
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'transport.request', {
+      method: 'PUT',
+      path: `/_xpack/index_lifecycle/my_policy`,
+      ignore: [ 404 ],
+      body: {
+        policy: {
+          phases: undefined,
+        }
+      },
+    });
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'indices.getTemplate', {
+      name: 'foobar'
+    });
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'transport.request', {
+      method: 'PUT',
+      path: `/_template/foobar`,
+      ignore: [ 404 ],
+      body: {
+        index_patterns: ['foobar*'],
+        settings: {
+          index: {
+            lifecycle: {
+              name: 'my_policy'
+            },
+            number_of_replicas: 2,
+            number_of_shards: 3,
+            routing: {
+              allocation: {
+                include: {
+                  'sattr_name': 'hot-node',
+                }
               }
             }
           }

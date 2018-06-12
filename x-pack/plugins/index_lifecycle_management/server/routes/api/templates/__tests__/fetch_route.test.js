@@ -4,73 +4,67 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import { registerFetchRoute } from '../register_fetch_route';
+import sinon from 'sinon';
+import proxyquire from 'proxyquire';
 
-jest.mock('../../../../lib/call_with_request_factory', () => {
-  const mock = jest.fn().mockImplementation((method, params) => {
-    if (params.path === '/_template') {
-      return {
-        template1: {
-          index_patterns: ['my_indices*'],
-          settings: {
-            index: {
-              lifecycle: {
-                name: 'my_policy',
-              },
-              routing: {
-                include: {},
-                require: {},
-              }
+const callWithRequestFactorySpy = sinon.fake(((method, params) => {
+  if (params.path === '/_template') {
+    return {
+      template1: {
+        index_patterns: ['my_indices*'],
+        settings: {
+          index: {
+            lifecycle: {
+              name: 'my_policy',
+            },
+            routing: {
+              include: {},
+              require: {},
             }
           }
-        },
-        template2: {
-          index_patterns: ['my_other_indices*'],
-          settings: {
-            index: {
-              lifecycle: {
-                name: 'my_policy2',
-              },
-            }
-          }
-        },
-        template3: {
-          index_patterns: ['even_more_indices*'],
-          settings: {}
         }
-      };
-    }
-    if (params.path === '/my_indices*/_stats') {
-      return {
-        my_indices1: {},
-        my_indices2: {},
-      };
-    }
-    if (params.path === '/my_other_indices*/_stats') {
-      return {
-        my_other_indices1: {},
-        my_other_indices2: {},
-      };
-    }
-    if (params.path === '/even_more_indices*/_stats') {
-      return {
-        even_more_indices1: {},
-        even_more_indices2: {},
-      };
-    }
-  });
-  return {
-    callWithRequestFactory: () => mock,
-  };
-});
-
-jest.mock('../../../../lib/is_es_error_factory', () => ({
-  isEsErrorFactory: jest.fn().mockImplementation(() => jest.fn()),
+      },
+      template2: {
+        index_patterns: ['my_other_indices*'],
+        settings: {
+          index: {
+            lifecycle: {
+              name: 'my_policy2',
+            },
+          }
+        }
+      },
+      template3: {
+        index_patterns: ['even_more_indices*'],
+        settings: {}
+      }
+    };
+  }
+  if (params.path === '/my_indices*/_stats') {
+    return {
+      my_indices1: {},
+      my_indices2: {},
+    };
+  }
+  if (params.path === '/my_other_indices*/_stats') {
+    return {
+      my_other_indices1: {},
+      my_other_indices2: {},
+    };
+  }
+  if (params.path === '/even_more_indices*/_stats') {
+    return {
+      even_more_indices1: {},
+      even_more_indices2: {},
+    };
+  }
 }));
 
-jest.mock('../../../../lib/license_pre_routing_factory', () => ({
-  licensePreRoutingFactory: jest.fn().mockImplementation(() => jest.fn()),
-}));
+const registerFetchRoute = proxyquire('../register_fetch_route', {
+  '../../../lib/call_with_request_factory': {
+    callWithRequestFactory: () => callWithRequestFactorySpy
+  }
+}).registerFetchRoute;
 
 let routeHandler;
 const mockServer = {
@@ -83,19 +77,32 @@ describe('ilmFetchIndexTemplatesRoute', () => {
   it('should fetch all templates and format the results', async () => {
     registerFetchRoute(mockServer);
 
-    const reply = jest.fn();
+    const reply = sinon.fake();
 
     await routeHandler({}, reply);
 
-    const mock = require('../../../../lib/call_with_request_factory').callWithRequestFactory().mock;
-
-    expect(mock.calls.length).toBe(4);
-    expect(mock.calls[0][1].path).toBe('/_template');
-    expect(mock.calls[1][1].path).toBe('/my_indices*/_stats');
-    expect(mock.calls[2][1].path).toBe('/my_other_indices*/_stats');
-    expect(mock.calls[3][1].path).toBe('/even_more_indices*/_stats');
-
-    expect(reply).toHaveBeenCalledWith([{
+    sinon.assert.match(callWithRequestFactorySpy.callCount, 4);
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'transport.request', {
+      method: 'GET',
+      path: '/_template',
+      ignore: [ 404 ]
+    });
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'transport.request', {
+      method: 'GET',
+      path: '/my_indices*/_stats',
+      ignore: [ 404 ]
+    });
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'transport.request', {
+      method: 'GET',
+      path: '/my_other_indices*/_stats',
+      ignore: [ 404 ]
+    });
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'transport.request', {
+      method: 'GET',
+      path: '/even_more_indices*/_stats',
+      ignore: [ 404 ]
+    });
+    sinon.assert.calledWith(reply, [{
       allocation_rules: {
         include: {},
         require: {}

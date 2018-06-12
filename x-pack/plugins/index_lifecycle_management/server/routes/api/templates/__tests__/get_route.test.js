@@ -4,55 +4,49 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import { registerGetRoute } from '../register_get_route';
+import sinon from 'sinon';
+import proxyquire from 'proxyquire';
 
-jest.mock('../../../../lib/call_with_request_factory', () => {
-  const mock = jest.fn().mockImplementation((method, params) => {
-    if (params.path.startsWith('/_template')) {
-      return {
-        template1: {
-          index_patterns: ['my_indices*'],
-          settings: {
-            index: {
-              lifecycle: {
-                name: 'my_policy',
-              },
-              routing: {
-                include: {},
-                require: {},
-              }
+const callWithRequestFactorySpy = sinon.fake(((method, params) => {
+  if (params.path.startsWith('/_template')) {
+    return {
+      template1: {
+        index_patterns: ['my_indices*'],
+        settings: {
+          index: {
+            lifecycle: {
+              name: 'my_policy',
+            },
+            routing: {
+              include: {},
+              require: {},
             }
           }
-        },
-        template2: {
-          index_patterns: ['my_other_indices*'],
-          settings: {
-            index: {
-              lifecycle: {
-                name: 'my_policy2',
-              },
-            }
-          }
-        },
-        template3: {
-          index_patterns: ['even_more_indices*'],
-          settings: {}
         }
-      };
-    }
-  });
-  return {
-    callWithRequestFactory: () => mock,
-  };
-});
-
-jest.mock('../../../../lib/is_es_error_factory', () => ({
-  isEsErrorFactory: jest.fn().mockImplementation(() => jest.fn()),
+      },
+      template2: {
+        index_patterns: ['my_other_indices*'],
+        settings: {
+          index: {
+            lifecycle: {
+              name: 'my_policy2',
+            },
+          }
+        }
+      },
+      template3: {
+        index_patterns: ['even_more_indices*'],
+        settings: {}
+      }
+    };
+  }
 }));
 
-jest.mock('../../../../lib/license_pre_routing_factory', () => ({
-  licensePreRoutingFactory: jest.fn().mockImplementation(() => jest.fn()),
-}));
+const registerGetRoute = proxyquire('../register_get_route', {
+  '../../../lib/call_with_request_factory': {
+    callWithRequestFactory: () => callWithRequestFactorySpy
+  }
+}).registerGetRoute;
 
 let routeHandler;
 const mockServer = {
@@ -65,16 +59,17 @@ describe('ilmFetchIndexTemplateRoute', () => {
   it('should fetch the template and format the result', async () => {
     registerGetRoute(mockServer);
 
-    const reply = jest.fn();
+    const reply = sinon.fake();
 
     await routeHandler({ params: { templateName: 'template2' } }, reply);
 
-    const mock = require('../../../../lib/call_with_request_factory').callWithRequestFactory().mock;
-
-    expect(mock.calls.length).toBe(1);
-    expect(mock.calls[0][1].path).toBe('/_template/template2');
-
-    expect(reply).toHaveBeenCalledWith({
+    sinon.assert.match(callWithRequestFactorySpy.callCount, 1);
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'transport.request', {
+      method: 'GET',
+      path: '/_template/template2',
+      ignore: [ 404 ]
+    });
+    sinon.assert.calledWith(reply, {
       index_patterns: ['my_other_indices*'],
       settings: {
         index: {

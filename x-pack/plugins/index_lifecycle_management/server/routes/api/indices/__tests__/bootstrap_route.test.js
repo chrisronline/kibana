@@ -4,22 +4,15 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import { registerBootstrapRoute } from '../register_bootstrap_route';
+import sinon from 'sinon';
+import proxyquire from 'proxyquire';
 
-jest.mock('../../../../lib/call_with_request_factory', () => {
-  const mock = jest.fn();
-  return {
-    callWithRequestFactory: () => mock,
-  };
-});
-
-jest.mock('../../../../lib/is_es_error_factory', () => ({
-  isEsErrorFactory: jest.fn().mockImplementation(() => jest.fn()),
-}));
-
-jest.mock('../../../../lib/license_pre_routing_factory', () => ({
-  licensePreRoutingFactory: jest.fn().mockImplementation(() => jest.fn()),
-}));
+const callWithRequestFactorySpy = sinon.spy();
+const registerBootstrapRoute = proxyquire('../register_bootstrap_route', {
+  '../../../lib/call_with_request_factory': {
+    callWithRequestFactory: () => callWithRequestFactorySpy
+  }
+}).registerBootstrapRoute;
 
 let routeHandler;
 const mockServer = {
@@ -35,22 +28,17 @@ describe('ilmBootstrapRoute', () => {
     await routeHandler({ payload: {
       indexName: 'myIndex',
       aliasName: 'myAlias',
-    } }, jest.fn());
+    } }, sinon.fake());
 
-    const mock = require('../../../../lib/call_with_request_factory').callWithRequestFactory().mock;
-
-    expect(mock.calls.length).toBe(1);
-    expect(mock.calls[0]).toEqual([
-      'indices.create',
-      {
-        index: 'myIndex',
-        aliases: {
-          myAlias: {}
-        },
-        settings: {
-          'index.lifecycle.rollover_alias': 'myAlias'
-        }
+    sinon.assert.match(callWithRequestFactorySpy.callCount, 1);
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'indices.create', {
+      index: 'myIndex',
+      aliases: {
+        myAlias: {}
+      },
+      settings: {
+        'index.lifecycle.rollover_alias': 'myAlias'
       }
-    ]);
+    });
   });
 });

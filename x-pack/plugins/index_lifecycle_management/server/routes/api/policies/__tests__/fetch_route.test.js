@@ -4,43 +4,37 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import { registerFetchRoute } from '../register_fetch_route';
+import sinon from 'sinon';
+import proxyquire from 'proxyquire';
 
-jest.mock('../../../../lib/call_with_request_factory', () => {
-  const mock = jest.fn().mockImplementation((method, params) => {
-    if (params.path === '/_xpack/index_lifecycle') {
-      return {
-        my_policy: {
-          phases: {
-            hot: {},
-            warm: {},
-            cold: {},
-            delete: {}
-          }
-        },
-        my_policy2: {
-          phases: {
-            hot: {},
-            warm: {},
-            cold: {},
-            delete: {}
-          }
+const callWithRequestFactorySpy = sinon.fake(((method, params) => {
+  if (params.path === '/_xpack/index_lifecycle') {
+    return {
+      my_policy: {
+        phases: {
+          hot: {},
+          warm: {},
+          cold: {},
+          delete: {}
         }
-      };
-    }
-  });
-  return {
-    callWithRequestFactory: () => mock,
-  };
-});
-
-jest.mock('../../../../lib/is_es_error_factory', () => ({
-  isEsErrorFactory: jest.fn().mockImplementation(() => jest.fn()),
+      },
+      my_policy2: {
+        phases: {
+          hot: {},
+          warm: {},
+          cold: {},
+          delete: {}
+        }
+      }
+    };
+  }
 }));
 
-jest.mock('../../../../lib/license_pre_routing_factory', () => ({
-  licensePreRoutingFactory: jest.fn().mockImplementation(() => jest.fn()),
-}));
+const registerFetchRoute = proxyquire('../register_fetch_route', {
+  '../../../lib/call_with_request_factory': {
+    callWithRequestFactory: () => callWithRequestFactorySpy
+  }
+}).registerFetchRoute;
 
 let routeHandler;
 const mockServer = {
@@ -53,13 +47,15 @@ describe('ilmFetchPoliciesRoute', () => {
   it('should fetch all policies and format the results', async () => {
     registerFetchRoute(mockServer);
 
-    const reply = jest.fn();
+    const reply = sinon.fake();
 
     await routeHandler({}, reply);
 
-    const mock = require('../../../../lib/call_with_request_factory').callWithRequestFactory().mock;
-
-    expect(mock.calls.length).toBe(1);
-    expect(mock.calls[0][1].path).toBe('/_xpack/index_lifecycle');
+    sinon.assert.match(callWithRequestFactorySpy.callCount, 1);
+    sinon.assert.calledWith(callWithRequestFactorySpy, 'transport.request', {
+      method: 'GET',
+      path: '/_xpack/index_lifecycle',
+      ignore: [ 404 ]
+    });
   });
 });
