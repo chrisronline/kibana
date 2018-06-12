@@ -34,7 +34,6 @@ export class PolicySelection extends Component {
     this.props.setSelectedPolicy(policy);
   }
 
-
   render() {
     const { policies, selectedPolicyName } = this.props;
 

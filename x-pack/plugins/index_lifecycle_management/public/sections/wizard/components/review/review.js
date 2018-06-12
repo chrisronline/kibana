@@ -110,7 +110,6 @@ export class Review extends Component {
     const {
       done,
       back,
-
       setSelectedPolicyName,
       setSaveAsNewPolicy,
       validate,
@@ -119,7 +118,6 @@ export class Review extends Component {
       selectedPolicyName,
       saveAsNewPolicy,
       originalPolicyName,
-
       selectedIndexTemplateName,
       affectedIndexTemplates,
       templateDiff,
