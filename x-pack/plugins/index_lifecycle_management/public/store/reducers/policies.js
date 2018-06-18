@@ -13,7 +13,10 @@ import {
   setSelectedPolicy,
   setSelectedPolicyName,
   setSaveAsNewPolicy,
-  setPhaseData
+  setPhaseData,
+  fetchedPolicy,
+  deletedPolicy,
+  resetSelectedPolicy
 } from '../actions';
 import { policyFromES } from '../selectors';
 import {
@@ -111,6 +114,55 @@ export const policies = handleActions(
         policies
       };
     },
+    [fetchedPolicy](state, { payload }) {
+      const policyName = Object.keys(payload)[0];
+      const policy = payload[policyName];
+
+      const selectedPolicy = policyFromES({
+        name: policyName,
+        phases: policy.phases,
+      });
+
+      const index = state.policies.findIndex(_policy => _policy.name === policy.name);
+      if (index >= 0) {
+        return {
+          ...state,
+          isLoading: false,
+          selectedPolicy,
+          originalPolicyName: selectedPolicy.name,
+          policies: [
+            ...state.policies.slice(0, index),
+            policy,
+            ...state.policies.slice(index + 1),
+          ]
+        };
+      }
+
+      return {
+        ...state,
+        isLoading: false,
+        selectedPolicy,
+        originalPolicyName: selectedPolicy.name,
+        policies: [
+          ...state.policies,
+          policy,
+        ]
+      };
+    },
+    [deletedPolicy](state, { payload: policyName }) {
+      const isSelectedPolicy = state.selectedPolicy && state.selectedPolicy.name === policyName;
+      const index = state.policies.findIndex(policy => policy.name === policyName);
+      return {
+        ...state,
+        isLoading: false,
+        selectedPolicy: isSelectedPolicy ? defaultPolicy : state.selectedPolicy,
+        originalPolicyName: isSelectedPolicy ? undefined : state.originalPolicyName,
+        policies: [
+          ...state.policies.slice(0, index),
+          ...state.policies.slice(index + 1),
+        ]
+      };
+    },
     [setSelectedPolicy](state, { payload: selectedPolicy }) {
       if (!selectedPolicy) {
         return {
@@ -128,6 +180,14 @@ export const policies = handleActions(
           ...defaultPolicy,
           ...policyFromES(selectedPolicy)
         }
+      };
+    },
+    [resetSelectedPolicy](state) {
+      return {
+        ...state,
+        originalPolicyName: defaultState.originalPolicyName,
+        selectedPolicySet: false,
+        selectedPolicy: defaultPolicy,
       };
     },
     [setSelectedPolicyName](state, { payload: name }) {
