@@ -10,6 +10,7 @@ import { toastNotifications } from 'ui/notify';
 
 import {
   EuiTitle,
+  EuiText,
   EuiSpacer,
   EuiHorizontalRule,
   EuiButton,
@@ -71,7 +72,7 @@ export class PolicyConfiguration extends Component {
     if (await this.validate()) {
       this.props.done();
     } else {
-      toastNotifications.addDanger('Please fix errors on the page.');
+      toastNotifications.addDanger('Please the fix errors on the page');
     }
   };
 
@@ -96,41 +97,20 @@ export class PolicyConfiguration extends Component {
       );
     }
 
-    // const singleTemplate = (
-    //   <span>
-    //     This policy is only attached to the selected template{' '}
-    //     <strong>{selectedIndexTemplateName}</strong>.
-    //   </span>
-    // );
-
-    // const multiTemplate = (
-    //   <span>
-    //     This policy is attached to{' '}
-    //     <strong>{affectedIndexTemplates.length - 1} other template(s)</strong>{' '}
-    //     besides <strong>{selectedIndexTemplateName}</strong>.
-    //   </span>
-    // );
-
-    // const warningMessage =
-    //   affectedIndexTemplates.length === 1 &&
-    //   affectedIndexTemplates[0] === selectedIndexTemplateName
-    //     ? singleTemplate
-    //     : multiTemplate;
-
     return (
       <div className="euiAnimateContentLoad">
         <PolicySelection/>
         <EuiHorizontalRule className="ilmHrule" />
         <EuiTitle>
           <h4>
-            {!selectedPolicyName ? 'Edit new policy' : `Edit policy ${selectedPolicyName}`}
+            {!selectedPolicyName ? 'Create a policy' : `Edit policy ${selectedPolicyName}`}
           </h4>
         </EuiTitle>
         <EuiSpacer size="xs" />
-        <EuiTitle size="xs">
-          <h5>Configure the phases of your data and when to transition between them.  Only the hot phase is required.</h5>
-        </EuiTitle>
-        <EuiHorizontalRule className="ilmHrule" />
+        <EuiText color="subdued">
+          <p>Configure the phases of your data and when to transition between them.</p>
+        </EuiText>
+        <EuiSpacer />
         <HotPhase
           validate={this.validate}
           errors={errors[PHASE_HOT]}
@@ -158,89 +138,6 @@ export class PolicyConfiguration extends Component {
         />
         <EuiHorizontalRule className="ilmHrule" />
 
-        {/* <EuiCallOut size="s" color="warning" title={warningMessage} />
-        <EuiSpacer />
-
-        <Fragment>
-          {originalPolicyName ? (
-            <EuiFormRow label="Policy options" style={{ maxWidth: '100%' }}>
-              <EuiSwitch
-                style={{ maxWidth: '100%' }}
-                checked={saveAsNewPolicy}
-                onChange={async e => {
-                  await setSaveAsNewPolicy(e.target.checked);
-                  validate();
-                }}
-                label={
-                  <span>
-                    Save this <strong>as a new policy</strong> so it does not
-                    effect other templates.
-                  </span>
-                }
-              />
-            </EuiFormRow>
-          ) : null}
-          {saveAsNewPolicy ? (
-            <ErrableFormRow
-              label="Policy name"
-              errorKey={STRUCTURE_POLICY_NAME}
-              isShowingErrors={isShowingErrors}
-              errors={errors}
-            >
-              <EuiFieldText
-                value={selectedPolicyName}
-                onChange={async e => {
-                  await setSelectedPolicyName(e.target.value);
-                  validate();
-                }}
-              />
-            </ErrableFormRow>
-          ) : null}
-          <EuiSpacer size="m" />
-          <EuiFormRow label="Bootstrap options" style={{ maxWidth: '100%' }}>
-            <EuiSwitch
-              style={{ maxWidth: '100%' }}
-              checked={bootstrapEnabled}
-              onChange={e => setBootstrapEnabled(e.target.checked)}
-              label={<span>Create an index and alias for this template</span>}
-            />
-          </EuiFormRow>
-          {bootstrapEnabled ? (
-            <Fragment>
-              <ErrableFormRow
-                label="Name your index"
-                errorKey={STRUCTURE_INDEX_NAME}
-                isShowingErrors={isShowingErrors}
-                errors={errors}
-              >
-                <EuiFieldText
-                  value={indexName}
-                  onChange={async e => {
-                    await setIndexName(e.target.value);
-                    validate();
-                  }}
-                />
-              </ErrableFormRow>
-              <ErrableFormRow
-                label="Name your alias"
-                errorKey={STRUCTURE_ALIAS_NAME}
-                isShowingErrors={isShowingErrors}
-                errors={errors}
-              >
-                <EuiFieldText
-                  value={aliasName}
-                  onChange={async e => {
-                    await setAliasName(e.target.value);
-                    validate();
-                  }}
-                />
-              </ErrableFormRow>
-            </Fragment>
-          ) : null}
-        </Fragment> */}
-
-        {/* <EuiSpacer /> */}
-
         <EuiButtonEmpty
           iconSide="left"
           iconType="sortLeft"
@@ -255,7 +152,7 @@ export class PolicyConfiguration extends Component {
           iconType="sortRight"
           onClick={this.submit}
         >
-          Next
+          Continue
         </EuiButton>
 
         {this.state.isShowingNodeDetailsFlyout ? (

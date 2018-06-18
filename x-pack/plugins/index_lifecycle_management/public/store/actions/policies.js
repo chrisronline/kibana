@@ -9,8 +9,7 @@
 
 import { createAction } from 'redux-actions';
 import { toastNotifications } from 'ui/notify';
-import { loadPolicies, loadPolicy, savePolicy as savePolicyApi, deletePolicy as deletePolicyApi } from '../../api';
-import { getLifecycle } from '../selectors';
+import { loadPolicies } from '../../api';
 
 export const fetchedPolicies = createAction('FETCHED_POLICIES');
 export const fetchPolicies = () => async dispatch => {
@@ -23,56 +22,11 @@ export const fetchPolicies = () => async dispatch => {
   }
 
   dispatch(fetchedPolicies(policies));
-};
-
-export const fetchedPolicy = createAction('FETCHED_POLICY');
-export const fetchPolicy = name => async dispatch => {
-  let policy;
-  try {
-    policy = await loadPolicy(name);
-  }
-  catch (err) {
-    return toastNotifications.addDanger(err.data.message);
-  }
-
-  dispatch(fetchedPolicy(policy));
+  return policies;
 };
 
 export const setSelectedPolicy = createAction('SET_SELECTED_POLICY');
-export const resetSelectedPolicy = createAction('RESET_SELECTED_POLICY');
 export const setSelectedPolicyName = createAction('SET_SELECTED_POLICY_NAME');
 export const setSaveAsNewPolicy = createAction('SET_SAVE_AS_NEW_POLICY');
 
 export const setPhaseData = createAction('SET_PHASE_DATA', (phase, key, value) => ({ phase, key, value }));
-
-export const savedPolicy = createAction('SAVED_POLICY');
-export const savePolicy = () => async (dispatch, getState) => {
-  const state = getState();
-  const policy = getLifecycle(state);
-
-  let saved;
-  try {
-    saved = await savePolicyApi(policy);
-  }
-  catch (err) {
-    return toastNotifications.addDanger(err.data.message);
-  }
-
-  toastNotifications.addSuccess(`Successfully saved policy '${policy.name}'`);
-
-  dispatch(savedPolicy(saved));
-};
-
-export const deletedPolicy = createAction('DELETED_POLICY');
-export const deletePolicy = name => async dispatch => {
-  try {
-    await deletePolicyApi(name);
-  }
-  catch (err) {
-    return toastNotifications.addDanger(err.data.message);
-  }
-
-  toastNotifications.addSuccess(`Successfully deleted policy '${name}'`);
-
-  dispatch(deletedPolicy(name));
-};

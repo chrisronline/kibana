@@ -7,30 +7,32 @@ import ace from 'brace';
 import { ADDITION_PREFIX, REMOVAL_PREFIX } from './diff_tools';
 
 function findInObject(key, obj, debug) {
-  // debug && console.log('findInObject()', key, obj);
   const objKeys = Object.keys(obj);
   for (const objKey of objKeys) {
     if (objKey === key) {
-      // debug && console.log('findInObject() FOUND', key);
       return obj[objKey];
     }
     if (typeof obj[objKey] === 'object' && !Array.isArray(obj[objKey])) {
       const item = findInObject(key, obj[objKey], debug);
       if (item !== false) {
-        // debug && console.log('findInObject() FOUND 2', key);
         return item;
       }
     }
   }
-  // debug && console.log('findInObject() NOT FOUND', key);
   return false;
 }
 
+/**
+ * Utilty method that will determine if the current key/value pair
+ * is an addition or removal and return the appropriate ace classes
+ * for styling. This is called after finding a valid key/value match
+ * in our custom JSON diff mode for ace.
+ *
+ * @param {string} key
+ * @param {string} val
+ * @param {object} jsonObject
+ */
 function getDiffClasses(key, val, jsonObject) {
-  const debug = false;//key === 'name' && val === '"t"';
-
-  debug && console.log('getDiffClasses()', key, val);
-
   let value = val;
   if (value.endsWith(',')) {
     value = value.slice(0, -1);
@@ -39,8 +41,8 @@ function getDiffClasses(key, val, jsonObject) {
     value = value.slice(1, -1);
   }
 
-  const additionValue = findInObject(`${ADDITION_PREFIX}${key}`, jsonObject, debug);
-  const removalValue = findInObject(`${REMOVAL_PREFIX}${key}`, jsonObject, debug);
+  const additionValue = findInObject(`${ADDITION_PREFIX}${key}`, jsonObject);
+  const removalValue = findInObject(`${REMOVAL_PREFIX}${key}`, jsonObject);
 
   const isAddition = Array.isArray(additionValue)
     ? !!additionValue.find(v => v === value)
@@ -58,16 +60,6 @@ function getDiffClasses(key, val, jsonObject) {
     diffClasses = 'variable';
   }
 
-  debug && console.log(`getDiffClasses()
-    key='${key}'
-    value='${value}'
-    additionValue='${additionValue}'
-    removalValue='${removalValue}'
-    isAddition=${isAddition}
-    isRemoval=${isRemoval}
-    diffClasses='${diffClasses}'
-  `);
-
   return diffClasses;
 }
 
@@ -75,6 +67,14 @@ let currentJsonObject;
 const getCurrentJsonObject = () => currentJsonObject;
 export const setCurrentJsonObject = jsonObject => currentJsonObject = jsonObject;
 
+/**
+ * This function will update the ace editor to support a `DiffJsonMode` that will
+ * show a merged object (merged through `diff_tools:mergeAndPreserveDuplicateKeys`)
+ * and highlight additions and removals. The goal of this from a UI perspective is
+ * to help the user see a visual result of merging two javascript objects.
+ *
+ * Read this as a starter: https://github.com/ajaxorg/ace/wiki/Creating-or-Extending-an-Edit-Mode
+ */
 export const addDiffAddonsForAce = () => {
   const JsonHighlightRules = ace.acequire('ace/mode/json_highlight_rules')
     .JsonHighlightRules;
@@ -90,6 +90,11 @@ export const addDiffAddonsForAce = () => {
             token: (key, val) => {
               return getDiffClasses(key, val, getCurrentJsonObject());
             },
+            // This is designed to match a key:value pair represented in JSON
+            // like:
+            //    "foo": "bar"
+            // Be aware when tweaking this that there are idiosyncracies with
+            // how these work internally in ace.
             regex: '(?:"([\\w-+]+)"\\s*:\\s*([^\\n\\[]+)$)',
           },
           {

@@ -8,7 +8,6 @@ import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { toastNotifications } from 'ui/notify';
 
-// import DiffEditor from 'react-ace/lib/diff';
 import './review.less';
 
 import 'brace/theme/github';
@@ -18,18 +17,19 @@ import 'brace/ext/language_tools';
 
 import {
   EuiTitle,
+  EuiCode,
+  EuiCallOut,
   EuiSpacer,
   EuiHorizontalRule,
   EuiButton,
   EuiFlexItem,
-  EuiFlexGrid,
-  EuiPanel,
   EuiText,
   EuiButtonEmpty,
   EuiFormRow,
   EuiSwitch,
   EuiFieldText,
   EuiLoadingSpinner,
+  EuiFlexGroup,
 } from '@elastic/eui';
 import { getAffectedIndices } from '../../../../api';
 import { DiffView } from './diff_view';
@@ -78,7 +78,7 @@ export class Review extends Component {
         this.props.selectedPolicyName
       );
       this.setState({ affectedIndices, isLoadingAffectedIndices: false });
-    }, 500);
+    }, 1000);
   }
 
   async componentWillMount() {
@@ -102,7 +102,7 @@ export class Review extends Component {
     if (await this.validate()) {
       this.props.done();
     } else {
-      toastNotifications.addDanger('Please fix errors on the page.');
+      toastNotifications.addDanger('Please fix the errors on the page');
     }
   };
 
@@ -110,8 +110,6 @@ export class Review extends Component {
     const {
       done,
       back,
-
-      /* Start might move */
       setSelectedPolicyName,
       setSaveAsNewPolicy,
       validate,
@@ -120,156 +118,161 @@ export class Review extends Component {
       selectedPolicyName,
       saveAsNewPolicy,
       originalPolicyName,
-      /* End might move */
-
       selectedIndexTemplateName,
       affectedIndexTemplates,
       templateDiff,
       lifecycle,
       bootstrapEnabled,
       aliasName,
+      policies,
     } = this.props;
 
     const { affectedIndices, isLoadingAffectedIndices, isShowingErrors } = this.state;
 
-    // console.log('render', affectedIndices);
+    const showSaveChangedMessage = (originalPolicyName && !saveAsNewPolicy)
+      || (saveAsNewPolicy && !!policies.find(policy => policy.name === selectedPolicyName));
 
     return (
       <div className="euiAnimateContentLoad">
-        {/* <EuiTitle>
-          <h4>Changes that will occur</h4>
+        <EuiSpacer />
+        <EuiTitle size="s">
+          <h3>Review your policy changes</h3>
         </EuiTitle>
-        <EuiSpacer /> */}
+        <EuiText>
+          <p>When you save a policy, your changes go into effect immediately.</p>
+        </EuiText>
+
         <EuiSpacer />
 
-        <Fragment>
-          {originalPolicyName ? (
-            <EuiFormRow label="Policy options" style={{ maxWidth: '100%' }}>
-              <EuiSwitch
-                style={{ maxWidth: '100%' }}
-                checked={saveAsNewPolicy}
-                onChange={async e => {
-                  await setSaveAsNewPolicy(e.target.checked);
-                  validate();
-                }}
-                label={
-                  <span>
-                    Save this <strong>as a new policy</strong> so it does not
-                    effect other templates.
-                  </span>
-                }
-              />
-            </EuiFormRow>
-          ) : null}
-          {saveAsNewPolicy ? (
-            <ErrableFormRow
-              label="Policy name"
-              errorKey={STRUCTURE_POLICY_NAME}
-              isShowingErrors={isShowingErrors}
-              errors={errors}
+        <EuiCallOut
+          title="Your changes affect these template configurations"
+          color="warning"
+        >
+          <h4>{`${affectedIndexTemplates.length} Index ${affectedIndexTemplates.length === 1 ? 'template' : 'templates'}`}</h4>
+          <ul>
+            {affectedIndexTemplates.map(template => (
+              <li key={template}>{template}</li>
+            ))}
+          </ul>
+          <h4>{`${affectedIndices.length} ${affectedIndices.length === 1 ? 'Index' : 'Indices' }`}</h4>
+          { isLoadingAffectedIndices ? (
+            <EuiLoadingSpinner size="l"/>
+          ) : (
+            <ul>
+              {affectedIndices.map(index => <li key={index}>{index}</li>)}
+            </ul>
+          ) }
+        </EuiCallOut>
+
+        {bootstrapEnabled ? (
+          <Fragment>
+            <EuiSpacer />
+            <EuiCallOut
+              title="This action creates a new index alias"
+              color="success"
             >
-              <EuiFieldText
-                value={selectedPolicyName}
-                onChange={async e => {
-                  await setSelectedPolicyName(e.target.value);
-                  validate();
-                }}
-              />
-            </ErrableFormRow>
-          ) : null}
-        </Fragment>
-        <EuiSpacer size="m"/>
-        <EuiFlexGrid columns={bootstrapEnabled ? 3 : 2}>
-          <EuiFlexItem>
-            <EuiPanel>
-              <EuiTitle size="l" style={{ textAlign: 'center' }}>
-                <p>{affectedIndexTemplates.length} Affected Index {affectedIndexTemplates.length === 1 ? 'Template' : 'Templates' }</p>
-              </EuiTitle>
-              <EuiText size="s">
-                <ul>
-                  {affectedIndexTemplates.map(template => (
-                    <li key={template}>{template}</li>
-                  ))}
-                </ul>
-              </EuiText>
-            </EuiPanel>
-          </EuiFlexItem>
-          <EuiFlexItem>
-            <EuiPanel>
-              <EuiTitle size="l" style={{ textAlign: 'center' }}>
-                <p>{affectedIndices.length} Affected {affectedIndices.length === 1 ? 'Index' : 'Indices' }</p>
-              </EuiTitle>
-              <EuiText size="s">
-                { isLoadingAffectedIndices ? (
-                  <EuiLoadingSpinner size="l"/>
-                ) : (
-                  <ul>
-                    {affectedIndices.map(index => <li key={index}>{index}</li>)}
-                  </ul>
-                ) }
-              </EuiText>
-            </EuiPanel>
-          </EuiFlexItem>
-          {bootstrapEnabled ? (
-            <EuiFlexItem>
-              <EuiPanel>
-                <EuiTitle size="l" style={{ textAlign: 'center' }}>
-                  <p>New alias</p>
-                </EuiTitle>
-                <EuiText size="s">
-                  <p>Point to this new alias going forward:</p>
-                  <ul>
-                    <li>{aliasName}</li>
-                  </ul>
-                </EuiText>
-              </EuiPanel>
-            </EuiFlexItem>
-          ) : null}
-        </EuiFlexGrid>
+              <p>You decided to bootstrap a new index. Point to this new alias going forward.</p>
+              <h3><span className="ilmAlias">{aliasName}</span> is your new alias</h3>
+            </EuiCallOut>
+          </Fragment>
+        ) : null}
+
         <EuiHorizontalRule className="ilmHrule" />
         {templateDiff.hasChanged ? (
           <Fragment>
             <EuiTitle>
               <h4>
-                We will be changing the index template named `{
-                  selectedIndexTemplateName
-                }`
+                <EuiCode>{selectedIndexTemplateName}</EuiCode> template changes
               </h4>
             </EuiTitle>
             <EuiSpacer size="m" />
             <DiffView
               templateDiff={templateDiff}
             />
-            {/* <DiffEditor
-              editorProps={{
-                $blockScrolling: Infinity,
-                autoScrollEditorIntoView: false,
-              }}
-              value={[
-                JSON.stringify(templateDiff.originalFullIndexTemplate, null, 2),
-                JSON.stringify(templateDiff.newFullIndexTemplate, null, 2),
-              ]}
-              readOnly={true}
-              height="300px"
-              width="100%"
-              mode="json"
-            /> */}
-
             <EuiHorizontalRule className="ilmHrule" />
           </Fragment>
         ) : null}
-        <EuiButtonEmpty iconSide="left" iconType="sortLeft" onClick={back}>
-          Back
-        </EuiButtonEmpty>
+
+        <EuiSpacer />
+        <Fragment>
+          {originalPolicyName ? (
+            <Fragment>
+              { showSaveChangedMessage ? (
+                <Fragment>
+                  <EuiTitle size="s">
+                    <h3>Save changes to {selectedPolicyName} policy?</h3>
+                  </EuiTitle>
+                  <EuiText>
+                    <p>
+                      <strong>You are editing an existing policy</strong>. Any changes you make
+                  will also change index templates that this policy is attached to. Alternately, you can save
+                  these changes in a new policy and only change the template you
+                  selected.
+                    </p>
+                  </EuiText>
+                  <EuiSpacer />
+                </Fragment>
+              ) : null }
+              <EuiFormRow label="Policy options" style={{ maxWidth: '100%' }}>
+                <EuiSwitch
+                  style={{ maxWidth: '100%' }}
+                  checked={saveAsNewPolicy}
+                  onChange={async e => {
+                    await setSaveAsNewPolicy(e.target.checked);
+                    validate();
+                  }}
+                  label={
+                    <span>
+                      Save this <strong>as a new policy</strong>
+                    </span>
+                  }
+                />
+              </EuiFormRow>
+            </Fragment>
+          ) : null}
+          {saveAsNewPolicy ? (
+            <Fragment>
+              <EuiTitle size="s">
+                <h3>Save your work</h3>
+              </EuiTitle>
+              <EuiSpacer />
+              <ErrableFormRow
+                label="Policy name"
+                errorKey={STRUCTURE_POLICY_NAME}
+                isShowingErrors={isShowingErrors}
+                errors={errors}
+              >
+                <EuiFieldText
+                  value={selectedPolicyName}
+                  onChange={async e => {
+                    await setSelectedPolicyName(e.target.value);
+                    validate();
+                  }}
+                />
+              </ErrableFormRow>
+            </Fragment>
+          ) : null}
+        </Fragment>
+
+        <EuiFlexGroup>
+          <EuiFlexItem grow={false}>
+            <EuiButtonEmpty iconSide="left" iconType="sortLeft" onClick={back}>
+              Back
+            </EuiButtonEmpty>
+
+          </EuiFlexItem>
+          <EuiFlexItem grow={false}>
+            <EuiButton
+              fill
+              color="secondary"
+              iconType="check"
+              onClick={() => done(lifecycle)}
+            >
+              Looks good, save changes
+            </EuiButton>
+          </EuiFlexItem>
+        </EuiFlexGroup>
         &nbsp;&nbsp;
-        <EuiButton
-          fill
-          color="secondary"
-          iconType="check"
-          onClick={() => done(lifecycle)}
-        >
-          Looks good, save changes
-        </EuiButton>
       </div>
     );
   }

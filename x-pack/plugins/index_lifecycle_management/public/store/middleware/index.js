@@ -5,3 +5,5 @@
  */
 
 export { autoEnablePhase } from './auto_enable_phase';
+export { setSelectedPolicyFromSelectedTemplate } from './set_selected_policy_from_selected_template';
+export { autoSetNodeAttrs } from './auto_set_node_attrs';

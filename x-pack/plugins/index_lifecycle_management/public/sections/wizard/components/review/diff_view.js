@@ -4,17 +4,16 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import React, { Fragment, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import {
   EuiCodeEditor,
-  EuiDescriptionList,
-  EuiDescriptionListTitle,
-  EuiDescriptionListDescription,
   EuiFlexGroup,
   EuiFlexItem,
   EuiButtonEmpty,
+  EuiToolTip,
+  EuiCode,
 } from '@elastic/eui';
 import ace from 'brace';
 import 'brace/mode/json';
@@ -48,50 +47,45 @@ export class DiffView extends PureComponent {
       templateDiff: { originalFullIndexTemplate, newFullIndexTemplate },
     } = this.props;
 
-    // console.log(JSON.stringify(this.props));
-
     const { result: mergedJson, changes } = mergeAndPreserveDuplicateKeys(
       originalFullIndexTemplate,
       newFullIndexTemplate
     );
-
-    console.log('mergedJson', mergedJson, changes);
 
     // Strip the ^ and $ characters
     const mergedJsonAsString = removePrefixes(
       JSON.stringify(mergedJson, null, 2)
     );
 
-    // console.log('mergedJsonAsString', mergedJsonAsString);
-
     setCurrentJsonObject(mergedJson);
     addDiffAddonsForAce();
 
     return (
-      <EuiFlexGroup>
-        <EuiFlexItem grow={false}>
-          <EuiDescriptionList>
+      <EuiFlexGroup gutterSize="none">
+        <EuiFlexItem grow={1} className="ilmDiff__nav">
+          <ul>
             {changes.map(({ key, original, updated }) => (
-              <Fragment key={key}>
-                <EuiDescriptionListTitle>
-                  <EuiButtonEmpty onClick={() => this.scrollToKey(key, updated)}>
-                    {key}
-                  </EuiButtonEmpty>
-                </EuiDescriptionListTitle>
-                <EuiDescriptionListDescription>
-                  {original ? (
+              <li key={key}>
+                <EuiToolTip
+                  title={original ? "Change" : "Addition"}
+                  content={original ? (
                     <span>
-                      Changing `{JSON.stringify(original)}` to `{JSON.stringify(updated)}``
+                      Changing the value of <EuiCode>{key}</EuiCode> from <EuiCode>{JSON.stringify(original)}</EuiCode>
+                      to <EuiCode>{JSON.stringify(updated)}</EuiCode>
                     </span>
                   ) : (
-                    <span>Adding with `{JSON.stringify(updated)}`</span>
+                    <span>Setting a value of <EuiCode>{JSON.stringify(updated)}</EuiCode> for <EuiCode>{key}</EuiCode></span>
                   )}
-                </EuiDescriptionListDescription>
-              </Fragment>
+                >
+                  <EuiButtonEmpty size="s" onClick={() => this.scrollToKey(key, updated)}>
+                    {key}
+                  </EuiButtonEmpty>
+                </EuiToolTip>
+              </li>
             ))}
-          </EuiDescriptionList>
+          </ul>
         </EuiFlexItem>
-        <EuiFlexItem grow={true}>
+        <EuiFlexItem grow={3} className="ilmDiff__code">
           <EuiCodeEditor
             ref={aceEditor => (this.aceEditor = aceEditor)}
             mode="diff_json"
