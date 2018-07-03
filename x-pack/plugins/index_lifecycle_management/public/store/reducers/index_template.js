@@ -12,14 +12,15 @@ import {
   fetchingIndexTemplates,
   fetchedIndexTemplates,
   setSelectedIndexTemplateName,
-  fetchedIndexTemplate
+  fetchedIndexTemplate,
+  resetSelectedIndexTemplate
 } from '../actions/index_template';
 
 const defaultState = {
   isLoading: false,
   fullSelectedIndexTemplate: null,
   selectedIndexTemplateName: '',
-  indexTemplates: null,
+  indexTemplates: [],
 };
 
 export const indexTemplate = handleActions(
@@ -47,6 +48,13 @@ export const indexTemplate = handleActions(
       return {
         ...state,
         selectedIndexTemplateName
+      };
+    },
+    [resetSelectedIndexTemplate](state) {
+      return {
+        ...state,
+        fullSelectedIndexTemplate: null,
+        selectedIndexTemplateName: '',
       };
     }
   },

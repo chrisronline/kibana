@@ -11,6 +11,7 @@ import React from 'react';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 import { Landing } from './sections/landing';
 import { PolicyManagement } from './sections/policy_management';
+import { IndexTemplateManagement } from './sections/index_template_management';
 
 export const App = ({ baseName }) => {
   const basename = baseName.endsWith('/') ? baseName.slice(0, -1) : baseName;
@@ -18,6 +19,7 @@ export const App = ({ baseName }) => {
     <HashRouter basename={basename}>
       <Switch>
         <Route path="/policies" component={PolicyManagement}/>
+        <Route path="/index_templates" component={IndexTemplateManagement}/>
         <Route component={Landing}/>
       </Switch>
     </HashRouter>

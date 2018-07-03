@@ -28,6 +28,8 @@ import {
   PHASE_DELETE
 } from '../constants';
 
+export const deleteIndexTemplate = createAction('DELETE_INDEX_TEMPLATE');
+
 export const fetchingIndexTemplates = createAction('FETCHING_INDEX_TEMPLATES');
 export const fetchedIndexTemplates = createAction('FETCHED_INDEX_TEMPLATES');
 export const fetchIndexTemplates = () => async dispatch => {
@@ -105,3 +107,5 @@ export const setSelectedIndexTemplate = name => async (dispatch, getState) => {
   }
   await Promise.all(promises);
 };
+
+export const resetSelectedIndexTemplate = createAction('RESET_SELECTED_INDEX_TEMPLATE');
