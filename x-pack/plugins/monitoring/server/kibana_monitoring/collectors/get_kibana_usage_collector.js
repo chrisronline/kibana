@@ -15,6 +15,14 @@ export function getKibanaUsageCollector(server) {
     type: KIBANA_USAGE_TYPE,
     async fetch({ savedObjectsClient }) {
       return savedObjectsClient.summarize();
+    },
+    format: result => {
+      return [{
+        type: 'kibana_stats',
+        payload: {
+          usage: result
+        }
+      }];
     }
   });
 }
