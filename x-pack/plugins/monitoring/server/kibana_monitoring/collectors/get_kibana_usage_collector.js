@@ -16,7 +16,7 @@ export function getKibanaUsageCollector(server) {
     async fetch({ savedObjectsClient }) {
       return savedObjectsClient.summarize();
     },
-    format: result => {
+    formatForBulkUpload: result => {
       return [{
         type: 'kibana_stats',
         payload: {
