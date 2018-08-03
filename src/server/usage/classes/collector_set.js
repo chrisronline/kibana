@@ -32,13 +32,11 @@ export class CollectorSet {
 
   /*
    * @param {Object} server - server object
-   * @param {Number} options.interval - in milliseconds
-   * @param {Function} options.combineTypes
-   * @param {Function} options.onPayload
+   * @param {Array} collectors to initialize, usually as a result of filtering another CollectorSet instance
    */
-  constructor(server) {
+  constructor(server, collectors = []) {
     this._log = getCollectorLogger(server);
-    this._collectors = [];
+    this._collectors = collectors;
 
     /*
      * Helper Factory methods
@@ -46,6 +44,7 @@ export class CollectorSet {
      */
     this.makeStatsCollector = options => new Collector(server, options);
     this.makeUsageCollector = options => new UsageCollector(server, options);
+    this.makeCollectorSetFromArray = collectorsArray => new CollectorSet(server, collectorsArray);
   }
 
   /*
@@ -71,9 +70,10 @@ export class CollectorSet {
 
   /*
    * Call a bunch of fetch methods and then do them in bulk
+   * @param {Object} fetchMechanisms - an object with a callCluster function and a savedObjectsClient object
    * @param {Array} collectors - an array of collectors, default to all registered collectors
    */
-  bulkFetch(callCluster, collectors = this._collectors) {
+  bulkFetch(fetchMechanisms, collectors = this._collectors) {
     if (!Array.isArray(collectors)) {
       throw new Error(`bulkFetch method given bad collectors parameter: ` + typeof collectors);
     }
@@ -83,7 +83,7 @@ export class CollectorSet {
       this._log.debug(`Fetching data from ${collectorType} collector`);
       return Promise.props({
         type: collectorType,
-        result: collector.fetchInternal(callCluster) // use the wrapper for fetch, kicks in error checking
+        result: collector.fetchInternal(fetchMechanisms) // use the wrapper for fetch, kicks in error checking
       })
         .catch(err => {
           this._log.warn(err);
@@ -97,23 +97,29 @@ export class CollectorSet {
       throw new Error(`bulkFormat method given bad collectors parameter: ` + typeof collectors);
     }
 
-    return data.reduce((accum, collectedData) => {
-      if (isEmpty(collectedData)) {
+    return data.reduce((accum, { type, result }) => {
+      if (isEmpty(result)) {
         return accum;
       }
-      const collector = collectors.find(_c => _c.type === collectedData.type);
-      const defaultFormatterForBulkUpload = result => ([
-        { type: collector.type, payload: result }
-      ]);
-      const formatter = collector.formatForBulkUpload || defaultFormatterForBulkUpload;
-      accum.push(formatter(collectedData.result));
-      return accum;
+
+      return [
+        ...accum,
+        this.getCollectorByType(type).formatForBulkUpload(result)
+      ];
     }, []);
   }
 
-  async bulkFetchUsage(callCluster) {
-    const usageCollectors = this._collectors.filter(c => c instanceof UsageCollector);
-    return this.bulkFetch(callCluster, usageCollectors);
+  /*
+   * @return {new CollectorSet}
+   */
+  getFilteredCollectorSet(filter) {
+    const filtered = this._collectors.filter(filter);
+    return this.makeCollectorSetFromArray(filtered);
+  }
+
+  async bulkFetchUsage(fetchMechanisms) {
+    const usageCollectors = this.getFilteredCollectorSet(c => c instanceof UsageCollector);
+    return this.bulkFetch(fetchMechanisms, usageCollectors);
   }
 
   // convert an array of fetched stats results into key/object

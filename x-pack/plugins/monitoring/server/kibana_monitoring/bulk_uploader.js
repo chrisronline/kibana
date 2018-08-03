@@ -4,16 +4,16 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import { get, set, flatten, uniq } from 'lodash';
+import { uniq } from 'lodash';
+import {
+  SavedObjectsClient,
+  SavedObjectsRepositoryProvider,
+} from '../../../../../src/server/saved_objects';
 import { callClusterFactory } from '../../../xpack_main';
 import {
   LOGGING_TAG,
   KIBANA_MONITORING_LOGGING_TAG,
-  KIBANA_STATS_TYPE_MONITORING,
-  KIBANA_SETTINGS_TYPE,
-  KIBANA_USAGE_TYPE,
 } from '../../common/constants';
-import { KIBANA_REPORTING_TYPE } from '../../../reporting/common/constants';
 import {
   sendBulkPayload,
   monitoringBulk,
@@ -55,8 +55,15 @@ export class BulkUploader {
       plugins: [monitoringBulk],
     });
 
-    this._callClusterWithInternalUser = callClusterFactory(server).getCallClusterInternal();
+    const callClusterInternal = callClusterFactory(server).getCallClusterInternal();
+    this._callClusterInternal = callClusterInternal;
 
+    const repositoryProvider = new SavedObjectsRepositoryProvider({
+      index: server.config().get('kibana.index'),
+      mappings: server.getKibanaIndexMappingsDsl(),
+    });
+    const repository = repositoryProvider.getRepository(callClusterInternal);
+    this._savedObjectsClient = new SavedObjectsClient(repository);
   }
 
   /*
@@ -66,9 +73,12 @@ export class BulkUploader {
    */
   start(collectorSet) {
     this._log.info('Starting monitoring stats collection');
-    this._fetchAndUpload(collectorSet); // initial fetch
+
+    // filter out API-only collectors
+    const filterThem = _collectorSet => _collectorSet.getFilteredCollectorSet(c => c.internalIgnore !== true);
+    this._fetchAndUpload(filterThem(collectorSet)); // initial fetch
     this._timer = setInterval(() => {
-      this._fetchAndUpload(collectorSet);
+      this._fetchAndUpload(filterThem(collectorSet));
     }, this._interval);
   }
 
@@ -97,8 +107,11 @@ export class BulkUploader {
    * @return {Promise} - resolves to undefined
    */
   async _fetchAndUpload(collectorSet) {
-    const data = await collectorSet.bulkFetch(this._callClusterWithInternalUser);
-    const payload = BulkUploader.toBulkUploadFormat(data, collectorSet);
+    const data = await collectorSet.bulkFetch({
+      callCluster: this._callClusterInternal,
+      savedObjectsClient: this._savedObjectsClient,
+    });
+    const payload = BulkUploader.getCollectedData(data, collectorSet);
 
     if (payload) {
       try {
@@ -117,39 +130,40 @@ export class BulkUploader {
     return sendBulkPayload(this._client, this._interval, payload);
   }
 
-  static deepMergeUploadData(uploadData, collectorSet) {
-    const deepMergeAndGroup = collectorSet.bulkFormat(uploadData).reduce((accum, datas) => {
-      for (const data of datas) {
-        accum[data.type] = accum[data.type] || {};
-        for (const key in data.payload) {
-          if (typeof accum[data.type][key] === 'object') {
-            accum[data.type][key] = {
-              ...accum[data.type][key],
-              ...data.payload[key]
+  /*
+   * Bulk stats are transformed into a bulk upload format
+   * Non-legacy transformation is done in CollectorSet.toApiStats
+   */
+  static getCollectedData(uploadData, collectorSet) {
+
+    const fromCollector = collectorSet.bulkFormat(uploadData);
+    const deepMergeAndGroup = fromCollector.reduce((accum, datas) => {
+      for (const { type, payload } of datas) {
+        accum[type] = accum[type] || {};
+        for (const key in payload) {
+          if (typeof accum[type][key] === 'object') {
+            accum[type][key] = {
+              ...accum[type][key],
+              ...payload[key]
             };
           } else {
-            accum[data.type][key] = data.payload[key];
+            accum[type][key] = payload[key];
           }
         }
       }
       return accum;
     }, {});
 
-    return Object.keys(deepMergeAndGroup).reduce((accum, type) => {
-      accum.push([
-        { index: { _type: type } },
-        deepMergeAndGroup[type],
-      ]);
-      return accum;
-    }, []);
-  }
-
-  /*
-   * Bulk stats are transformed into a bulk upload format
-   * Non-legacy transformation is done in CollectorSet.toApiStats
-   */
-  static toBulkUploadFormat(uploadData, collectorSet) {
-    return flatten(BulkUploader.deepMergeUploadData(uploadData, collectorSet));
+    const types = Object.keys(deepMergeAndGroup);
+    if (types) {
+      return types.reduce((accum, type) => {
+        return [
+          ...accum,
+          { index: { _type: type } },
+          deepMergeAndGroup[type],
+        ];
+      }, []);
+    }
   }
 
   static checkPayloadTypesUnique(payload) {
@@ -160,45 +174,7 @@ export class BulkUploader {
     }
   }
 
-  static combineStatsLegacy(payload) {
-    throw 'This is deprecated';
-    BulkUploader.checkPayloadTypesUnique(payload);
-
-    // default the item to [] to allow destructuring
-    const findItem = type => payload.find(item => get(item, '[0].index._type') === type) || [];
-
-    // kibana usage and stats
-    let statsResult;
-    const [ statsHeader, statsPayload ] = findItem(KIBANA_STATS_TYPE_MONITORING);
-    const [ reportingHeader, reportingPayload ] = findItem(KIBANA_REPORTING_TYPE);
-
-    if (statsHeader && statsPayload) {
-      statsHeader.index._type = 'kibana_stats'; // HACK to convert kibana_stats_monitoring to just kibana_stats for bwc
-      const [ usageHeader, usagePayload ] = findItem(KIBANA_USAGE_TYPE);
-      const kibanaUsage = (usageHeader && usagePayload) ? usagePayload : null;
-      const reportingUsage = (reportingHeader && reportingPayload) ? reportingPayload : null;
-      statsResult = [ statsHeader, statsPayload ];
-      if (kibanaUsage) {
-        set(statsResult, '[1].usage', kibanaUsage);
-      }
-      if (reportingUsage) {
-        set(statsResult, '[1].usage.xpack.reporting', reportingUsage);
-      }
-    }
-
-    // kibana settings
-    let settingsResult;
-    const [ settingsHeader, settingsPayload ] = findItem(KIBANA_SETTINGS_TYPE);
-    if (settingsHeader && settingsPayload) {
-      settingsResult = [ settingsHeader, settingsPayload ];
-    }
-
-    // return new payload with the combined data
-    // adds usage data to stats data
-    // strips usage out as a top-level type
-    const result = [ statsResult, settingsResult ];
-
-    // remove result items that are undefined
-    return result.filter(Boolean);
+  static combineStatsLegacy() {
+    throw new Error('This is deprecated');
   }
 }
