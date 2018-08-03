@@ -13,11 +13,7 @@ import { callClusterFactory } from '../../../xpack_main';
 import {
   LOGGING_TAG,
   KIBANA_MONITORING_LOGGING_TAG,
-  KIBANA_STATS_TYPE_MONITORING,
-  KIBANA_SETTINGS_TYPE,
-  KIBANA_USAGE_TYPE,
 } from '../../common/constants';
-import { KIBANA_REPORTING_TYPE } from '../../../reporting/common/constants';
 import {
   sendBulkPayload,
   monitoringBulk,
@@ -115,7 +111,7 @@ export class BulkUploader {
       callCluster: this._callClusterInternal,
       savedObjectsClient: this._savedObjectsClient,
     });
-    const payload = BulkUploader.toBulkUploadFormat(data, collectorSet);
+    const payload = BulkUploader.getCollectedData(data, collectorSet);
 
     if (payload) {
       try {
@@ -134,39 +130,40 @@ export class BulkUploader {
     return sendBulkPayload(this._client, this._interval, payload);
   }
 
-  static deepMergeUploadData(uploadData, collectorSet) {
-    const deepMergeAndGroup = collectorSet.bulkFormat(uploadData).reduce((accum, datas) => {
-      for (const data of datas) {
-        accum[data.type] = accum[data.type] || {};
-        for (const key in data.payload) {
-          if (typeof accum[data.type][key] === 'object') {
-            accum[data.type][key] = {
-              ...accum[data.type][key],
-              ...data.payload[key]
+  /*
+   * Bulk stats are transformed into a bulk upload format
+   * Non-legacy transformation is done in CollectorSet.toApiStats
+   */
+  static getCollectedData(uploadData, collectorSet) {
+
+    const fromCollector = collectorSet.bulkFormat(uploadData);
+    const deepMergeAndGroup = fromCollector.reduce((accum, datas) => {
+      for (const { type, payload } of datas) {
+        accum[type] = accum[type] || {};
+        for (const key in payload) {
+          if (typeof accum[type][key] === 'object') {
+            accum[type][key] = {
+              ...accum[type][key],
+              ...payload[key]
             };
           } else {
-            accum[data.type][key] = data.payload[key];
+            accum[type][key] = payload[key];
           }
         }
       }
       return accum;
     }, {});
 
-    return Object.keys(deepMergeAndGroup).reduce((accum, type) => {
-      accum.push([
-        { index: { _type: type } },
-        deepMergeAndGroup[type],
-      ]);
-      return accum;
-    }, []);
-  }
-
-  /*
-   * Bulk stats are transformed into a bulk upload format
-   * Non-legacy transformation is done in CollectorSet.toApiStats
-   */
-  static toBulkUploadFormat(uploadData, collectorSet) {
-    return flatten(BulkUploader.deepMergeUploadData(uploadData, collectorSet));
+    const types = Object.keys(deepMergeAndGroup);
+    if (types) {
+      return types.reduce((accum, type) => {
+        return [
+          ...accum,
+          { index: { _type: type } },
+          deepMergeAndGroup[type],
+        ];
+      }, []);
+    }
   }
 
   static checkPayloadTypesUnique(payload) {
