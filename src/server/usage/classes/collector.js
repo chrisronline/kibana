@@ -44,7 +44,9 @@ export class Collector {
     this.type = type;
     this.init = init;
     this.fetch = fetch;
-    this.formatForBulkUpload = formatForBulkUpload;
+
+    const defaultFormatterForBulkUpload = result => [ { type, payload: result } ];
+    this._formatForBulkUpload = formatForBulkUpload || defaultFormatterForBulkUpload;
 
     this.log = getCollectorLogger(server);
   }
@@ -61,5 +63,9 @@ export class Collector {
       );
     }
     return this.fetch(fetchMechanisms);
+  }
+
+  formatForBulkUpload(result) {
+    return this._formatForBulkUpload(result);
   }
 }
