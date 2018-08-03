@@ -32,13 +32,11 @@ export class CollectorSet {
 
   /*
    * @param {Object} server - server object
-   * @param {Number} options.interval - in milliseconds
-   * @param {Function} options.combineTypes
-   * @param {Function} options.onPayload
+   * @param {Array} collectors to initialize, usually as a result of filtering another CollectorSet instance
    */
-  constructor(server) {
+  constructor(server, collectors = []) {
     this._log = getCollectorLogger(server);
-    this._collectors = [];
+    this._collectors = collectors;
 
     /*
      * Helper Factory methods
@@ -46,6 +44,7 @@ export class CollectorSet {
      */
     this.makeStatsCollector = options => new Collector(server, options);
     this.makeUsageCollector = options => new UsageCollector(server, options);
+    this.makeCollectorSetFromArray = collectorsArray => new CollectorSet(server, collectorsArray);
   }
 
   /*
@@ -98,22 +97,28 @@ export class CollectorSet {
       throw new Error(`bulkFormat method given bad collectors parameter: ` + typeof collectors);
     }
 
-    return data.reduce((accum, collectedData) => {
-      if (isEmpty(collectedData)) {
+    return data.reduce((accum, { type, result }) => {
+      if (isEmpty(result)) {
         return accum;
       }
-      const collector = collectors.find(_c => _c.type === collectedData.type);
-      const defaultFormatterForBulkUpload = result => ([
-        { type: collector.type, payload: result }
-      ]);
-      const formatter = collector.formatForBulkUpload || defaultFormatterForBulkUpload;
-      accum.push(formatter(collectedData.result));
-      return accum;
+
+      return [
+        ...accum,
+        this.getCollectorByType(type).formatForBulkUpload(result)
+      ];
     }, []);
   }
 
+  /*
+   * @return {new CollectorSet}
+   */
+  getFilteredCollectorSet(filter) {
+    const filtered = this._collectors.filter(filter);
+    return this.makeCollectorSetFromArray(filtered);
+  }
+
   async bulkFetchUsage(fetchMechanisms) {
-    const usageCollectors = this._collectors.filter(c => c instanceof UsageCollector);
+    const usageCollectors = this.getFilteredCollectorSet(c => c instanceof UsageCollector);
     return this.bulkFetch(fetchMechanisms, usageCollectors);
   }
 
