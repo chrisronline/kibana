@@ -8,17 +8,17 @@ import { checkParam } from '../error_missing_required';
 import { createApmQuery } from './create_apm_query';
 import { ApmMetric } from '../metrics';
 import { apmAggResponseHandler, apmUuidsAgg, apmAggFilterPath } from './_apm_stats';
+import { getTimeOfLastEvent } from './_get_time_of_last_event';
 
 export function handleResponse(clusterUuid, response) {
-  const { beatTotal, beatTypes, totalEvents, bytesSent } = apmAggResponseHandler(response);
+  const { apmTotal, totalEvents, bytesSent } = apmAggResponseHandler(response);
 
   // combine stats
   const stats = {
     totalEvents,
     bytesSent,
-    beats: {
-      total: beatTotal,
-      types: beatTypes,
+    apms: {
+      total: apmTotal,
     }
   };
 
@@ -55,7 +55,25 @@ export function getApmsForClusters(req, apmIndexPattern, clusters) {
     };
 
     const { callWithRequest } = req.server.plugins.elasticsearch.getCluster('monitoring');
-    const response = await callWithRequest(req, 'search', params);
-    return handleResponse(clusterUuid, response);
+    const [response, timeOfLastEvent] = await Promise.all([
+      callWithRequest(req, 'search', params),
+      getTimeOfLastEvent({
+        req,
+        callWithRequest,
+        apmIndexPattern,
+        start,
+        end,
+        clusterUuid
+      })
+    ]);
+
+    const formattedResponse = handleResponse(clusterUuid, response);
+    return {
+      ...formattedResponse,
+      stats: {
+        ...formattedResponse.stats,
+        timeOfLastEvent,
+      }
+    };
   }));
 }
