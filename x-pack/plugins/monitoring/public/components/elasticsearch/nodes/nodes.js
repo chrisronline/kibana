@@ -11,9 +11,7 @@ import { ClusterStatus } from '../cluster_status';
 import { MonitoringTable } from '../../table';
 import { MetricCell, OfflineCell } from './cells';
 import { EuiLink, EuiToolTip, EuiSpacer, EuiPage, EuiPageContent } from '@elastic/eui';
-import { SORT_ASCENDING } from '../../../../common/constants';
 
-// const filterFields = ['name'];
 const getColumns = showCgroupMetricsElasticsearch => {
   const cols = [];
 
@@ -168,8 +166,9 @@ const getColumns = showCgroupMetricsElasticsearch => {
   return cols;
 };
 
-export function ElasticsearchNodes({ clusterStatus, nodes, showCgroupMetricsElasticsearch }) {
+export function ElasticsearchNodes({ clusterStatus, nodes, showCgroupMetricsElasticsearch, ...props }) {
   const columns = getColumns(showCgroupMetricsElasticsearch);
+  const { sorting, pagination, onTableChange } = props;
 
   return (
     <EuiPage>
@@ -180,23 +179,15 @@ export function ElasticsearchNodes({ clusterStatus, nodes, showCgroupMetricsElas
           className="elasticsearchNodesTable"
           rows={nodes}
           columns={columns}
-          sorting={{
-            field: 'name',
-            direction: SORT_ASCENDING
-          }}
-          pagination={{
-            initialPageSize: 10,
-            pageSizeOptions: [5, 10, 20]
-          }}
+          sorting={sorting}
+          pagination={pagination}
           search={{
             box: {
               incremental: true,
               placeholder: 'Filter Nodes...'
             },
           }}
-          onTableChange={() => {
-            // console.log('change', state);
-          }}
+          onTableChange={onTableChange}
 
           // pageIndex={props.pageIndex}
           // filterText={props.filterText}

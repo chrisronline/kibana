@@ -6,6 +6,7 @@
 
 import { MonitoringViewBaseController } from './';
 import { tableStorageGetter, tableStorageSetter } from 'plugins/monitoring/components/table';
+import { SORT_ASCENDING } from '../../common/constants';
 
 /**
  * Class to manage common instantiation behaviors in a view controller
@@ -40,6 +41,20 @@ export class MonitoringViewBaseTableController extends MonitoringViewBaseControl
     const getLocalStorageData = tableStorageGetter(storageKey);
     const setLocalStorageData = tableStorageSetter(storageKey);
     const { pageIndex, filterText, sortKey, sortOrder } = getLocalStorageData(storage);
+
+    this.pagination = {
+      initialPageSize: 10,
+      pageSizeOptions: [5, 10, 20]
+    };
+
+    this.sorting = {
+      field: 'name',
+      direction: SORT_ASCENDING
+    };
+
+    this.onTableChange = () => {
+      console.log('table change');
+    };
 
     this.pageIndex = pageIndex;
     this.filterText = filterText;
