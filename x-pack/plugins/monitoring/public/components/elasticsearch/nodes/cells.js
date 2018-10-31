@@ -7,15 +7,12 @@
 import React from 'react';
 import { get } from 'lodash';
 import { formatMetric } from '../../../lib/format_number';
-import { KuiTableRowCell } from '@kbn/ui-framework/components';
 
 function OfflineCell() {
   return (
-    <KuiTableRowCell>
-      <div className="monTableCell__number monTableCell__offline">
-        N/A
-      </div>
-    </KuiTableRowCell>
+    <div className="monTableCell__number monTableCell__offline">
+      N/A
+    </div>
   );
 }
 
@@ -39,7 +36,7 @@ function MetricCell({ isOnline, metric = {}, isPercent, ...props }) {
     const format = get(metric, 'metric.format');
 
     return (
-      <KuiTableRowCell>
+      <div>
         <div className="monTableCell__metricCellMetric" data-test-subj={props['data-test-subj']}>
           { metricVal(lastVal, format, isPercent) }
         </div>
@@ -52,7 +49,7 @@ function MetricCell({ isOnline, metric = {}, isPercent, ...props }) {
             { metricVal(minVal, format, isPercent) + ' min' }
           </div>
         </div>
-      </KuiTableRowCell>
+      </div>
     );
   }
 
