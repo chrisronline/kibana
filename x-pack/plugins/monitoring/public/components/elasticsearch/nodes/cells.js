@@ -7,6 +7,7 @@
 import React from 'react';
 import { get } from 'lodash';
 import { formatMetric } from '../../../lib/format_number';
+import { EuiStat, EuiText, EuiTitle, EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
 
 function OfflineCell() {
   return (
@@ -30,26 +31,36 @@ const metricVal = (metric, format, isPercent) => {
   return formatMetric(metric, format);
 };
 
-function MetricCell({ isOnline, metric = {}, isPercent, ...props }) {
+function MetricCell({ isOnline, metric = {}, isPercent }) {
   if (isOnline) {
     const { lastVal, maxVal, minVal, slope } = get(metric, 'summary', {});
     const format = get(metric, 'metric.format');
 
     return (
-      <div>
-        <div className="monTableCell__metricCellMetric" data-test-subj={props['data-test-subj']}>
-          { metricVal(lastVal, format, isPercent) }
-        </div>
-        <span className={`monTableCell__metricCellSlopeArrow fa fa-long-arrow-${getSlopeArrow(slope)}`} />
-        <div className="monTableCell__metricCellMixMax">
-          <div>
-            { metricVal(maxVal, format, isPercent) + ' max' }
-          </div>
-          <div>
-            { metricVal(minVal, format, isPercent) + ' min' }
-          </div>
-        </div>
-      </div>
+      <EuiStat
+        title={(
+          <EuiFlexGroup alignItems="center">
+            <EuiFlexItem grow={false}>
+              <EuiTitle size="m">
+                <h4>
+                  { metricVal(lastVal, format, isPercent) }
+                  &nbsp;
+                  <span className={`fa fa-long-arrow-${getSlopeArrow(slope)}`} />
+                </h4>
+              </EuiTitle>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
+              <EuiText size="xs">
+                { metricVal(maxVal, format, isPercent) + ' max' }
+              </EuiText>
+              {/* <br/> */}
+              <EuiText size="xs">
+                { metricVal(minVal, format, isPercent) + ' min' }
+              </EuiText>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+        )}
+      />
     );
   }
 

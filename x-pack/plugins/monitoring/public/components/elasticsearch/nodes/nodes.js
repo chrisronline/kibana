@@ -26,11 +26,6 @@ const getColumns = showCgroupMetricsElasticsearch => {
     name: 'Name',
     field: 'name',
     sortable: true,
-    footer: ({ items }) => {
-      return (
-        <span>Total Nodes: {items.length}</span>
-      );
-    },
     render: (value, node) => (
       <div>
         <div className="monTableCell__name">
