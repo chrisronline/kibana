@@ -10,7 +10,14 @@ import { extractIp } from '../../../lib/extract_ip'; // TODO this is only used f
 import { ClusterStatus } from '../cluster_status';
 import { MonitoringTable } from '../../table';
 import { MetricCell, OfflineCell } from './cells';
-import { EuiLink, EuiToolTip, EuiSpacer, EuiPage, EuiPageContent } from '@elastic/eui';
+import {
+  EuiLink,
+  EuiToolTip,
+  EuiSpacer,
+  EuiPage,
+  EuiPageContent,
+  EuiPageBody,
+} from '@elastic/eui';
 
 const getColumns = showCgroupMetricsElasticsearch => {
   const cols = [];
@@ -19,6 +26,11 @@ const getColumns = showCgroupMetricsElasticsearch => {
     name: 'Name',
     field: 'name',
     sortable: true,
+    footer: ({ items }) => {
+      return (
+        <span>Total Nodes: {items.length}</span>
+      );
+    },
     render: (value, node) => (
       <div>
         <div className="monTableCell__name">
@@ -172,33 +184,35 @@ export function ElasticsearchNodes({ clusterStatus, nodes, showCgroupMetricsElas
 
   return (
     <EuiPage>
-      <EuiPageContent>
-        <ClusterStatus stats={clusterStatus} />
-        <EuiSpacer size="m"/>
-        <MonitoringTable
-          className="elasticsearchNodesTable"
-          rows={nodes}
-          columns={columns}
-          sorting={sorting}
-          pagination={pagination}
-          search={{
-            box: {
-              incremental: true,
-              placeholder: 'Filter Nodes...'
-            },
-          }}
-          onTableChange={onTableChange}
+      <EuiPageBody>
+        <EuiPageContent>
+          <ClusterStatus stats={clusterStatus} />
+          <EuiSpacer size="m"/>
+          <MonitoringTable
+            className="elasticsearchNodesTable"
+            rows={nodes}
+            columns={columns}
+            sorting={sorting}
+            pagination={pagination}
+            search={{
+              box: {
+                incremental: true,
+                placeholder: 'Filter Nodes...'
+              },
+            }}
+            onTableChange={onTableChange}
 
-          // pageIndex={props.pageIndex}
-          // filterText={props.filterText}
-          // sortKey={props.sortKey}
-          // sortOrder={props.sortOrder}
-          // onNewState={props.onNewState}
-          // placeholder="Filter Nodes..."
-          // filterFields={filterFields}
+            // pageIndex={props.pageIndex}
+            // filterText={props.filterText}
+            // sortKey={props.sortKey}
+            // sortOrder={props.sortOrder}
+            // onNewState={props.onNewState}
+            // placeholder="Filter Nodes..."
+            // filterFields={filterFields}
 
-        />
-      </EuiPageContent>
+          />
+        </EuiPageContent>
+      </EuiPageBody>
     </EuiPage>
   );
 }
