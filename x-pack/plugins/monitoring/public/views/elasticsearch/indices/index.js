@@ -65,6 +65,9 @@ uiRoutes.when('/elasticsearch/indices', {
             indices={indices}
             showSystemIndices={showSystemIndices}
             toggleShowSystemIndices={toggleShowSystemIndices}
+            sorting={this.sorting}
+            pagination={this.pagination}
+            onTableChange={this.onTableChange}
           />
         );
       };

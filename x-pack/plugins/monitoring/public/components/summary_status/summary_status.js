@@ -61,18 +61,6 @@ const StatusIndicator = ({ status, isOnline, IconComponent }) => {
       {/* </EuiPanel> */}
     </EuiFlexItem>
   );
-
-  // return (
-  //   <EuiFlexGroup gutterSize="xs" alignItems="center">
-  //     <EuiFlexItem grow={false} />
-  //     <EuiFlexItem grow={false} className="eui-textNoWrap">
-  //       <IconComponent status={status} isOnline={isOnline} />{' '}
-  //     </EuiFlexItem>
-  //     <EuiFlexItem grow={false}>
-  //       {capitalize(status)}
-  //     </EuiFlexItem>
-  //   </EuiFlexGroup>
-  // );
 };
 
 export function SummaryStatus({ metrics, status, isOnline, IconComponent = DefaultIconComponent, ...props }) {

@@ -53,7 +53,6 @@ function MetricCell({ isOnline, metric = {}, isPercent }) {
               <EuiText size="xs">
                 { metricVal(maxVal, format, isPercent) + ' max' }
               </EuiText>
-              {/* <br/> */}
               <EuiText size="xs">
                 { metricVal(minVal, format, isPercent) + ' min' }
               </EuiText>
