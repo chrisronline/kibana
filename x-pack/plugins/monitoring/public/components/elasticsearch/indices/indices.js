@@ -15,7 +15,8 @@ import {
   EuiLink,
   EuiPage,
   EuiPageContent,
-  EuiPageBody, } from '@elastic/eui';
+  EuiPageBody,
+} from '@elastic/eui';
 
 const columns = [
   {
