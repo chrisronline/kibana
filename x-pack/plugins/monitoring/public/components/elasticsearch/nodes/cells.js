@@ -38,6 +38,7 @@ function MetricCell({ isOnline, metric = {}, isPercent }) {
 
     return (
       <EuiStat
+        description=""
         title={(
           <EuiFlexGroup alignItems="center">
             <EuiFlexItem grow={false}>
