@@ -20,6 +20,7 @@ export function DetailStatus({ stats }) {
 
   const metrics = [
     {
+      label: 'Transport Address',
       value: transportAddress,
       dataTestSubj: 'transportAddress'
     },

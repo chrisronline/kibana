@@ -7,12 +7,17 @@
 /*
  * Kibana Instance
  */
+import React from 'react';
+import { render } from 'react-dom';
 import { get, find } from 'lodash';
 import uiRoutes from'ui/routes';
 import { ajaxErrorHandlersProvider } from 'plugins/monitoring/lib/ajax_error_handler';
 import { routeInitProvider } from 'plugins/monitoring/lib/route_init';
 import template from './index.html';
 import { timefilter } from 'ui/timefilter';
+import { EuiPage, EuiPageBody, EuiPageContent, EuiSpacer, EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
+import { MonitoringTimeseriesContainer } from '../../../components/chart';
+import { DetailStatus } from 'plugins/monitoring/components/kibana/detail_status';
 
 function getPageData($injector) {
   const $http = $injector.get('$http');
@@ -66,5 +71,64 @@ uiRoutes.when('/kibana/instances/:uuid', {
     $executor.start($scope);
 
     $scope.$on('$destroy', $executor.destroy);
+
+    $scope.$watch('pageData', renderReact);
+    renderReact();
+
+    function renderReact() {
+      const app =  document.getElementById('monitoringKibanaInstanceApp');
+      if (!app) {
+        return;
+      }
+
+      const overviewPage = (
+        <EuiPage>
+          <EuiPageBody>
+            <EuiPageContent>
+              <DetailStatus stats={$scope.pageData.kibanaSummary} />
+              <EuiSpacer size="m"/>
+              <EuiFlexGroup>
+                <EuiFlexItem grow={true}>
+                  <MonitoringTimeseriesContainer
+                    series={$scope.pageData.metrics.kibana_requests}
+                  />
+                </EuiFlexItem>
+                <EuiFlexItem grow={true}>
+                  <MonitoringTimeseriesContainer
+                    series={$scope.pageData.metrics.kibana_response_times}
+                  />
+                </EuiFlexItem>
+              </EuiFlexGroup>
+              <EuiFlexGroup>
+                <EuiFlexItem grow={true}>
+                  <MonitoringTimeseriesContainer
+                    series={$scope.pageData.metrics.kibana_memory}
+                  />
+                </EuiFlexItem>
+                <EuiFlexItem grow={true}>
+                  <MonitoringTimeseriesContainer
+                    series={$scope.pageData.metrics.kibana_average_concurrent_connections}
+                  />
+                </EuiFlexItem>
+              </EuiFlexGroup>
+              <EuiFlexGroup>
+                <EuiFlexItem grow={true}>
+                  <MonitoringTimeseriesContainer
+                    series={$scope.pageData.metrics.kibana_os_load}
+                  />
+                </EuiFlexItem>
+                <EuiFlexItem grow={true}>
+                  <MonitoringTimeseriesContainer
+                    series={$scope.pageData.metrics.kibana_process_delay}
+                  />
+                </EuiFlexItem>
+              </EuiFlexGroup>
+            </EuiPageContent>
+          </EuiPageBody>
+        </EuiPage>
+      );
+
+      render(overviewPage, app);
+    }
   }
 });
