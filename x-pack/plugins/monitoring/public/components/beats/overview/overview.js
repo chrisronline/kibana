@@ -18,7 +18,8 @@ import {
   EuiFlexGroup,
   EuiFlexItem,
   EuiPageBody,
-  EuiPanel
+  EuiPanel,
+  EuiPageContent
 } from '@elastic/eui';
 
 function renderLatestActive(latestActive, latestTypes, latestVersions) {
@@ -91,13 +92,14 @@ export function BeatsOverview({
   return (
     <EuiPage style={{ backgroundColor: 'white' }}>
       <EuiPageBody>
-        {renderLatestActive(latestActive, latestTypes, latestVersions)}
-        <EuiSpacer size="s"/>
-        <Stats stats={stats} />
-        <EuiSpacer size="s"/>
-        <EuiFlexGroup wrap>
-          {charts}
-        </EuiFlexGroup>
+        <EuiPageContent>
+          <Stats stats={stats} />
+          {renderLatestActive(latestActive, latestTypes, latestVersions)}
+          <EuiSpacer size="s"/>
+          <EuiFlexGroup wrap>
+            {charts}
+          </EuiFlexGroup>
+        </EuiPageContent>
       </EuiPageBody>
     </EuiPage>
   );
