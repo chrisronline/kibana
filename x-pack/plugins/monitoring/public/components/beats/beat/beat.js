@@ -7,7 +7,8 @@
 import React from 'react';
 import { MonitoringTimeseriesContainer } from '../../chart';
 import { formatMetric } from '../../../lib/format_number';
-import { EuiFlexItem, EuiFlexGroup, EuiPage, EuiPageBody, EuiFlexGrid, EuiSpacer } from '@elastic/eui';
+import { EuiFlexItem, EuiPage, EuiPageBody, EuiFlexGrid, EuiSpacer, EuiPageContent } from '@elastic/eui';
+import { SummaryStatus } from '../../summary_status/summary_status';
 
 export function Beat({ summary, metrics, ...props }) {
 
@@ -21,23 +22,6 @@ export function Beat({ summary, metrics, ...props }) {
     metrics.beat_os_load,
     metrics.beat_handles,
   ];
-
-  const wrapChild = ({ label, value, dataTestSubj }, index) => (
-    <EuiFlexItem
-      key={`summary-status-item-${index}`}
-      grow={false}
-      data-test-subj={dataTestSubj}
-    >
-      <EuiFlexGroup responsive={false} gutterSize="xs" alignItems="center">
-        <EuiFlexItem grow={false}>
-          {label ? label + ': ' : null}
-        </EuiFlexItem>
-        <EuiFlexItem grow={false}>
-          <strong>{value}</strong>
-        </EuiFlexItem>
-      </EuiFlexGroup>
-    </EuiFlexItem>
-  );
 
   const summarytStatsTop = [
     { label: 'Name', value: summary.name, dataTestSubj: 'name' },
@@ -59,33 +43,18 @@ export function Beat({ summary, metrics, ...props }) {
   ];
 
   return (
-    <div>
-      <div className="monSummaryStatus" role="status">
-        <div {...props}>
-          <EuiFlexGroup gutterSize="none" alignItems="center" data-test-subj="beatSummaryStatus01">
-            <EuiFlexItem grow={false}>
-              <EuiFlexGroup>
-                {summarytStatsTop.map(wrapChild)}
-              </EuiFlexGroup>
-            </EuiFlexItem>
-          </EuiFlexGroup>
-        </div>
-      </div>
-
-      <div className="monSummaryStatus" role="status">
-        <div {...props}>
-          <EuiFlexGroup gutterSize="none" alignItems="center" data-test-subj="beatSummaryStatus02">
-            <EuiFlexItem grow={false}>
-              <EuiFlexGroup>
-                {summarytStatsBot.map(wrapChild)}
-              </EuiFlexGroup>
-            </EuiFlexItem>
-          </EuiFlexGroup>
-        </div>
-      </div>
-
-      <EuiPage style={{ backgroundColor: 'white' }}>
-        <EuiPageBody>
+    <EuiPage>
+      <EuiPageBody>
+        <EuiPageContent>
+          <SummaryStatus
+            metrics={summarytStatsTop}
+            data-test-subj="beatSummaryStatus01"
+          />
+          <SummaryStatus
+            metrics={summarytStatsBot}
+            data-test-subj="beatSummaryStatus02"
+          />
+          <EuiSpacer size="m"/>
           <EuiFlexGrid columns={2} gutterSize="none">
             {metricsToShow.map((metric, index) => (
               <EuiFlexItem key={index} style={{ width: '50%' }}>
@@ -97,8 +66,8 @@ export function Beat({ summary, metrics, ...props }) {
               </EuiFlexItem>
             ))}
           </EuiFlexGrid>
-        </EuiPageBody>
-      </EuiPage>
-    </div>
+        </EuiPageContent>
+      </EuiPageBody>
+    </EuiPage>
   );
 }
