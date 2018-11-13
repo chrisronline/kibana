@@ -22,7 +22,6 @@ import './logstash/node_summary';
 import './logstash/pipeline_viewer';
 import './logstash/pipeline_listing';
 import './kibana/cluster_status';
-import './kibana/listing';
 import './kibana/summary';
 import './beats/overview';
 import './beats/listing';
