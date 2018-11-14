@@ -10,7 +10,6 @@ import { DetailStatus } from '../detail_status';
 import { MonitoringTimeseriesContainer } from '../../chart';
 
 export class Node extends PureComponent {
-  doS() { }
   render() {
     const { stats, metrics, ...rest } = this.props;
 

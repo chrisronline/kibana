@@ -8,6 +8,9 @@
  * Logstash Node Pipelines Listing
  */
 
+import React from 'react';
+import { render } from 'react-dom';
+import moment from 'moment';
 import { find } from 'lodash';
 import uiRoutes from 'ui/routes';
 import { ajaxErrorHandlersProvider } from 'plugins/monitoring/lib/ajax_error_handler';
@@ -17,6 +20,8 @@ import {
 } from 'plugins/monitoring/lib/logstash/pipelines';
 import template from './index.html';
 import { timefilter } from 'ui/timefilter';
+import { PipelineListing } from '../../../../components/logstash/pipeline_listing/pipeline_listing';
+import { DetailStatus } from '../../../../components/logstash/detail_status';
 
 const getPageData = ($injector) => {
   const $route = $injector.get('$route');
@@ -65,6 +70,7 @@ uiRoutes
       const globalState = $injector.get('globalState');
       const title = $injector.get('title');
       const $executor = $injector.get('$executor');
+      const kbnUrl = $injector.get('kbnUrl');
 
       $scope.cluster = find($route.current.locals.clusters, { cluster_uuid: globalState.cluster_uuid });
       $scope.pageData = $route.current.locals.pageData;
@@ -83,5 +89,36 @@ uiRoutes
       $executor.start($scope);
 
       $scope.$on('$destroy', $executor.destroy);
+
+      function onBrush(xaxis) {
+        timefilter.setTime({
+          from: moment(xaxis.from),
+          to: moment(xaxis.to),
+          mode: 'absolute'
+        });
+      }
+
+      function renderReact(pageData) {
+        render(
+          <PipelineListing
+            onBrush={onBrush}
+            stats={pageData.nodeSummary}
+            data={pageData.pipelines}
+            sorting={$scope.sorting}
+            pagination={$scope.pagination}
+            onTableChange={$scope.onTableChange}
+            statusComponent={DetailStatus}
+            angular={{
+              kbnUrl,
+              scope: $scope,
+            }}
+          />,
+          document.getElementById('monitoringLogstashNodePipelinesApp')
+        );
+      }
+
+      $scope.$watch('pageData', pageData => {
+        renderReact(pageData);
+      });
     }
   });

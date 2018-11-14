@@ -9,7 +9,7 @@ import moment from 'moment';
 import { partialRight } from 'lodash';
 import { EuiPage, EuiLink, EuiPageBody, EuiPageContent, EuiSpacer, EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
 import { formatMetric } from '../../../lib/format_number';
-import { ClusterStatus } from '..//cluster_status';
+import { ClusterStatus } from '../cluster_status';
 import { Sparkline } from 'plugins/monitoring/components/sparkline';
 import { MonitoringTable } from '../../table';
 
@@ -107,15 +107,35 @@ export class PipelineListing extends PureComponent {
       },
     ];
   }
+
+  renderStats() {
+    if (this.props.statusComponent) {
+      const Component = this.props.statusComponent;
+      return (
+        <Component stats={this.props.stats}/>
+      );
+    }
+
+    return (
+      <ClusterStatus stats={this.props.stats}/>
+    );
+  }
+
   render() {
-    const { data, stats, sorting, pagination, onTableChange } = this.props;
+    const {
+      data,
+      sorting,
+      pagination,
+      onTableChange,
+    } = this.props;
+
     const columns = this.getColumns();
 
     return (
       <EuiPage>
         <EuiPageBody>
           <EuiPageContent>
-            <ClusterStatus stats={stats} />
+            {this.renderStats()}
             <EuiSpacer size="m"/>
             <MonitoringTable
               className="logstashNodesTable"
