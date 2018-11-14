@@ -21,6 +21,7 @@ export function DetailStatus({ stats }) {
 
   const firstMetrics = [
     {
+      label: 'HTTP Address',
       value: httpAddress,
       dataTestSubj: 'httpAddress'
     },

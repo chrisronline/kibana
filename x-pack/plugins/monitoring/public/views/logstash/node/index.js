@@ -7,12 +7,16 @@
 /*
  * Logstash Node
  */
+import React from 'react';
+import { render } from 'react-dom';
+import moment from 'moment';
 import { find } from 'lodash';
 import uiRoutes from'ui/routes';
 import { ajaxErrorHandlersProvider } from 'plugins/monitoring/lib/ajax_error_handler';
 import { routeInitProvider } from 'plugins/monitoring/lib/route_init';
 import template from './index.html';
 import { timefilter } from 'ui/timefilter';
+import { Node } from '../../../components/logstash/node/node';
 
 function getPageData($injector) {
   const $http = $injector.get('$http');
@@ -67,5 +71,25 @@ uiRoutes.when('/logstash/node/:uuid', {
     $executor.start($scope);
 
     $scope.$on('$destroy', $executor.destroy);
+
+    function onBrush({ xaxis }) {
+      timefilter.setTime({
+        from: moment(xaxis.from),
+        to: moment(xaxis.to),
+        mode: 'absolute'
+      });
+    }
+
+    $scope.$watch('pageData', data => renderReact(data));
+    function renderReact(data) {
+      render(
+        <Node
+          stats={data.nodeSummary}
+          metrics={data.metrics}
+          onBrush={onBrush}
+        />,
+        document.getElementById('monitoringLogstashNodeApp')
+      );
+    }
   }
 });
