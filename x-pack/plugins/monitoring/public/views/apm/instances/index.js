@@ -45,21 +45,17 @@ uiRoutes.when('/apm/instances', {
 
     renderReact(data) {
       const {
-        pageIndex,
-        filterText,
-        sortKey,
-        sortOrder,
-        onNewState,
+        pagination,
+        sorting,
+        onTableChange,
       } = this;
 
       const component = (
         <ApmServerInstances
           apms={{
-            pageIndex,
-            filterText,
-            sortKey,
-            sortOrder,
-            onNewState,
+            pagination,
+            sorting,
+            onTableChange,
             data,
           }}
         />

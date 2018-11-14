@@ -120,15 +120,6 @@ export class Listing extends PureComponent {
                 ]
               }}
               onTableChange={onTableChange}
-
-              // pageIndex={props.pageIndex}
-              // filterText={props.filterText}
-              // sortKey={props.sortKey}
-              // sortOrder={props.sortOrder}
-              // onNewState={props.onNewState}
-              // placeholder="Filter Nodes..."
-              // filterFields={filterFields}
-
             />
           </EuiPageContent>
         </EuiPageBody>

@@ -6,102 +6,104 @@
 
 import React from 'react';
 import moment from 'moment';
+import { uniq } from 'lodash';
 import { MonitoringTable } from '../../table';
-import {
-  KuiTableRowCell,
-  KuiTableRow
-} from '@kbn/ui-framework/components';
-import { EuiLink } from '@elastic/eui';
+import { EuiLink, EuiPage, EuiPageBody, EuiPageContent, EuiSpacer } from '@elastic/eui';
 import { Status } from './status';
-import { SORT_ASCENDING, SORT_DESCENDING, TABLE_ACTION_UPDATE_FILTER } from '../../../../common/constants';
 import { formatMetric } from '../../../lib/format_number';
 import { formatTimestampToDuration } from '../../../../common';
 
-
-const filterFields = [ 'name', 'type', 'version', 'output' ];
 const columns = [
-  { title: 'Name', sortKey: 'name', sortOrder: SORT_ASCENDING },
-  { title: 'Output Enabled', sortKey: 'output' },
-  { title: 'Total Events Rate', sortKey: 'total_events_rate', secondarySortOrder: SORT_DESCENDING },
-  { title: 'Bytes Sent Rate', sortKey: 'bytes_sent_rate' },
-  { title: 'Output Errors', sortKey: 'errors' },
-  { title: 'Last Event', sortKey: 'time_of_last_event' },
-  { title: 'Allocated Memory', sortKey: 'memory' },
-  { title: 'Version', sortKey: 'version' },
+  {
+    name: 'Name',
+    field: 'name',
+    render: (name, instance) => (
+      <EuiLink
+        href={`#/apm/instances/${instance.uuid}`}
+        data-test-subj={`apmLink-${name}`}
+      >
+        {name}
+      </EuiLink>
+    )
+  },
+  {
+    name: 'Output Enabled',
+    field: 'output'
+  },
+  {
+    name: 'Total Events Rate',
+    field: 'total_events_rate',
+    render: value => formatMetric(value, '', '/s')
+  },
+  {
+    name: 'Bytes Sent Rate',
+    field: 'bytes_sent_rate',
+    render: value => formatMetric(value, 'byte', '/s')
+  },
+  {
+    name: 'Output Errors',
+    field: 'errors',
+    render: value => formatMetric(value, '0')
+  },
+  {
+    name: 'Last Event',
+    field: 'time_of_last_event',
+    render: value => formatTimestampToDuration(+moment(value), 'since') + ' ago'
+  },
+  {
+    name: 'Allocated Memory',
+    field: 'memory',
+    render: value => formatMetric(value, 'byte')
+  },
+  {
+    name: 'Version',
+    field: 'version'
+  },
 ];
-const instanceRowFactory = () => {
-  return function KibanaRow(props) {
-    const applyFiltering = filterText => () => {
-      props.dispatchTableAction(TABLE_ACTION_UPDATE_FILTER, filterText);
-    };
-
-    return (
-      <KuiTableRow>
-        <KuiTableRowCell>
-          <div className="monTableCell__name">
-            <EuiLink
-              href={`#/apm/instances/${props.uuid}`}
-              data-test-subj={`apmLink-${props.name}`}
-            >
-              {props.name}
-            </EuiLink>
-          </div>
-        </KuiTableRowCell>
-        <KuiTableRowCell>
-          {props.output}
-        </KuiTableRowCell>
-        <KuiTableRowCell>
-          {formatMetric(props.total_events_rate, '', '/s')}
-        </KuiTableRowCell>
-        <KuiTableRowCell>
-          {formatMetric(props.bytes_sent_rate, 'byte', '/s')}
-        </KuiTableRowCell>
-        <KuiTableRowCell>
-          {formatMetric(props.errors, '0')}
-        </KuiTableRowCell>
-        <KuiTableRowCell>
-          {formatTimestampToDuration(+moment(props.time_of_last_event), 'since') + ' ago'}
-        </KuiTableRowCell>
-        <KuiTableRowCell>
-          {formatMetric(props.memory, 'byte')}
-        </KuiTableRowCell>
-        <KuiTableRowCell>
-          <EuiLink
-            onClick={applyFiltering(props.version)}
-          >
-            {props.version}
-          </EuiLink>
-        </KuiTableRowCell>
-      </KuiTableRow>
-    );
-  };
-};
 
 export function ApmServerInstances({ apms }) {
   const {
-    pageIndex,
-    filterText,
-    sortKey,
-    sortOrder,
-    onNewState,
+    pagination,
+    sorting,
+    onTableChange,
+    data
   } = apms;
 
+  const versions = uniq(data.apms.map(item => item.version)).map(version => {
+    return { value: version };
+  });
+
   return (
-    <div>
-      <Status stats={apms.data.stats}/>
-      <MonitoringTable
-        className="apmInstancesTable"
-        rows={apms.data.apms}
-        pageIndex={pageIndex}
-        filterText={filterText}
-        sortKey={sortKey}
-        sortOrder={sortOrder}
-        onNewState={onNewState}
-        placeholder="Filter Instances..."
-        filterFields={filterFields}
-        columns={columns}
-        rowComponent={instanceRowFactory()}
-      />
-    </div>
+    <EuiPage>
+      <EuiPageBody>
+        <EuiPageContent>
+          <Status stats={data.stats} />
+          <EuiSpacer size="m"/>
+          <MonitoringTable
+            className="apmInstancesTable"
+            rows={data.apms}
+            columns={columns}
+            sorting={sorting}
+            pagination={pagination}
+            search={{
+              box: {
+                incremental: true,
+                placeholder: 'Filter APM Instances...'
+              },
+              filters: [
+                {
+                  type: 'field_value_selection',
+                  field: 'version',
+                  name: 'Version',
+                  options: versions,
+                  multiSelect: 'or',
+                }
+              ]
+            }}
+            onTableChange={onTableChange}
+          />
+        </EuiPageContent>
+      </EuiPageBody>
+    </EuiPage>
   );
 }
