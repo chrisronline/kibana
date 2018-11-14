@@ -4,8 +4,11 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
+import React from 'react';
+import { render } from 'react-dom';
 import { find } from 'lodash';
 import uiRoutes from 'ui/routes';
+import moment from 'moment';
 import { ajaxErrorHandlersProvider } from 'plugins/monitoring/lib/ajax_error_handler';
 import { routeInitProvider } from 'plugins/monitoring/lib/route_init';
 import {
@@ -13,6 +16,7 @@ import {
 } from 'plugins/monitoring/lib/logstash/pipelines';
 import template from './index.html';
 import { timefilter } from 'ui/timefilter';
+import { PipelineListing } from '../../../components/logstash/pipeline_listing/pipeline_listing';
 
 /*
  * Logstash Pipelines Listing page
@@ -65,6 +69,7 @@ uiRoutes
       const globalState = $injector.get('globalState');
       const title = $injector.get('title');
       const $executor = $injector.get('$executor');
+      const kbnUrl = $injector.get('kbnUrl');
 
       $scope.cluster = find($route.current.locals.clusters, { cluster_uuid: globalState.cluster_uuid });
       $scope.pageData = $route.current.locals.pageData;
@@ -83,5 +88,35 @@ uiRoutes
       $executor.start($scope);
 
       $scope.$on('$destroy', $executor.destroy);
+
+      function onBrush(xaxis) {
+        timefilter.setTime({
+          from: moment(xaxis.from),
+          to: moment(xaxis.to),
+          mode: 'absolute'
+        });
+      }
+
+      function renderReact(pageData) {
+        render(
+          <PipelineListing
+            onBrush={onBrush}
+            stats={pageData.clusterStatus}
+            data={pageData.pipelines}
+            sorting={$scope.sorting}
+            pagination={$scope.pagination}
+            onTableChange={$scope.onTableChange}
+            angular={{
+              kbnUrl,
+              scope: $scope,
+            }}
+          />,
+          document.getElementById('monitoringLogstashPipelinesApp')
+        );
+      }
+
+      $scope.$watch('pageData', pageData => {
+        renderReact(pageData);
+      });
     }
   });
