@@ -127,6 +127,7 @@ export class PipelineListing extends PureComponent {
       sorting,
       pagination,
       onTableChange,
+      upgradeMessage
     } = this.props;
 
     const columns = this.getColumns();
@@ -142,6 +143,7 @@ export class PipelineListing extends PureComponent {
               rows={data}
               columns={columns}
               sorting={sorting}
+              message={upgradeMessage}
               pagination={pagination}
               search={{
                 box: {

@@ -108,6 +108,7 @@ uiRoutes
             pagination={$scope.pagination}
             onTableChange={$scope.onTableChange}
             statusComponent={DetailStatus}
+            upgradeMessage={$scope.upgradeMessage}
             angular={{
               kbnUrl,
               scope: $scope,
