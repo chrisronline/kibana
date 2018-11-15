@@ -7,7 +7,13 @@
 
   <div class="page-row">
     <h3 class="kuiScreenReaderOnly">Alerts</h3>
-    <monitoring-cluster-alerts-listing alerts="alerts.data"></monitoring-cluster-alerts-listing>
+    <monitoring-cluster-alerts-listing
+      alerts="alerts.data"
+      paginationSettings="alerts.pagination"
+      sorting="alerts.sorting"
+      on-table-change="alerts.onTableChange"
+    >
+  </monitoring-cluster-alerts-listing>
   </div>
 
   <div class="page-row">
