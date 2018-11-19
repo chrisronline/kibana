@@ -24,22 +24,22 @@ export function Beat({ summary, metrics, ...props }) {
   ];
 
   const summarytStatsTop = [
-    { label: 'Name', value: summary.name, dataTestSubj: 'name' },
-    { label: 'Host', value: summary.transportAddress, dataTestSubj: 'host' },
-    { label: 'Version', value: summary.version, dataTestSubj: 'version' },
-    { label: 'Type', value: summary.type, dataTestSubj: 'type' },
-    { label: 'Output', value: summary.output, dataTestSubj: 'output' },
-    { label: 'Config reloads', value: formatMetric(summary.configReloads, 'int_commas'), dataTestSubj: 'configReloads' },
-    { label: 'Uptime', value: formatMetric(summary.uptime, 'time_since'), dataTestSubj: 'uptime' },
+    { label: 'Name', value: summary.name, 'data-test-subj': 'name' },
+    { label: 'Host', value: summary.transportAddress, 'data-test-subj': 'host' },
+    { label: 'Version', value: summary.version, 'data-test-subj': 'version' },
+    { label: 'Type', value: summary.type, 'data-test-subj': 'type' },
+    { label: 'Output', value: summary.output, 'data-test-subj': 'output' },
+    { label: 'Config reloads', value: formatMetric(summary.configReloads, 'int_commas'), 'data-test-subj': 'configReloads' },
+    { label: 'Uptime', value: formatMetric(summary.uptime, 'time_since'), 'data-test-subj': 'uptime' },
   ];
 
   const summarytStatsBot = [
-    { label: 'Events total', value: formatMetric(summary.eventsTotal, 'int_commas'), dataTestSubj: 'eventsTotal' },
-    { label: 'Events emitted', value: formatMetric(summary.eventsEmitted, 'int_commas'), dataTestSubj: 'eventsEmitted' },
-    { label: 'Events dropped', value: formatMetric(summary.eventsDropped, 'int_commas'), dataTestSubj: 'eventsDropped' },
-    { label: 'Bytes sent', value: formatMetric(summary.bytesWritten, 'byte'), dataTestSubj: 'bytesWritten' },
-    { label: 'Handles limit (soft)', value: formatMetric(summary.handlesSoftLimit, 'byte'), dataTestSubj: 'handlesLimitSoft' },
-    { label: 'Handles limit (hard)', value: formatMetric(summary.handlesHardLimit, 'byte'), dataTestSubj: 'handlesLimitHard' },
+    { label: 'Events total', value: formatMetric(summary.eventsTotal, 'int_commas'), 'data-test-subj': 'eventsTotal' },
+    { label: 'Events emitted', value: formatMetric(summary.eventsEmitted, 'int_commas'), 'data-test-subj': 'eventsEmitted' },
+    { label: 'Events dropped', value: formatMetric(summary.eventsDropped, 'int_commas'), 'data-test-subj': 'eventsDropped' },
+    { label: 'Bytes sent', value: formatMetric(summary.bytesWritten, 'byte'), 'data-test-subj': 'bytesWritten' },
+    { label: 'Handles limit (soft)', value: formatMetric(summary.handlesSoftLimit, 'byte'), 'data-test-subj': 'handlesLimitSoft' },
+    { label: 'Handles limit (hard)', value: formatMetric(summary.handlesHardLimit, 'byte'), 'data-test-subj': 'handlesLimitHard' },
   ];
 
   return (

@@ -23,32 +23,32 @@ export function DetailStatus({ stats }) {
     {
       label: 'HTTP Address',
       value: httpAddress,
-      dataTestSubj: 'httpAddress'
+      'data-test-subj': 'httpAddress'
     },
     {
       label: 'Events Received',
       value: formatMetric(events.in, '0.[0]a'),
-      dataTestSubj: 'eventsIn'
+      'data-test-subj': 'eventsIn'
     },
     {
       label: 'Events Emitted',
       value: formatMetric(events.out, '0.[0]a'),
-      dataTestSubj: 'eventsOut'
+      'data-test-subj': 'eventsOut'
     },
     {
       label: 'Config Reloads',
       value: reloads.successes,
-      dataTestSubj: 'numReloads'
+      'data-test-subj': 'numReloads'
     },
     {
       label: 'Pipeline Workers',
       value: pipeline.workers,
-      dataTestSubj: 'pipelineWorkers'
+      'data-test-subj': 'pipelineWorkers'
     },
     {
       label: 'Batch Size',
       value: pipeline.batch_size,
-      dataTestSubj: 'pipelineBatchSize'
+      'data-test-subj': 'pipelineBatchSize'
     }
   ];
 
@@ -56,12 +56,12 @@ export function DetailStatus({ stats }) {
     {
       label: 'Version',
       value: version,
-      dataTestSubj: 'version'
+      'data-test-subj': 'version'
     },
     {
       label: 'Uptime',
       value: formatMetric(uptime, 'time_since'),
-      dataTestSubj: 'uptime'
+      'data-test-subj': 'uptime'
     }
   ];
 
@@ -71,7 +71,7 @@ export function DetailStatus({ stats }) {
     metrics.push({
       label: 'Queue Type',
       value: queueType,
-      dataTestSubj: 'queueType'
+      'data-test-subj': 'queueType'
     });
   }
   metrics.push(...lastMetrics);

@@ -17,24 +17,23 @@ export function MonitoringElasticsearchNodesProvider({ getService, getPageObject
   const SUBJ_TABLE_NO_DATA = `${SUBJ_TABLE_CONTAINER} monitoringTableNoData`;
   const SUBJ_SEARCH_BAR = `${SUBJ_TABLE_CONTAINER} monitoringTableToolBar`;
 
-  const SUBJ_TABLE_SORT_NAME_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell-name`;
-  const SUBJ_TABLE_SORT_STATUS_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell-status`;
-  const SUBJ_TABLE_SORT_CPU_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell-cpuUsage`;
-  const SUBJ_TABLE_SORT_LOAD_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell-loadAverage`;
-  const SUBJ_TABLE_SORT_MEM_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell-jvmMemory`;
-  const SUBJ_TABLE_SORT_DISK_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell-diskFreeSpace`;
-  const SUBJ_TABLE_SORT_SHARDS_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell-shards`;
+  const SUBJ_TABLE_SORT_NAME_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell_name_0`;
+  const SUBJ_TABLE_SORT_STATUS_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell_isOnline_1`;
+  const SUBJ_TABLE_SORT_CPU_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell_node_cpu_utilization_2`;
+  const SUBJ_TABLE_SORT_LOAD_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell_node_load_average_3`;
+  const SUBJ_TABLE_SORT_MEM_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell_node_jvm_mem_percent_4`;
+  const SUBJ_TABLE_SORT_DISK_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell_node_free_space_5`;
+  const SUBJ_TABLE_SORT_SHARDS_COL = `${SUBJ_TABLE_CONTAINER} tableHeaderCell_shardCount_6`;
 
-  const SUBJ_TABLE_BODY = 'elasticsearchNodesTableBody';
-  const SUBJ_NODES_NAMES = `${SUBJ_TABLE_BODY} name`;
-  const SUBJ_NODES_STATUSES = `${SUBJ_TABLE_BODY} statusIcon`;
-  const SUBJ_NODES_CPUS = `${SUBJ_TABLE_BODY} cpuUsage`;
-  const SUBJ_NODES_LOADS = `${SUBJ_TABLE_BODY} loadAverage`;
-  const SUBJ_NODES_MEMS = `${SUBJ_TABLE_BODY} jvmMemory`;
-  const SUBJ_NODES_DISKS = `${SUBJ_TABLE_BODY} diskFreeSpace`;
-  const SUBJ_NODES_SHARDS = `${SUBJ_TABLE_BODY} shards`;
+  const SUBJ_NODES_NAMES = `${SUBJ_TABLE_CONTAINER} name`;
+  const SUBJ_NODES_STATUSES = `${SUBJ_TABLE_CONTAINER} statusIcon`;
+  const SUBJ_NODES_CPUS = `${SUBJ_TABLE_CONTAINER} cpuUsage`;
+  const SUBJ_NODES_LOADS = `${SUBJ_TABLE_CONTAINER} loadAverage`;
+  const SUBJ_NODES_MEMS = `${SUBJ_TABLE_CONTAINER} jvmMemory`;
+  const SUBJ_NODES_DISKS = `${SUBJ_TABLE_CONTAINER} diskFreeSpace`;
+  const SUBJ_NODES_SHARDS = `${SUBJ_TABLE_CONTAINER} shards`;
 
-  const SUBJ_NODE_LINK_PREFIX = `${SUBJ_TABLE_BODY} nodeLink-`;
+  const SUBJ_NODE_LINK_PREFIX = `${SUBJ_TABLE_CONTAINER} nodeLink-`;
 
   return new class ElasticsearchIndices {
     async isOnListing() {
@@ -89,7 +88,7 @@ export function MonitoringElasticsearchNodesProvider({ getService, getPageObject
     }
 
     getRows() {
-      return PageObjects.monitoring.tableGetRows(SUBJ_TABLE_BODY);
+      return PageObjects.monitoring.tableGetRows(SUBJ_TABLE_CONTAINER);
     }
 
     setFilter(text) {

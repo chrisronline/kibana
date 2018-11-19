@@ -24,27 +24,27 @@ export function ClusterStatus({ stats }) {
     {
       label: 'Instances',
       value: instances,
-      dataTestSubj: 'instances'
+      'data-test-subj': 'instances'
     },
     {
       label: 'Memory',
       value: formatMetric(memSize, 'byte') + ' / ' + formatMetric(memLimit, 'byte'),
-      dataTestSubj: 'memory'
+      'data-test-subj': 'memory'
     },
     {
       label: 'Requests',
       value: requests,
-      dataTestSubj: 'requests'
+      'data-test-subj': 'requests'
     },
     {
       label: 'Connections',
       value: connections,
-      dataTestSubj: 'connections'
+      'data-test-subj': 'connections'
     },
     {
       label: 'Max. Response Time',
       value: formatMetric(maxResponseTime, '0', 'ms'),
-      dataTestSubj: 'maxResponseTime'
+      'data-test-subj': 'maxResponseTime'
     }
   ];
 

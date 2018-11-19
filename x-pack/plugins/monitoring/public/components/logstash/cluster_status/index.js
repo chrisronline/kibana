@@ -21,22 +21,22 @@ export function ClusterStatus({ stats }) {
     {
       label: 'Nodes',
       value: nodeCount,
-      dataTestSubj: 'node_count'
+      'data-test-subj': 'node_count'
     },
     {
       label: 'Memory',
       value: formatMetric(avgMemoryUsed, 'byte') + ' / ' + formatMetric(avgMemory, 'byte'),
-      dataTestSubj: 'memory_used'
+      'data-test-subj': 'memory_used'
     },
     {
       label: 'Events Received',
       value: formatMetric(eventsInTotal, '0.[0]a'),
-      dataTestSubj: 'events_in_total'
+      'data-test-subj': 'events_in_total'
     },
     {
       label: 'Events Emitted',
       value: formatMetric(eventsOutTotal, '0.[0]a'),
-      dataTestSubj: 'events_out_total'
+      'data-test-subj': 'events_out_total'
     }
   ];
 

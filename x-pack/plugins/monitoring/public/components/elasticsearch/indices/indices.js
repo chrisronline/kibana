@@ -16,6 +16,8 @@ import {
   EuiPage,
   EuiPageContent,
   EuiPageBody,
+  EuiSwitch,
+  EuiSpacer,
 } from '@elastic/eui';
 
 const columns = [
@@ -107,58 +109,57 @@ const getNoDataMessage = () => {
   );
 };
 
-export function ElasticsearchIndices({ clusterStatus, indices, ...props }) {
-  const { sorting, pagination, onTableChange } = props;
+export class ElasticsearchIndices extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowingSystemIndices: false,
+    };
+  }
+  render() {
+    const { clusterStatus, indices, ...props } = this.props;
+    const { sorting, pagination, onTableChange } = props;
 
-  const rows = indices.map(index => ({
-    ...index,
-    isSystemIndex: index.name.startsWith('.'),
-  }));
+    const rows = indices
+      .filter(index => {
+        if (index.name.startsWith('.') && !this.state.isShowingSystemIndices) {
+          return false;
+        }
+        return true;
+      });
 
-  return (
-    <EuiPage>
-      <EuiPageBody>
-        <EuiPageContent>
-          <ClusterStatus stats={clusterStatus} />
-          <MonitoringTable
-            className="elasticsearchIndicesTable"
-            rows={rows}
-            columns={columns}
-            sorting={sorting}
-            pagination={pagination}
-            message={getNoDataMessage()}
-            search={{
-              box: {
-                incremental: true,
-                placeholder: 'Filter Nodes...'
-              },
-              filters: [
-                {
-                  type: 'is',
-                  field: 'isSystemIndex',
-                  name: 'System indices'
-                }
-              ]
-            }}
-            onTableChange={onTableChange}
-            // rows={indices}
-            // pageIndex={props.pageIndex}
-            // filterText={props.filterText}
-            // sortKey={props.sortKey}
-            // sortOrder={props.sortOrder}
-            // onNewState={props.onNewState}
-            // placeholder="Filter Indices..."
-            // filterFields={filterFields}
-            // renderToolBarSections={renderToolBarSection}
-            // columns={columns}
-            // rowComponent={IndexRow}
-            // getNoDataMessage={getNoDataMessage}
-            // showSystemIndices={props.showSystemIndices}
-            // toggleShowSystemIndices={props.toggleShowSystemIndices}
-          />
-        </EuiPageContent>
-      </EuiPageBody>
-    </EuiPage>
-  );
+    return (
+      <EuiPage>
+        <EuiPageBody>
+          <EuiPageContent>
+            <ClusterStatus stats={clusterStatus} />
+            <EuiSpacer size="xs"/>
+            <EuiSwitch
+              label="Show system indices"
+              checked={this.state.isShowingSystemIndices}
+              onChange={e => this.setState({ isShowingSystemIndices: e.target.checked })}
+            />
+            <EuiSpacer size="m"/>
+            <MonitoringTable
+              className="elasticsearchIndicesTable"
+              rows={rows}
+              columns={columns}
+              sorting={sorting}
+              secondarySortField="name"
+              pagination={pagination}
+              message={getNoDataMessage()}
+              search={{
+                box: {
+                  incremental: true,
+                  placeholder: 'Filter Nodes...'
+                },
+              }}
+              onTableChange={onTableChange}
+            />
+          </EuiPageContent>
+        </EuiPageBody>
+      </EuiPage>
+    );
+  }
 }
 

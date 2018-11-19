@@ -22,27 +22,27 @@ export function IndexDetailStatus({ stats }) {
     {
       label: 'Total',
       value: formatMetric(dataSize.total, '0.0 b'),
-      dataTestSubj: 'dataSize'
+      'data-test-subj': 'dataSize'
     },
     {
       label: 'Primaries',
       value: formatMetric(dataSize.primaries, '0.0 b'),
-      dataTestSubj: 'dataSizePrimaries'
+      'data-test-subj': 'dataSizePrimaries'
     },
     {
       label: 'Documents',
       value: formatMetric(documentCount, '0.[0]a'),
-      dataTestSubj: 'documentCount'
+      'data-test-subj': 'documentCount'
     },
     {
       label: 'Total Shards',
       value: formatMetric(totalShards, 'int_commas'),
-      dataTestSubj: 'totalShards'
+      'data-test-subj': 'totalShards'
     },
     {
       label: 'Unassigned Shards',
       value: formatMetric(unassignedShards, 'int_commas'),
-      dataTestSubj: 'unassignedShards'
+      'data-test-subj': 'unassignedShards'
     }
   ];
 

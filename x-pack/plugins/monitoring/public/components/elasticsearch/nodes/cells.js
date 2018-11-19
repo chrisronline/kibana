@@ -31,7 +31,7 @@ const metricVal = (metric, format, isPercent) => {
   return formatMetric(metric, format);
 };
 
-function MetricCell({ isOnline, metric = {}, isPercent }) {
+function MetricCell({ isOnline, metric = {}, isPercent, ...props }) {
   if (isOnline) {
     const { lastVal, maxVal, minVal, slope } = get(metric, 'summary', {});
     const format = get(metric, 'metric.format');
@@ -40,7 +40,7 @@ function MetricCell({ isOnline, metric = {}, isPercent }) {
       <EuiStat
         description=""
         title={(
-          <EuiFlexGroup alignItems="center">
+          <EuiFlexGroup alignItems="center" {...props}>
             <EuiFlexItem grow={false}>
               <EuiTitle size="m">
                 <h4>

@@ -10,11 +10,11 @@ import { isEmpty, capitalize } from 'lodash';
 import { EuiFlexGroup, EuiFlexItem, EuiStat, EuiHorizontalRule } from '@elastic/eui';
 import { StatusIcon } from '../status_icon/index.js';
 
-const wrapChild = ({ label, value, dataTestSubj }, index) => (
+const wrapChild = ({ label, value, ...props }, index) => (
   <EuiFlexItem
     key={`summary-status-item-${index}`}
     grow={false}
-    data-test-subj={dataTestSubj}
+    {...props}
   >
     {/* <EuiPanel paddingSize="m"> */}
     <EuiStat

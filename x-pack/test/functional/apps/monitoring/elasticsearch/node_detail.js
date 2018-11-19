@@ -41,13 +41,13 @@ export default function ({ getService, getPageObjects }) {
 
         expect(await nodeDetail.getSummary()).to.eql({
           transportAddress: '127.0.0.1:9300',
-          jvmHeap: 'JVM Heap:\n29%',
-          freeDiskSpace: 'Free Disk Space:\n173.9 GB',
-          documentCount: 'Documents:\n24.8k',
-          dataSize: 'Data:\n50.4 MB',
-          indicesCount: 'Indices:\n20',
-          shardsCount: 'Shards:\n38',
-          nodeType: 'Type:\nMaster Node',
+          jvmHeap: 'JVM Heap\n29%',
+          freeDiskSpace: 'Free Disk Space\n173.9 GB',
+          documentCount: 'Documents\n24.8k',
+          dataSize: 'Data\n50.4 MB',
+          indicesCount: 'Indices\n20',
+          shardsCount: 'Shards\n38',
+          nodeType: 'Type\nMaster Node',
           status: 'Status: Online',
         });
       });
@@ -57,13 +57,13 @@ export default function ({ getService, getPageObjects }) {
 
         expect(await nodeDetail.getSummary()).to.eql({
           transportAddress: '127.0.0.1:9302',
-          jvmHeap: 'JVM Heap:\n17%',
-          freeDiskSpace: 'Free Disk Space:\n173.9 GB',
-          documentCount: 'Documents:\n240',
-          dataSize: 'Data:\n1.4 MB',
-          indicesCount: 'Indices:\n4',
-          shardsCount: 'Shards:\n4',
-          nodeType: 'Type:\nNode',
+          jvmHeap: 'JVM Heap\n17%',
+          freeDiskSpace: 'Free Disk Space\n173.9 GB',
+          documentCount: 'Documents\n240',
+          dataSize: 'Data\n1.4 MB',
+          indicesCount: 'Indices\n4',
+          shardsCount: 'Shards\n4',
+          nodeType: 'Type\nNode',
           status: 'Status: Online',
         });
       });
@@ -92,13 +92,13 @@ export default function ({ getService, getPageObjects }) {
 
         expect(await nodeDetail.getSummary()).to.eql({
           transportAddress: '127.0.0.1:9302',
-          jvmHeap: 'JVM Heap:\nN/A',
-          freeDiskSpace: 'Free Disk Space:\nN/A',
-          documentCount: 'Documents:\nN/A',
-          dataSize: 'Data:\nN/A',
-          indicesCount: 'Indices:\nN/A',
-          shardsCount: 'Shards:\nN/A',
-          nodeType: 'Type:\nOffline Node',
+          jvmHeap: 'JVM Heap\nN/A',
+          freeDiskSpace: 'Free Disk Space\nN/A',
+          documentCount: 'Documents\nN/A',
+          dataSize: 'Data\nN/A',
+          indicesCount: 'Indices\nN/A',
+          shardsCount: 'Shards\nN/A',
+          nodeType: 'Type\nOffline Node',
           status: 'Status: Offline',
         });
       });

@@ -22,22 +22,22 @@ export function DetailStatus({ stats }) {
     {
       label: 'Transport Address',
       value: transportAddress,
-      dataTestSubj: 'transportAddress'
+      'data-test-subj': 'transportAddress'
     },
     {
       label: 'OS Free Memory',
       value: formatMetric(osFreeMemory, 'byte'),
-      dataTestSubj: 'osFreeMemory'
+      'data-test-subj': 'osFreeMemory'
     },
     {
       label: 'Version',
       value: version,
-      dataTestSubj: 'version'
+      'data-test-subj': 'version'
     },
     {
       label: 'Uptime',
       value: formatMetric(uptime, 'time_since'),
-      dataTestSubj: 'uptime'
+      'data-test-subj': 'uptime'
     }
   ];
 

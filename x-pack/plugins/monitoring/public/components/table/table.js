@@ -59,20 +59,33 @@ export class MonitoringTable extends React.Component {
   }
 
   render() {
-    const { rows: items, ...props } = this.props;
+    const {
+      rows: items,
+      search = {},
+      columns: _columns,
+      ...props
+    } = this.props;
 
-    // const columns = this.props.columns.map(column => ({
-    //   field: column.field,
-    //   name: column.title,
-    //   sortable: true,
-    //   render: column.render
-    // }));
+    if (search.box && !search.box['data-test-subj']) {
+      search.box['data-test-subj'] = 'monitoringTableToolBar';
+    }
+
+    const columns = _columns.map(column => {
+      if (!column['data-test-subj']) {
+        column['data-test-subj'] = 'monitoringTableHasData';
+      }
+      return column;
+    });
 
     return (
-      <EuiInMemoryTable
-        items={items}
-        {...props}
-      />
+      <div data-test-subj={`${this.props.className}Container`}>
+        <EuiInMemoryTable
+          items={items}
+          search={search}
+          columns={columns}
+          {...props}
+        />
+      </div>
     );
   }
 }

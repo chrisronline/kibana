@@ -30,6 +30,7 @@ export class PipelineListing extends PureComponent {
       {
         name: 'ID',
         field: 'id',
+        sortable: true,
         render: (id) => (
           <EuiLink
             data-test-subj="id"
@@ -46,6 +47,7 @@ export class PipelineListing extends PureComponent {
       {
         name: 'Events Emitted Rate',
         field: 'latestThroughput',
+        sortable: true,
         render: (value, pipeline) => {
           const throughput = pipeline.metrics.throughput;
           return (
@@ -77,6 +79,7 @@ export class PipelineListing extends PureComponent {
       {
         name: 'Number of Nodes',
         field: 'latestNodesCount',
+        sortable: true,
         render: (value, pipeline) => {
           const nodesCount = pipeline.metrics.nodesCount;
           return (
@@ -127,7 +130,8 @@ export class PipelineListing extends PureComponent {
       sorting,
       pagination,
       onTableChange,
-      upgradeMessage
+      upgradeMessage,
+      className
     } = this.props;
 
     const columns = this.getColumns();
@@ -139,10 +143,16 @@ export class PipelineListing extends PureComponent {
             {this.renderStats()}
             <EuiSpacer size="m"/>
             <MonitoringTable
-              className="logstashNodesTable"
+              className={className || 'logstashNodesTable'}
               rows={data}
               columns={columns}
-              sorting={sorting}
+              sorting={{
+                ...sorting,
+                sort: {
+                  ...sorting.sort,
+                  field: 'id'
+                }
+              }}
               message={upgradeMessage}
               pagination={pagination}
               search={{

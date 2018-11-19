@@ -48,6 +48,9 @@ uiRoutes.when('/elasticsearch/nodes', {
       this.renderReact = ({ clusterStatus, nodes }) => {
         super.renderReact(
           <ElasticsearchNodes
+            sorting={this.sorting}
+            pagination={this.pagination}
+            onTableChange={this.onTableChange}
             clusterStatus={clusterStatus}
             nodes={nodes}
             showCgroupMetricsElasticsearch={showCgroupMetricsElasticsearch}

@@ -160,7 +160,7 @@ const getColumns = (
     },
     {
       name: 'Kibana',
-      field: 'kibana.node_count',
+      field: 'kibana.count',
       'data-test-subj': 'kibanaCount',
       sortable: true,
       render: (count, cluster) => (
@@ -174,7 +174,8 @@ const getColumns = (
       field: 'license.type',
       'data-test-subj': 'clusterLicense',
       sortable: true,
-      render: (license, cluster) => {
+      render: (licenseType, cluster) => {
+        const license = cluster.license;
         if (license) {
           const licenseExpiry = () => {
             if (license.expiry_date_in_millis < moment().valueOf()) {
@@ -197,7 +198,7 @@ const getColumns = (
           return (
             <div>
               <div className="monTableCell__clusterCellLiscense">
-                { capitalize(license.type) }
+                { capitalize(licenseType) }
               </div>
               <div className="monTableCell__clusterCellExpiration">
                 { showLicenseExpiration ? licenseExpiry() : null }
@@ -309,7 +310,13 @@ uiModule.directive('monitoringClusterListing', ($injector) => {
                 'data-test-subj': `clusterRow_${item.cluster_uuid}`
               };
             }}
-            sorting={sorting}
+            sorting={{
+              ...sorting,
+              sort: {
+                ...sorting.sort,
+                field: 'cluster_name'
+              }
+            }}
             pagination={pagination}
             search={{
               box: {
@@ -318,17 +325,6 @@ uiModule.directive('monitoringClusterListing', ($injector) => {
               },
             }}
             onTableChange={onTableChange}
-
-            // rows={clusters}
-            // pageIndex={scope.pageIndex}
-            // filterText={scope.filterText}
-            // sortKey={scope.sortKey}
-            // sortOrder={scope.sortOrder}
-            // onNewState={scope.onNewState}
-            // placeholder="Filter Clusters..."
-            // filterFields={filterFields}
-            // columns={columns}
-            // rowComponent={clusterRowFactory(scope, globalState, kbnUrl, showLicenseExpiration)}
           />
         );
         render(clusterTable, $el[0]);

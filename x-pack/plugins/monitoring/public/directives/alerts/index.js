@@ -10,7 +10,7 @@ import { render } from 'react-dom';
 import { EuiIcon, EuiHealth } from '@elastic/eui';
 import { uiModules } from 'ui/modules';
 import { MonitoringTable } from 'plugins/monitoring/components/table';
-import { CALCULATE_DURATION_SINCE } from '../../../common/constants';
+import { CALCULATE_DURATION_SINCE, SORT_DESCENDING } from '../../../common/constants';
 import { Tooltip } from 'plugins/monitoring/components/tooltip';
 import { FormattedAlert } from 'plugins/monitoring/components/alerts/formatted_alert';
 import { mapSeverity } from 'plugins/monitoring/components/alerts/map_severity';
@@ -113,7 +113,14 @@ uiModule.directive('monitoringClusterAlertsListing', kbnUrl => {
             className="alertsTable"
             rows={alerts}
             columns={getColumns(kbnUrl, scope)}
-            sorting={scope.sorting}
+            sorting={{
+              ...scope.sorting,
+              sort: {
+                ...scope.sorting.sort,
+                field: 'metadata.severity',
+                direction: SORT_DESCENDING,
+              }
+            }}
             pagination={scope.pagination}
             search={{
               box: {

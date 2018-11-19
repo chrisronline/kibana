@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { render } from 'react-dom';
 import { find } from 'lodash';
+import { render } from 'react-dom';
 import uiRoutes from 'ui/routes';
 import moment from 'moment';
 import { ajaxErrorHandlersProvider } from 'plugins/monitoring/lib/ajax_error_handler';
@@ -17,6 +17,7 @@ import {
 import template from './index.html';
 import { timefilter } from 'ui/timefilter';
 import { PipelineListing } from '../../../components/logstash/pipeline_listing/pipeline_listing';
+import { MonitoringViewBaseTableController } from '../../base_table_controller';
 
 /*
  * Logstash Pipelines Listing page
@@ -64,60 +65,61 @@ uiRoutes
       },
       pageData: getPageData
     },
-    controller($injector, $scope) {
-      const $route = $injector.get('$route');
-      const globalState = $injector.get('globalState');
-      const title = $injector.get('title');
-      const $executor = $injector.get('$executor');
-      const kbnUrl = $injector.get('kbnUrl');
+    controller: class LogstashPipelinesList extends MonitoringViewBaseTableController {
+      constructor($injector, $scope) {
+        super({
+          title: 'Logstash Pipelines',
+          storageKey: 'logstash.pipelines',
+          getPageData,
+          $scope,
+          $injector
+        });
 
-      $scope.cluster = find($route.current.locals.clusters, { cluster_uuid: globalState.cluster_uuid });
-      $scope.pageData = $route.current.locals.pageData;
+        const $route = $injector.get('$route');
+        const kbnUrl = $injector.get('kbnUrl');
+        this.data = $route.current.locals.pageData;
+        const globalState = $injector.get('globalState');
+        $scope.cluster = find($route.current.locals.clusters, { cluster_uuid: globalState.cluster_uuid });
 
-      $scope.upgradeMessage = makeUpgradeMessage($scope.pageData.clusterStatus.versions);
-      timefilter.enableTimeRangeSelector();
-      timefilter.enableAutoRefreshSelector();
+        function onBrush(xaxis) {
+          timefilter.setTime({
+            from: moment(xaxis.from),
+            to: moment(xaxis.to),
+            mode: 'absolute'
+          });
+        }
 
-      title($scope.cluster, 'Logstash Pipelines');
+        const renderReact = (pageData) => {
+          if (!pageData) {
+            return;
+          }
 
-      $executor.register({
-        execute: () => getPageData($injector),
-        handleResponse: (response) => $scope.pageData = response
-      });
+          const upgradeMessage = pageData
+            ? makeUpgradeMessage(pageData.clusterStatus.versions)
+            : null;
 
-      $executor.start($scope);
+          render(
+            <PipelineListing
+              className="monitoringLogstashPipelinesTable"
+              onBrush={onBrush}
+              stats={pageData.clusterStatus}
+              data={pageData.pipelines}
+              sorting={this.sorting}
+              pagination={this.pagination}
+              onTableChange={this.onTableChange}
+              upgradeMessage={upgradeMessage}
+              angular={{
+                kbnUrl,
+                scope: $scope,
+              }}
+            />,
+            document.getElementById('monitoringLogstashPipelinesApp')
+          );
+        };
 
-      $scope.$on('$destroy', $executor.destroy);
-
-      function onBrush(xaxis) {
-        timefilter.setTime({
-          from: moment(xaxis.from),
-          to: moment(xaxis.to),
-          mode: 'absolute'
+        $scope.$watch(() => this.data, pageData => {
+          renderReact(pageData);
         });
       }
-
-      function renderReact(pageData) {
-        render(
-          <PipelineListing
-            onBrush={onBrush}
-            stats={pageData.clusterStatus}
-            data={pageData.pipelines}
-            sorting={$scope.sorting}
-            pagination={$scope.pagination}
-            onTableChange={$scope.onTableChange}
-            upgradeMessage={$scope.upgradeMessage}
-            angular={{
-              kbnUrl,
-              scope: $scope,
-            }}
-          />,
-          document.getElementById('monitoringLogstashPipelinesApp')
-        );
-      }
-
-      $scope.$watch('pageData', pageData => {
-        renderReact(pageData);
-      });
     }
   });

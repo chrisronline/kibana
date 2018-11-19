@@ -7,7 +7,7 @@
 import { find, get } from 'lodash';
 import uiRoutes from 'ui/routes';
 import template from './index.html';
-import { MonitoringViewBaseController } from 'plugins/monitoring/views';
+import { MonitoringViewBaseTableController } from 'plugins/monitoring/views';
 import { routeInitProvider } from 'plugins/monitoring/lib/route_init';
 import { ajaxErrorHandlersProvider } from 'plugins/monitoring/lib/ajax_error_handler';
 import { timefilter } from 'ui/timefilter';
@@ -44,7 +44,7 @@ uiRoutes.when('/alerts', {
     alerts: getPageData
   },
   controllerAs: 'alerts',
-  controller: class AlertsView extends MonitoringViewBaseController {
+  controller: class AlertsView extends MonitoringViewBaseTableController {
     constructor($injector, $scope) {
       const $route = $injector.get('$route');
       const globalState = $injector.get('globalState');

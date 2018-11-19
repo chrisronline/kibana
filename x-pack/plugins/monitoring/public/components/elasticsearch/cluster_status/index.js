@@ -26,37 +26,37 @@ export function ClusterStatus({ stats }) {
     {
       label: 'Nodes',
       value: nodesCount,
-      dataTestSubj: 'nodesCount'
+      'data-test-subj': 'nodesCount'
     },
     {
       label: 'Indices',
       value: indicesCount,
-      dataTestSubj: 'indicesCount'
+      'data-test-subj': 'indicesCount'
     },
     {
       label: 'Memory',
       value: formatMetric(memUsed, 'byte') + ' / ' + formatMetric(memMax, 'byte'),
-      dataTestSubj: 'memory'
+      'data-test-subj': 'memory'
     },
     {
       label: 'Total Shards',
       value: totalShards,
-      dataTestSubj: 'totalShards'
+      'data-test-subj': 'totalShards'
     },
     {
       label: 'Unassigned Shards',
       value: unassignedShards,
-      dataTestSubj: 'unassignedShards'
+      'data-test-subj': 'unassignedShards'
     },
     {
       label: 'Documents',
       value: formatMetric(documentCount, 'int_commas'),
-      dataTestSubj: 'documentCount'
+      'data-test-subj': 'documentCount'
     },
     {
       label: 'Data',
       value: formatMetric(dataSize, 'byte'),
-      dataTestSubj: 'dataSize'
+      'data-test-subj': 'dataSize'
     }
   ];
 

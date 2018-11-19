@@ -52,6 +52,7 @@ const getColumns = showCgroupMetricsElasticsearch => {
     )
   });
 
+
   cols.push({
     name: 'Status',
     field: 'isOnline',
@@ -108,7 +109,7 @@ const getColumns = showCgroupMetricsElasticsearch => {
           isOnline={node.isOnline}
           metric={value}
           isPercent={true}
-          data-test-subj="cpuUage"
+          data-test-subj="cpuUsage"
         />
       )
     });
@@ -192,7 +193,7 @@ export function ElasticsearchNodes({ clusterStatus, nodes, showCgroupMetricsElas
             search={{
               box: {
                 incremental: true,
-                placeholder: 'Filter Nodes...'
+                placeholder: 'Filter Nodes...',
               },
             }}
             onTableChange={onTableChange}

@@ -26,42 +26,42 @@ export function NodeDetailStatus({ stats }) {
   const metrics = [
     {
       value: transportAddress,
-      dataTestSubj: 'transportAddress'
+      'data-test-subj': 'transportAddress'
     },
     {
       label: 'JVM Heap',
       value: formatMetric(usedHeap, '0,0.[00]', '%', { prependSpace: false }),
-      dataTestSubj: 'jvmHeap'
+      'data-test-subj': 'jvmHeap'
     },
     {
       label: 'Free Disk Space',
       value: formatMetric(freeSpace, '0.0 b'),
-      dataTestSubj: 'freeDiskSpace'
+      'data-test-subj': 'freeDiskSpace'
     },
     {
       label: 'Documents',
       value: formatMetric(documents, '0.[0]a'),
-      dataTestSubj: 'documentCount'
+      'data-test-subj': 'documentCount'
     },
     {
       label: 'Data',
       value: formatMetric(dataSize, '0.0 b'),
-      dataTestSubj: 'dataSize'
+      'data-test-subj': 'dataSize'
     },
     {
       label: 'Indices',
       value: formatMetric(indexCount, 'int_commas'),
-      dataTestSubj: 'indicesCount'
+      'data-test-subj': 'indicesCount'
     },
     {
       label: 'Shards',
       value: formatMetric(totalShards, 'int_commas'),
-      dataTestSubj: 'shardsCount'
+      'data-test-subj': 'shardsCount'
     },
     {
       label: 'Type',
       value: nodeTypeLabel,
-      dataTestSubj: 'nodeType'
+      'data-test-subj': 'nodeType'
     }
   ];
 

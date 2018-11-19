@@ -136,7 +136,13 @@ uiRoutes.when('/kibana/instances', {
                   className="kibanaInstancesTable"
                   rows={this.data.kibanas}
                   columns={getColumns(kbnUrl, $scope)}
-                  sorting={this.sorting}
+                  sorting={{
+                    ...this.sorting,
+                    sort: {
+                      ...this.sorting.sort,
+                      field: 'kibana.name'
+                    }
+                  }}
                   pagination={this.pagination}
                   search={{
                     box: {

@@ -22,31 +22,33 @@ export function Stats({ stats }) {
     {
       label: 'Total Beats',
       value: formatMetric(total, 'int_commas'),
-      dataTestSubj: 'beatsTotalBeats'
+      'data-test-subj': 'totalBeats'
     },
   ];
 
   metrics.push(...types.map(({ type, count }) => ({
     label: type,
     value: formatMetric(count, 'int_commas'),
+    'data-test-subj': 'typeCount',
+    'data-test-type-count': `${type}:${count}`
   })));
 
   metrics.push({
     label: 'Total Events',
     value: formatMetric(totalEvents, '0.[0]a'),
-    dataTestSubj: 'beatsTotalEvents'
+    'data-test-subj': 'totalEvents'
   });
 
   metrics.push({
     label: 'Bytes Sent',
     value: formatMetric(bytesSent, 'byte'),
-    dataTestSubj: 'beatsBytesSent'
+    'data-test-subj': 'bytesSent'
   });
 
   return (
     <SummaryStatus
       metrics={metrics}
-      data-test-subj="beatsDetailStatus"
+      data-test-subj="beatsSummaryStatus"
     />
   );
 }
