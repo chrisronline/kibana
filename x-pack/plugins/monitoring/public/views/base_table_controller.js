@@ -40,31 +40,27 @@ export class MonitoringViewBaseTableController extends MonitoringViewBaseControl
 
     const getLocalStorageData = tableStorageGetter(storageKey);
     const setLocalStorageData = tableStorageSetter(storageKey);
-    const { pageIndex, filterText, sortKey, sortOrder } = getLocalStorageData(storage);
+    const { page, sort } = getLocalStorageData(storage);
 
-    this.pagination = {
+    this.pagination = page || {
       initialPageSize: 20,
       pageSizeOptions: [5, 10, 20, 50]
     };
 
-    this.sorting = {
+    this.sorting = sort || {
       sort: {
         field: 'name',
         direction: SORT_ASCENDING
       }
     };
 
-    this.onTableChange = () => {
-      console.log('table change');
-    };
-
-    this.pageIndex = pageIndex;
-    this.filterText = filterText;
-    this.sortKey = sortKey;
-    this.sortOrder = sortOrder;
-
-    this.onNewState = newState => {
-      setLocalStorageData(storage, newState);
+    this.onTableChange = ({ page, sort }) => {
+      setLocalStorageData(storage, {
+        page,
+        sort: {
+          sort
+        }
+      });
     };
   }
 

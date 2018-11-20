@@ -10,23 +10,19 @@ import { STORAGE_KEY } from '../../../common/constants';
 export const tableStorageGetter = keyPrefix => {
   return storage => {
     const localStorageData = storage.get(STORAGE_KEY) || {};
-    const filterText = get(localStorageData, [ keyPrefix, 'filterText' ]);
-    const pageIndex  = get(localStorageData, [ keyPrefix, 'pageIndex' ]);
-    const sortKey    = get(localStorageData, [ keyPrefix, 'sortKey' ]);
-    const sortOrder  = get(localStorageData, [ keyPrefix, 'sortOrder' ]);
+    const sort = get(localStorageData, [ keyPrefix, 'sort' ]);
+    const page  = get(localStorageData, [ keyPrefix, 'page' ]);
 
-    return { pageIndex, filterText, sortKey, sortOrder };
+    return { page, sort };
   };
 };
 
 export const tableStorageSetter = keyPrefix => {
-  return (storage, { filterText, pageIndex, sortKey, sortOrder }) => {
+  return (storage, { sort, page }) => {
     const localStorageData = storage.get(STORAGE_KEY) || {};
 
-    set(localStorageData, [ keyPrefix, 'filterText' ], filterText || undefined); // don`t store empty data
-    set(localStorageData, [ keyPrefix, 'pageIndex' ], pageIndex || undefined);
-    set(localStorageData, [ keyPrefix, 'sortKey' ], sortKey || undefined);
-    set(localStorageData, [ keyPrefix, 'sortOrder' ], sortOrder || undefined);
+    set(localStorageData, [ keyPrefix, 'sort' ], sort || undefined); // don`t store empty data
+    set(localStorageData, [ keyPrefix, 'page' ], page || undefined);
 
     storage.set(STORAGE_KEY, localStorageData);
 

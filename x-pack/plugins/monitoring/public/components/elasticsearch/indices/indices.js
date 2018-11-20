@@ -145,7 +145,6 @@ export class ElasticsearchIndices extends React.Component {
               rows={rows}
               columns={columns}
               sorting={sorting}
-              secondarySortField="name"
               pagination={pagination}
               message={getNoDataMessage()}
               search={{
