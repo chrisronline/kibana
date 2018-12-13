@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { EuiCallOut, EuiSpacer } from '@elastic/eui';
-import { FormattedMessage, injectI18n } from '@kbn/i18n/react';
+import { injectI18n } from '@kbn/i18n/react';
 
 const DeprecationLogsPanelUI = ({ intl }) => (
   <div>
@@ -19,13 +19,13 @@ const DeprecationLogsPanelUI = ({ intl }) => (
       color="warning"
     >
       <p>
-        <FormattedMessage
+        {/* <FormattedMessage
           id=""
           defaultMessage=""
           values={{
 
           }}
-        />
+        /> */}
       </p>
     </EuiCallOut>
     <EuiSpacer size="m"/>
