@@ -20,6 +20,7 @@ import { getClustersSummary } from './get_clusters_summary';
 import { CLUSTER_ALERTS_SEARCH_SIZE } from '../../../common/constants';
 import { getApmsForClusters } from '../apm/get_apms_for_clusters';
 import { i18n } from '@kbn/i18n';
+import { getDeprecationLogCount } from '../elasticsearch/get_deprecation_log_count';
 
 /**
  * Get all clusters or the cluster associated with {@code clusterUuid} when it is defined.
@@ -31,7 +32,8 @@ export async function getClustersFromRequest(req, indexPatterns, { clusterUuid, 
     lsIndexPattern,
     beatsIndexPattern,
     apmIndexPattern,
-    alertsIndex
+    alertsIndex,
+    filebeatIndexPattern
   } = indexPatterns;
 
   // get clusters with stats and cluster state
@@ -127,7 +129,15 @@ export async function getClustersFromRequest(req, indexPatterns, { clusterUuid, 
     set(clusters[clusterIndex], 'apm', apm.stats);
   });
 
+  // check for deprecation logs
+  const deprecationLogCount = await getDeprecationLogCount(req, filebeatIndexPattern);
+
   const config = req.server.config();
   const kibanaUuid = config.get('server.uuid');
-  return getClustersSummary(clusters, kibanaUuid);
+  return getClustersSummary(clusters, kibanaUuid).map(cluster => {
+    return {
+      ...cluster,
+      deprecation_log_count: deprecationLogCount,
+    };
+  });
 }

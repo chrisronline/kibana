@@ -46,7 +46,16 @@ export function clustersRoute(server) {
         const beatsIndexPattern = prefixIndexPattern(config, 'xpack.monitoring.beats.index_pattern', ccs);
         const apmIndexPattern = prefixIndexPattern(config, 'xpack.monitoring.beats.index_pattern', ccs);
         const alertsIndex = prefixIndexPattern(config, 'xpack.monitoring.cluster_alerts.index', ccs);
-        const indexPatterns = { esIndexPattern, kbnIndexPattern, lsIndexPattern, beatsIndexPattern, apmIndexPattern, alertsIndex };
+        const filebeatIndexPattern = 'filebeat-*';
+        const indexPatterns = {
+          esIndexPattern,
+          kbnIndexPattern,
+          lsIndexPattern,
+          beatsIndexPattern,
+          apmIndexPattern,
+          alertsIndex,
+          filebeatIndexPattern
+        };
 
         clusters = await getClustersFromRequest(req, indexPatterns);
       } catch (err) {

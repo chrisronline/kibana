@@ -13,12 +13,15 @@ import { BeatsPanel } from './beats_panel';
 
 import { EuiPage, EuiPageBody } from '@elastic/eui';
 import { ApmPanel } from './apm_panel';
+import { DeprecationLogsPanel } from './deprecation_logs_panel';
 
 export function Overview(props) {
   return (
     <EuiPage>
       <EuiPageBody>
         <AlertsPanel alerts={props.cluster.alerts} changeUrl={props.changeUrl} />
+
+        <DeprecationLogsPanel logs={props.cluster.deprecation_log_count}/>
 
         <ElasticsearchPanel
           {...props.cluster.elasticsearch}
