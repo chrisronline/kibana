@@ -23,6 +23,7 @@ import { i18n } from '@kbn/i18n';
 import { checkCcrEnabled } from '../elasticsearch/ccr';
 import { getStandaloneClusterDefinition, hasStandaloneClusters } from '../standalone_clusters';
 import { getLogTypes } from '../logs';
+import { getStackAlertsForCluster } from '../stack_alerts/get_stack_alerts';
 
 /**
  * Get all clusters or the cluster associated with {@code clusterUuid} when it is defined.
@@ -79,6 +80,10 @@ export async function getClustersFromRequest(req, indexPatterns, { clusterUuid, 
     const mlJobs = await getMlJobsForCluster(req, esIndexPattern, cluster);
     if (mlJobs !== null) {
       cluster.ml = { jobs: mlJobs };
+    }
+    const stackAlerts = await getStackAlertsForCluster(req, cluster);
+    if (stackAlerts) {
+      cluster.stackAlerts = stackAlerts;
     }
     const alerts = await alertsClusterSearch(req, alertsIndex, cluster, checkLicenseForAlerts, {
       start,

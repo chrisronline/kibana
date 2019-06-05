@@ -12,6 +12,9 @@ export {
   clusterAlertsRoute
 } from './alerts/';
 export {
+  stackAlertsRoute
+} from './stack_alerts/';
+export {
   beatsDetailRoute,
   beatsListingRoute,
   beatsOverviewRoute
@@ -28,7 +31,7 @@ export {
   esOverviewRoute,
   mlJobRoute,
   ccrRoute,
-  ccrShardRoute
+  ccrShardRoute,
 } from './elasticsearch';
 export {
   clusterSettingsCheckRoute,

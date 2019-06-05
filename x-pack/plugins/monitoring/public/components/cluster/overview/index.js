@@ -9,6 +9,7 @@ import { ElasticsearchPanel } from './elasticsearch_panel';
 import { KibanaPanel } from './kibana_panel';
 import { LogstashPanel } from './logstash_panel';
 import { AlertsPanel } from './alerts_panel';
+import { StackAlertsPanel } from './stack_alerts_panel';
 import { BeatsPanel } from './beats_panel';
 
 import { EuiPage, EuiPageBody } from '@elastic/eui';
@@ -22,6 +23,7 @@ export function Overview(props) {
     <EuiPage>
       <EuiPageBody>
         <AlertsPanel alerts={props.cluster.alerts} changeUrl={props.changeUrl} />
+        <StackAlertsPanel alerts={props.cluster.stackAlerts} changeUrl={props.changeUrl} />
 
         { !isFromStandaloneCluster ?
           (

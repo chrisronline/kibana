@@ -6,7 +6,7 @@
 
 import { contains } from 'lodash';
 import { uiModules } from 'ui/modules';
-import { ML_SUPPORTED_LICENSES } from '../../common/constants';
+import { ML_SUPPORTED_LICENSES, WATCHER_SUPPORTED_LICENSES } from '../../common/constants';
 
 const uiModule = uiModules.get('monitoring/license', []);
 uiModule.service('license', () => {
@@ -30,6 +30,10 @@ uiModule.service('license', () => {
 
     mlIsSupported() {
       return contains(ML_SUPPORTED_LICENSES, this.license.type);
+    }
+
+    stackAlertsAreSupported() {
+      return contains(WATCHER_SUPPORTED_LICENSES, this.license.type);
     }
 
     doesExpire() {
