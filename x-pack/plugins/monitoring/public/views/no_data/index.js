@@ -7,11 +7,13 @@
 import uiRoutes from 'ui/routes';
 import template from './index.html';
 import { NoDataController } from './controller';
+import { setAngularState, toggleSetupMode } from '../../lib/setup_mode';
+
 uiRoutes
   .when('/no-data', {
     template,
     resolve: {
-      clusters: $injector => {
+      clusters: ($injector, $rootScope) => {
         const monitoringClusters = $injector.get('monitoringClusters');
         const kbnUrl = $injector.get('kbnUrl');
 
@@ -20,7 +22,17 @@ uiRoutes
             kbnUrl.changePath('/home');
             return Promise.reject();
           }
-          return Promise.resolve();
+          setAngularState($rootScope, $injector);
+          return toggleSetupMode(true)
+            .then(() => {
+              return kbnUrl.changePath('/elasticsearch/nodes');
+            })
+            .catch(err => {
+              console.log('promise error', { err });
+            })
+            .finally(() => {
+              return Promise.resolve();
+            });
         });
       }
     },

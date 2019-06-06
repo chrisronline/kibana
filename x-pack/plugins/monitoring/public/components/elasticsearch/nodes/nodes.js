@@ -214,7 +214,9 @@ function ElasticsearchNodesUI({ clusterStatus, nodes, showCgroupMetricsElasticse
 
   let disableInternalCollectionForMigrationMessage = null;
   if (setupMode.data) {
-    if (setupMode.data.totalUniquePartiallyMigratedCount === setupMode.data.totalUniqueInstanceCount) {
+    // Think net new user scenario
+    const hasInstances = setupMode.data.totalUniqueInstanceCount > 0;
+    if (hasInstances && setupMode.data.totalUniquePartiallyMigratedCount === setupMode.data.totalUniqueInstanceCount) {
       disableInternalCollectionForMigrationMessage = (
         <Fragment>
           <EuiCallOut
@@ -242,13 +244,24 @@ function ElasticsearchNodesUI({ clusterStatus, nodes, showCgroupMetricsElasticse
     }
   }
 
-  return (
-    <EuiPage>
-      <EuiPageBody>
+  function renderClusterStatus() {
+    if (!clusterStatus) {
+      return null;
+    }
+    return (
+      <Fragment>
         <EuiPanel>
           <ClusterStatus stats={clusterStatus} />
         </EuiPanel>
         <EuiSpacer size="m" />
+      </Fragment>
+    );
+  }
+
+  return (
+    <EuiPage>
+      <EuiPageBody>
+        {renderClusterStatus()}
         {disableInternalCollectionForMigrationMessage}
         <EuiPageContent>
           <EuiMonitoringTable

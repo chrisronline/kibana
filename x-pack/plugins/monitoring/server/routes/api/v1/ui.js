@@ -25,6 +25,7 @@ export {
   esIndicesRoute,
   esNodeRoute,
   esNodesRoute,
+  liveEsNodesRoute,
   esOverviewRoute,
   mlJobRoute,
   ccrRoute,

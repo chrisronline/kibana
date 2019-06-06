@@ -8,12 +8,15 @@ import React, { Fragment } from 'react';
 import { i18n } from '@kbn/i18n';
 import { find } from 'lodash';
 import uiRoutes from 'ui/routes';
+import { timefilter } from 'ui/timefilter';
 import template from './index.html';
 import { routeInitProvider } from 'plugins/monitoring/lib/route_init';
 import { MonitoringViewBaseEuiTableController } from '../../';
 import { ElasticsearchNodes } from '../../../components';
 import { I18nContext } from 'ui/i18n';
+import { ajaxErrorHandlersProvider } from '../../../lib/ajax_error_handler';
 import { SetupModeRenderer } from '../../../components/renderers';
+import { getSetupModeState } from '../../../lib/setup_mode';
 
 uiRoutes.when('/elasticsearch/nodes', {
   template,
@@ -32,14 +35,45 @@ uiRoutes.when('/elasticsearch/nodes', {
 
       $scope.cluster = find($route.current.locals.clusters, {
         cluster_uuid: globalState.cluster_uuid
-      });
+      }) || {};
+
+      const getPageData = ($injector) => {
+        const $http = $injector.get('$http');
+        const globalState = $injector.get('globalState');
+        const timeBounds = timefilter.getBounds();
+
+        const setupMode = getSetupModeState();
+
+        let promise = null;
+        if (setupMode.enabled && !globalState.cluster_uuid) {
+          promise = $http.get(`../api/monitoring/v1/live/elasticsearch/nodes`);
+        }
+        else {
+          promise = $http
+            .post(`../api/monitoring/v1/clusters/${globalState.cluster_uuid}/elasticsearch/nodes`, {
+              ccs: globalState.ccs,
+              timeRange: {
+                min: timeBounds.min.toISOString(),
+                max: timeBounds.max.toISOString()
+              }
+            });
+        }
+
+        return promise
+          .then(response => response.data)
+          .catch(err => {
+            const Private = $injector.get('Private');
+            const ajaxErrorHandlers = Private(ajaxErrorHandlersProvider);
+            return ajaxErrorHandlers(err);
+          });
+      };
 
       super({
         title: i18n.translate('xpack.monitoring.elasticsearch.nodes.routeTitle', {
           defaultMessage: 'Elasticsearch - Nodes'
         }),
         storageKey: 'elasticsearch.nodes',
-        api: `../api/monitoring/v1/clusters/${globalState.cluster_uuid}/elasticsearch/nodes`,
+        getPageData,
         reactNodeId: 'elasticsearchNodesReact',
         defaultData: {},
         $scope,

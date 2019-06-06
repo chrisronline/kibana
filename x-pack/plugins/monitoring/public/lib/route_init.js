@@ -6,6 +6,7 @@
 
 import _ from 'lodash';
 import { ajaxErrorHandlersProvider } from 'plugins/monitoring/lib/ajax_error_handler';
+import { getSetupModeState } from './setup_mode';
 
 export function routeInitProvider(Private, monitoringClusters, globalState, license, kbnUrl) {
   const ajaxErrorHandlers = Private(ajaxErrorHandlersProvider);
@@ -34,23 +35,24 @@ export function routeInitProvider(Private, monitoringClusters, globalState, lice
           return null;
         })();
 
+        const inSetupMode = getSetupModeState().enabled;
+
         if (cluster && cluster.license) {
           globalState.cluster_uuid = cluster.cluster_uuid;
           globalState.ccs = cluster.ccs;
           globalState.save();
-        } else {
+        } else if (!inSetupMode) {
           return kbnUrl.redirect('/no-data');
         }
 
-        license.setLicense(cluster.license);
-
+        !inSetupMode && license.setLicense(cluster.license);
         // check if we need to redirect because of license problems
-        if (!(isOnPage('license') || isOnPage('home')) && license.isExpired()) {
+        if (!inSetupMode && !(isOnPage('license') || isOnPage('home')) && license.isExpired()) {
           return kbnUrl.redirect('/license');
         }
 
         // check if we need to redirect because of attempt at unsupported multi-cluster monitoring
-        if (!isOnPage('home') && !cluster.isSupported) {
+        if (!inSetupMode && !isOnPage('home') && !cluster.isSupported) {
           return kbnUrl.redirect('/home');
         }
 
