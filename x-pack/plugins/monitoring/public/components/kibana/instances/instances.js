@@ -101,7 +101,7 @@ const getColumns = (kbnUrl, scope) => {
         return (
           <div>
             <div className="monTableCell__splitNumber">
-              { value && (formatNumber(value, 'int_commas') + ' ms avg') }
+              { (formatNumber(value, 'int_commas') + ' ms avg') }
             </div>
             <div className="monTableCell__splitNumber">
               { formatNumber(kibana.response_times.max, 'int_commas') } ms max
@@ -122,6 +122,9 @@ export class KibanaInstances extends PureComponent {
       clusterStatus,
       angular,
       setupMode,
+      sorting,
+      pagination,
+      onTableChange
     } = this.props;
 
     const dataFlattened = instances.map(item => ({
@@ -142,8 +145,8 @@ export class KibanaInstances extends PureComponent {
               className="kibanaInstancesTable"
               rows={dataFlattened}
               columns={getColumns(angular.kbnUrl, angular.$scope)}
-              sorting={this.sorting}
-              pagination={this.pagination}
+              sorting={sorting}
+              pagination={pagination}
               setupMode={setupMode}
               uuidField="kibana.uuid"
               nameField="name"
@@ -155,7 +158,7 @@ export class KibanaInstances extends PureComponent {
                   })
                 },
               }}
-              onTableChange={this.onTableChange}
+              onTableChange={onTableChange}
               executeQueryOptions={{
                 defaultFields: ['name']
               }}
