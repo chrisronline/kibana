@@ -294,7 +294,6 @@ export const getCollectionStatus = async (req, indexPatterns, clusterUuid) => {
       productStatus.detected = detectedProducts[product.name];
 
       if (product.name === ELASTICSEARCH_CUSTOM_ID && liveEsNodes.length) {
-        productStatus.totalUniqueInstanceCount = liveEsNodes.length;
         productStatus.byUuid = liveEsNodes.reduce((accum, esNode) => ({
           ...accum,
           [esNode.id]: {

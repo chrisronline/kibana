@@ -42,7 +42,7 @@ export function routeInitProvider(Private, monitoringClusters, globalState, lice
           globalState.ccs = cluster.ccs;
           globalState.save();
         } else if (!inSetupMode) {
-          return kbnUrl.redirect('/no-data');
+          return kbnUrl.redirect('/loading');
         }
 
         !inSetupMode && license.setLicense(cluster.license);

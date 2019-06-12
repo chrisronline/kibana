@@ -25,7 +25,8 @@ uiRoutes.when('/home', {
       return routeInit()
         .then(clusters => {
           if (!clusters || !clusters.length) {
-            kbnUrl.changePath('/no-data');
+            console.log('chris here');
+            // kbnUrl.changePath('/no-data');
             return Promise.reject();
           }
           if (clusters.length === 1) {
@@ -79,4 +80,4 @@ uiRoutes.when('/home', {
     }
   }
 })
-  .otherwise({ redirectTo: '/no-data' });
+  .otherwise({ redirectTo: '/loading' });
