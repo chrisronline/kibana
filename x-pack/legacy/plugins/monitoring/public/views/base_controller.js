@@ -98,6 +98,7 @@ export class MonitoringViewBaseController {
     $scope.pageData = this.data = { ...defaultData };
     this._isDataInitialized = false;
     this.reactNodeId = reactNodeId;
+    this.$executor = $executor;
 
     let deferTimer;
     let zoomInLevel = 0;

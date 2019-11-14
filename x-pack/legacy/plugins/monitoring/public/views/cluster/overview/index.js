@@ -12,6 +12,7 @@ import { MonitoringViewBaseController } from '../../';
 import { Overview } from 'plugins/monitoring/components/cluster/overview';
 import { I18nContext } from 'ui/i18n';
 import { SetupModeRenderer } from '../../../components/renderers';
+import { MonitoringNavWrapper } from '../../../components/main';
 import { CODE_PATH_ALL } from '../../../../common/constants';
 
 const CODE_PATHS = [CODE_PATH_ALL];
@@ -55,22 +56,27 @@ uiRoutes.when('/overview', {
       $scope.$watch(() => this.data, data => {
         this.renderReact(
           <I18nContext>
-            <SetupModeRenderer
-              scope={$scope}
-              injector={$injector}
-              render={({ setupMode, flyoutComponent, bottomBarComponent }) => (
-                <Fragment>
-                  {flyoutComponent}
-                  <Overview
-                    cluster={data}
-                    setupMode={setupMode}
-                    changeUrl={changeUrl}
-                    showLicenseExpiration={showLicenseExpiration}
-                  />
-                  {bottomBarComponent}
-                </Fragment>
-              )}
-            />
+            <MonitoringNavWrapper
+              tabs={[{ label: data.cluster_name } ]}
+              $executor={this.$executor}
+            >
+              <SetupModeRenderer
+                scope={$scope}
+                injector={$injector}
+                render={({ setupMode, flyoutComponent, bottomBarComponent }) => (
+                  <Fragment>
+                    {flyoutComponent}
+                    <Overview
+                      cluster={data}
+                      setupMode={setupMode}
+                      changeUrl={changeUrl}
+                      showLicenseExpiration={showLicenseExpiration}
+                    />
+                    {bottomBarComponent}
+                  </Fragment>
+                )}
+              />
+            </MonitoringNavWrapper>
           </I18nContext>
         );
       });
