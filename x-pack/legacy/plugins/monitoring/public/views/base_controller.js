@@ -87,6 +87,8 @@ export class MonitoringViewBaseController {
     $injector,
     options = {},
     fetchDataImmediately = true,
+    supportsPhaseLoading = false,
+    loadingPhases = 0,
   }) {
     const titleService = $injector.get('title');
     const $executor = $injector.get('$executor');
@@ -98,6 +100,8 @@ export class MonitoringViewBaseController {
     $scope.pageData = this.data = { ...defaultData };
     this._isDataInitialized = false;
     this.reactNodeId = reactNodeId;
+    this.performPhaseLoading = supportsPhaseLoading;
+    this.currentLoadingPhase = 0;
 
     let deferTimer;
     let zoomInLevel = 0;
@@ -133,7 +137,13 @@ export class MonitoringViewBaseController {
         this.updateDataPromise = null;
       }
       const _api = apiUrlFn ? apiUrlFn() : api;
-      const promises = [_getPageData($injector, _api, this.getPaginationRouteOptions())];
+      const options = this.getPaginationRouteOptions();
+      if (supportsPhaseLoading && this.performPhaseLoading) {
+        options.phaseLoading = true;
+        options.currentLoadingPhase = this.currentLoadingPhase;
+        $executor.pause();
+      }
+      const promises = [_getPageData($injector, _api, options)];
       const setupMode = getSetupModeState();
       if (setupMode.enabled) {
         promises.push(updateSetupModeData());
@@ -143,6 +153,18 @@ export class MonitoringViewBaseController {
         $scope.$apply(() => {
           this._isDataInitialized = true; // render will replace loading screen with the react component
           $scope.pageData = this.data = pageData; // update the view's data with the fetch result
+          if (supportsPhaseLoading) {
+            if (this.currentLoadingPhase + 1 >= loadingPhases) {
+              this.performPhaseLoading = false;
+              $executor.unpause();
+              // Restart the time so we don't just immediately refetch data
+              // (assuming one of these calls took longer than the refresh interval)
+              $executor.reset();
+            } else {
+              this.currentLoadingPhase++;
+              setTimeout(this.updateData, 100);
+            }
+          }
         });
       });
     };

@@ -74,6 +74,8 @@ uiRoutes.when('/elasticsearch/nodes', {
         $scope,
         $injector,
         fetchDataImmediately: false, // We want to apply pagination before sending the first request
+        supportsPhaseLoading: true,
+        loadingPhases: 2,
       });
 
       this.isCcrEnabled = $scope.cluster.isCcrEnabled;

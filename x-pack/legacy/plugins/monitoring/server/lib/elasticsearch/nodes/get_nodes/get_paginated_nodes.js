@@ -30,12 +30,11 @@ import { getMetrics } from '../../../details/get_metrics';
 export async function getPaginatedNodes(
   req,
   esIndexPattern,
-  { clusterUuid },
-  metricSet,
+  clusterUuid,
   pagination,
   sort,
   queryText,
-  { clusterStats, shardStats }
+  { clusterStats = {}, shardStats = {}, metricSet = [] }
 ) {
   const config = req.server.config();
   const size = config.get('xpack.monitoring.max_bucket_size');
@@ -45,7 +44,9 @@ export async function getPaginatedNodes(
   const clusterState = get(clusterStats, 'cluster_state', { nodes: {} });
   for (const node of nodes) {
     node.isOnline = !isUndefined(get(clusterState, ['nodes', node.uuid]));
-    node.shardCount = get(shardStats, `nodes[${node.uuid}].shardCount`, 0);
+    if (shardStats && shardStats.nodes) {
+      node.shardCount = get(shardStats, `nodes[${node.uuid}].shardCount`, 0);
+    }
   }
 
   // `metricSet` defines a list of metrics that are sortable in the UI

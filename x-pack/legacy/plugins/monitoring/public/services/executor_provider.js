@@ -12,6 +12,7 @@ export function executorProvider(Promise, $timeout) {
   const subscriptions = new Subscription();
   let executionTimer;
   let ignorePaused = false;
+  let paused = false;
 
   /**
    * Resets the timer to start again
@@ -56,11 +57,25 @@ export function executorProvider(Promise, $timeout) {
     queue.splice(0, queue.length);
   }
 
+  function pause() {
+    paused = true;
+  }
+
+  function unpause() {
+    paused = false;
+  }
+
   /**
    * Runs the queue (all at once)
    * @returns {Promise} a promise of all the services
    */
   function run() {
+    if (paused) {
+      return new Promise(resolve => {
+        reset();
+        resolve();
+      });
+    }
     const noop = () => Promise.resolve();
     return Promise.all(
       queue.map(service => {
@@ -101,6 +116,8 @@ export function executorProvider(Promise, $timeout) {
    */
   return {
     register,
+    pause,
+    unpause,
     start($scope) {
       subscriptions.add(
         subscribeWithScope($scope, timefilter.getFetch$(), {

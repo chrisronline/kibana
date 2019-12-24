@@ -23,6 +23,7 @@ import {
   EuiCallOut,
   EuiButton,
   EuiText,
+  EuiLoadingSpinner,
 } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
 import _ from 'lodash';
@@ -51,6 +52,15 @@ const getNodeTooltip = node => {
   }
   return null;
 };
+
+function loadableColumn(renderer) {
+  return (value, node) => {
+    if ((value === undefined || value === null) && node.loading) {
+      return <EuiLoadingSpinner size="m" />;
+    }
+    return renderer(value, node);
+  };
+}
 
 const getSortHandler = type => item => _.get(item, [type, 'summary', 'lastVal']);
 const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
@@ -126,7 +136,7 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
     }),
     field: 'isOnline',
     sortable: true,
-    render: value => {
+    render: loadableColumn(value => {
       const status = value
         ? i18n.translate('xpack.monitoring.elasticsearch.nodes.statusColumn.onlineLabel', {
             defaultMessage: 'Online',
@@ -139,7 +149,7 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
           <NodeStatusIcon isOnline={value} status={status} /> {status}
         </div>
       );
-    },
+    }),
   });
 
   cols.push({
@@ -148,7 +158,7 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
     }),
     field: 'shardCount',
     sortable: true,
-    render: (value, node) => {
+    render: loadableColumn((value, node) => {
       return node.isOnline ? (
         <div className="monTableCell__number" data-test-subj="shards">
           {value}
@@ -156,7 +166,7 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
       ) : (
         <OfflineCell />
       );
-    },
+    }),
   });
 
   if (showCgroupMetricsElasticsearch) {
@@ -164,14 +174,14 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
       name: cpuUsageColumnTitle,
       field: 'node_cgroup_quota',
       sortable: getSortHandler('node_cgroup_quota'),
-      render: (value, node) => (
+      render: loadableColumn((value, node) => (
         <MetricCell
           isOnline={node.isOnline}
           metric={value}
           isPercent={true}
           data-test-subj="cpuQuota"
         />
-      ),
+      )),
     });
 
     cols.push({
@@ -180,28 +190,28 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
       }),
       field: 'node_cgroup_throttled',
       sortable: getSortHandler('node_cgroup_throttled'),
-      render: (value, node) => (
+      render: loadableColumn((value, node) => (
         <MetricCell
           isOnline={node.isOnline}
           metric={value}
           isPercent={false}
           data-test-subj="cpuThrottled"
         />
-      ),
+      )),
     });
   } else {
     cols.push({
       name: cpuUsageColumnTitle,
       field: 'node_cpu_utilization',
       sortable: getSortHandler('node_cpu_utilization'),
-      render: (value, node) => (
+      render: loadableColumn((value, node) => (
         <MetricCell
           isOnline={node.isOnline}
           metric={value}
           isPercent={true}
           data-test-subj="cpuUsage"
         />
-      ),
+      )),
     });
 
     cols.push({
@@ -210,14 +220,14 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
       }),
       field: 'node_load_average',
       sortable: getSortHandler('node_load_average'),
-      render: (value, node) => (
+      render: loadableColumn((value, node) => (
         <MetricCell
           isOnline={node.isOnline}
           metric={value}
           isPercent={false}
           data-test-subj="loadAverage"
         />
-      ),
+      )),
     });
   }
 
@@ -230,14 +240,14 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
     }),
     field: 'node_jvm_mem_percent',
     sortable: getSortHandler('node_jvm_mem_percent'),
-    render: (value, node) => (
+    render: loadableColumn((value, node) => (
       <MetricCell
         isOnline={node.isOnline}
         metric={value}
         isPercent={true}
         data-test-subj="jvmMemory"
       />
-    ),
+    )),
   });
 
   cols.push({
@@ -246,14 +256,14 @@ const getColumns = (showCgroupMetricsElasticsearch, setupMode, clusterUuid) => {
     }),
     field: 'node_free_space',
     sortable: getSortHandler('node_free_space'),
-    render: (value, node) => (
+    render: loadableColumn((value, node) => (
       <MetricCell
         isOnline={node.isOnline}
         metric={value}
         isPercent={false}
         data-test-subj="diskFreeSpace"
       />
-    ),
+    )),
   });
 
   return cols;
