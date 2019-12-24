@@ -62,6 +62,7 @@ export function esNodesRoute(server) {
         if (!phaseLoading || currentLoadingPhase === 1) {
           shardStats = await getShardStats(req, esIndexPattern, clusterStats, {
             includeNodes: true,
+            includeIndices: false,
           });
           aggregationOptions.shardStats = shardStats;
           aggregationOptions.metricSet = LISTING_METRICS_NAMES;
