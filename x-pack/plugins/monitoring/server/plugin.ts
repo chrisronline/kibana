@@ -94,6 +94,8 @@ function setFieldsFromBoolInner(clause, fields, existingMappings) {
     field = Object.keys(clause.term)[0];
   } else if (clause.range) {
     field = Object.keys(clause.range)[0];
+  } else {
+    field = clause[Object.keys(clause)[0]].field;
   }
 
   if (field) {
