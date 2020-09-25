@@ -9,6 +9,7 @@ import { checkParam } from '../error_missing_required';
 import { createQuery } from '../create_query';
 import { ElasticsearchMetric } from '../metrics';
 import { parseCrossClusterPrefix } from '../ccs_utils';
+import { getIndicesForRange } from '../get_indices_for_range';
 import { getClustersState } from './get_clusters_state';
 
 /**
@@ -45,7 +46,7 @@ function fetchClusterStats(req, esIndexPattern, clusterUuid) {
   const end = req.payload.timeRange.max;
   const metric = ElasticsearchMetric.getMetricFields();
   const params = {
-    index: esIndexPattern,
+    index: getIndicesForRange(start, end, esIndexPattern),
     size: config.get('monitoring.ui.max_bucket_size'),
     ignoreUnavailable: true,
     filterPath: [
@@ -70,6 +71,8 @@ function fetchClusterStats(req, esIndexPattern, clusterUuid) {
       sort: { timestamp: { order: 'desc', unmapped_type: 'long' } },
     },
   };
+
+  console.log(params.index);
 
   const { callWithRequest } = req.server.plugins.elasticsearch.getCluster('monitoring');
   return callWithRequest(req, 'search', params);
