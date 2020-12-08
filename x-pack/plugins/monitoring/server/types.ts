@@ -135,6 +135,20 @@ export interface ElasticsearchResponseHit {
 
 export interface ElasticsearchSource {
   timestamp: string;
+  kibana_stats?: {
+    timestamp?: string;
+    kibana?: {
+      uuid?: string;
+    };
+    os?: {
+      memory?: {
+        free_in_bytes?: number;
+      };
+    };
+    process?: {
+      uptime_in_millis?: number;
+    };
+  };
   beats_stats?: {
     timestamp?: string;
     beat?: {
